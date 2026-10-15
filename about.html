@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ffffff">
+
+    <title>About Us | CREDORA</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&family=Roboto:wght@400;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+   <link rel="icon" type="image/png" href="./ICON.png">
+
+</head>
+
+<body>
+
+   <header class="site-header">
+  <nav class="navbar">
+    <a class="brand" href="index.html"><img src="LOGO.jpeg" alt="CREDORA"><span>CREDORA</span></a>
+    <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+    <div class="nav-links">
+      <a href="index.html">Home</a><a href="applications.html">Applications</a><a href="lenders.html">Lenders</a><a href="reports.html">Reports</a><a href="about.html">About</a>
+    </div>
+
+<!-- AUTH / PROFILE AREA -->
+<div class="nav-auth" id="navAuth">
+  <a href="login.html" class="nav-login" id="loginLink">
+    LOGIN <span>↗</span>
+  </a>
+
+  <div class="profile-container" id="profileContainer" hidden>
+    <button class="profile-button" id="profileButton"
+            type="button" aria-label="Open profile menu"
+            aria-expanded="false">
+      <img id="profileImage" src="profile.png" alt="Profile">
+    </button>
+
+    <div class="profile-dropdown" id="profileDropdown" hidden>
+      <div class="profile-info">
+        <strong id="profileName">User</strong>
+        <span id="profileEmail">user@example.com</span>
+      </div>
+      <a href="profile.html">My Profile</a>
+      <a href="applications.html">My Applications</a>
+      <button type="button" id="logoutButton">Logout</button>
+    </div>
+  </div>
+</div>
+
+  </nav>
+</header>
+
+    <!-- MAIN CONTENT -->
+    <main>
+
+        <section class="about-section">
+            <h1>
+                &nbsp;&nbsp;Making loan discovery
+                <span>simple and transparent.</span>
+            </h1>
+
+            <p class="about-description">
+                &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CREDORA is a digital platform designed to simplify the way
+                people discover and understand loan opportunities. It helps
+                users explore available lenders, review loan-related
+                information, and identify relevant options based on their
+               needs. Through a clear and user-friendly interface, CREDORA
+                aims to make financial information easier to access and
+                understand. Users can explore lender details, manage loan
+                applications, view reports, and submit complaints or queries
+                through the website. By bringing essential loan information
+                and support features together in one place, CREDORA strives
+                to make the loan discovery process more transparent,
+                organized, and convenient.
+            </p>
+
+            <div class="about-divider"></div>
+
+            <div class="features">
+
+                <article class="feature">
+                    <h2>&nbsp;&nbsp;&nbsp;Explore Lenders</h2>
+                    <p>
+                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Discover lender information and explore available
+                        loan-related options in one place.
+                    </p>
+                </article>
+
+                <article class="feature">
+                    <h2>&nbsp;&nbsp;&nbsp;Manage Applications</h2>
+                    <p>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Access the application section to review and manage
+                        loan application information.
+                    </p>
+                </article>
+
+                <article class="feature">
+                    <h2>&nbsp;&nbsp;&nbsp;Report Issues</h2>
+                    <p>
+                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Submit website-related complaints, questions, and
+                        feedback through the report section.
+                    </p>
+                </article>
+
+            </div>
+
+            <div class="about-note">
+                <p>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CREDORA helps users explore loan-related information.
+                    Always verify lender credentials, eligibility criteria,
+                    interest rates, fees, and loan terms directly with the
+                    lender before making a financial decision.
+                </p>
+            </div>
+
+        </section>
+
+    </main>
+
+<footer class="site-footer"><div class="footer-inner"><p class="footer-copy">© <span data-year></span> CREDORA. All rights reserved.</p><div class="footer-links"><a href="index.html">Home</a><a href="applications.html">Applications</a><a href="reports.html">Reports</a><a href="about.html">Contact</a></div></div></footer>
+    <script>
+        document.getElementById("currentYear").textContent =
+            new Date().getFullYear();
+    </script>
+
+</body>
+</html>

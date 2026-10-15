@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+
+  <title>Lenders — CREDORA</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&family=Roboto:wght@400;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+  <script src="lenders.js" defer></script>
+</head>
+
+<body>
+
+  <!-- NAVBAR: MATCHES index.html -->
+  <header class="site-header">
+    <nav class="navbar" aria-label="Main navigation">
+
+      <a class="brand" href="index.html">
+        <img src="LOGO.jpeg" alt="CREDORA">
+        <span>CREDORA</span>
+      </a>
+
+      <button
+        class="menu-toggle"
+        id="menuToggle"
+        type="button"
+        aria-label="Toggle navigation"
+        aria-controls="navLinks"
+        aria-expanded="false"
+      >☰</button>
+
+      <div class="nav-links" id="navLinks">
+        <a href="index.html">Home</a>
+        <a href="applications.html">Applications</a>
+        <a href="lenders.html" aria-current="page">Lenders</a>
+        <a href="reports.html">Reports</a>
+        <a href="about.html">About</a>
+      </div>
+
+      <!-- LOGIN / PROFILE -->
+      <div class="nav-auth" id="navAuth">
+
+        <a href="login.html" class="nav-login" id="loginLink">
+          LOGIN <span aria-hidden="true">↗</span>
+        </a>
+
+        <div class="profile-container" id="profileContainer" hidden>
+
+          <button
+            class="profile-button"
+            id="profileButton"
+            type="button"
+            aria-label="Open profile menu"
+            aria-controls="profileDropdown"
+            aria-expanded="false"
+          >
+            <img id="profileImage" src="profile.png" alt="">
+          </button>
+
+          <div class="profile-dropdown" id="profileDropdown" hidden>
+
+            <div class="profile-info">
+              <strong id="profileName">User</strong>
+              <span id="profileEmail">user@example.com</span>
+            </div>
+
+            <a href="profile.html">My Profile</a>
+            <a href="applications.html">My Applications</a>
+
+            <button type="button" id="logoutButton">
+              Logout
+            </button>
+
+          </div>
+        </div>
+
+      </div>
+    </nav>
+  </header>
+
+
+  <!-- MAIN CONTENT -->
+  <main>
+
+    <!-- LENDER DIRECTORY -->
+    <section class="section">
+      <div class="container">
+
+<!-- SEARCH -->
+<div class="lender-search">
+  <label for="lenderSearch" class="eyebrow">
+    SEARCH DIRECTORY
+  </label>
+
+  <div class="lender-search-box">
+    <svg
+      class="search-icon"
+      xmlns="http://www.w3.org/2000/svg"
+      width="21"
+      height="21"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="11" cy="11" r="7"></circle>
+      <path d="m20 20-4-4"></path>
+    </svg>
+
+    <input
+      type="search"
+      id="lenderSearch"
+      placeholder="Search lenders by name..."
+      autocomplete="off"
+      aria-label="Search lenders by name"
+    >
+
+    <button type="button" id="lenderSearchButton" hidden>
+      SEARCH ↗
+    </button>
+  </div>
+</div>
+
+<p id="lenderStatus" role="status" aria-live="polite" hidden></p>
+
+<div class="grid grid-3" id="lenderList" aria-live="polite"></div>
+
+<div id="lenderEmpty" class="card">
+  <p class="eyebrow">DIRECTORY STATUS</p>
+  <h3 id="lenderEmptyTitle">NO LENDERS AVAILABLE</h3>
+  <p id="lenderEmptyMessage">
+    No verified lenders are currently available in the directory.
+  </p>
+</div>
+
+  <!-- FOOTER: MATCHES index.html -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+
+      <p class="footer-copy">
+        © <span data-year></span> CREDORA. All rights reserved.
+      </p>
+
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="applications.html">Applications</a>
+        <a href="lenders.html">Lenders</a>
+        <a href="reports.html">Reports</a>
+        <a href="about.html">Contact</a>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,1576 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#FFFFFF">
+  <title>Lender Dashboard — CREDORA</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+   <link rel="icon" type="image/png" href="./ICON.png">
+
+  <script src="script.js" defer></script>
+
+  <style>
+    /* ==================================
+       CREDORA LENDER DASHBOARD
+       Black & White Brutalist UI
+    ================================== */
+
+    :root {
+      --dash-black: #000;
+      --dash-white: #fff;
+      --dash-gray: #777;
+      --dash-light: #f4f4f4;
+      --dash-border: 2px solid #000;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #fff;
+      color: #000;
+      font-family: 'Inter', sans-serif;
+    }
+
+    button, input, select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .dashboard {
+      width: min(1440px, 100%);
+      margin: 0 auto;
+      padding: 38px 5% 70px;
+    }
+
+    .dash-topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      padding-bottom: 18px;
+      border-bottom: 2px solid #000;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .live-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .live-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #000;
+      animation: pulse 1.6s infinite;
+    }
+
+    @keyframes pulse {
+      50% { opacity: .35; }
+    }
+
+    .dash-heading {
+      padding: 28px 0 32px;
+    }
+
+    .dash-heading h1 {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(35px, 6vw, 68px);
+      font-weight: 800;
+      letter-spacing: -3px;
+      line-height: 1.05;
+    }
+
+    .dash-heading p {
+      color: #555;
+      max-width: 650px;
+      font-size: 14px;
+      line-height: 1.8;
+      margin: 15px 0 0;
+    }
+
+    .dash-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    .dash-btn {
+      min-height: 42px;
+      padding: 11px 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 2px solid #000;
+      background: #fff;
+      color: #000;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .5px;
+      text-decoration: none;
+      transition: .2s;
+    }
+
+    .dash-btn:hover,
+    .dash-btn.primary {
+      background: #000;
+      color: #fff;
+    }
+
+    .dash-btn:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+    }
+
+    .section-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 30px 0 15px;
+    }
+
+    .section-label h2 {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      font-size: 19px;
+      font-weight: 800;
+    }
+
+    .section-label span {
+      color: #666;
+      font-size: 11px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .stat-card {
+      min-height: 150px;
+      border: 2px solid #000;
+      padding: 21px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: #fff;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .stat-number {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(32px, 4vw, 46px);
+      font-weight: 800;
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+    }
+
+    .stat-foot {
+      color: #666;
+      font-size: 11px;
+    }
+
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .panel {
+      min-width: 0;
+      border: 2px solid #000;
+      padding: 22px;
+      background: #fff;
+    }
+
+    .panel h3 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .panel-subtitle {
+      color: #666;
+      font-size: 11px;
+      line-height: 1.6;
+      margin: 7px 0 22px;
+    }
+
+    .status-row {
+      margin: 19px 0;
+    }
+
+    .status-info {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .bar-track {
+      height: 12px;
+      border: 1px solid #000;
+      background: #eee;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: #000;
+      width: 0;
+      transition: width .35s ease;
+    }
+
+    .activity-list {
+      display: grid;
+      gap: 0;
+    }
+
+    .activity-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+
+    .activity-title {
+      font-size: 12px;
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+
+    .activity-meta {
+      margin-top: 5px;
+      color: #666;
+      font-size: 11px;
+    }
+
+    .status-tag {
+      display: inline-block;
+      border: 1px solid #000;
+      padding: 5px 7px;
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .empty-state {
+      padding: 20px 0;
+      color: #666;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .insight-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .insight-panel {
+      border: 2px solid #000;
+      padding: 24px;
+    }
+
+    .insight-heading {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .insight-icon {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border: 2px solid #000;
+      font-weight: 900;
+    }
+
+    .insight-heading h3 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .insight-content {
+      color: #333;
+      font-size: 12px;
+      line-height: 1.9;
+      white-space: pre-line;
+    }
+
+    .insight-content ul {
+      padding-left: 18px;
+      margin: 8px 0;
+    }
+
+    .insight-content li {
+      margin-bottom: 7px;
+    }
+
+    .notice {
+      margin-top: 14px;
+      padding: 12px;
+      border-left: 4px solid #000;
+      background: #f3f3f3;
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .toolbar-left,
+    .toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      flex-wrap: wrap;
+    }
+
+    .dash-input,
+    .dash-select {
+      min-height: 42px;
+      max-width: 100%;
+      padding: 10px 12px;
+      border: 2px solid #000;
+      background: #fff;
+      color: #000;
+      font-size: 12px;
+      outline: none;
+    }
+
+    .dash-input:focus,
+    .dash-select:focus {
+      box-shadow: 3px 3px 0 #000;
+    }
+
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      border: 2px solid #000;
+    }
+
+    .data-table {
+      width: 100%;
+      min-width: 780px;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .data-table th {
+      background: #000;
+      color: #fff;
+      padding: 15px 13px;
+      font-size: 10px;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+    }
+
+    .data-table td {
+      padding: 14px 13px;
+      border-bottom: 1px solid #ddd;
+      font-size: 11px;
+      vertical-align: middle;
+      overflow-wrap: anywhere;
+    }
+
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .data-table tbody tr:hover {
+      background: #f5f5f5;
+    }
+
+    .document-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .document-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 15px;
+      border: 1px solid #000;
+    }
+
+    .document-name {
+      font-size: 12px;
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+
+    .document-meta {
+      margin-top: 5px;
+      font-size: 10px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .document-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .small-btn {
+      padding: 8px 10px;
+      border: 1px solid #000;
+      background: #fff;
+      color: #000;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .small-btn:hover {
+      background: #000;
+      color: #fff;
+    }
+
+    .small-btn:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+    }
+
+    .document-note {
+      margin-top: 14px;
+      color: #555;
+      font-size: 11px;
+      line-height: 1.8;
+    }
+
+    .dash-footer-note {
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 2px solid #000;
+      color: #666;
+      font-size: 10px;
+      line-height: 1.8;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 900px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .analytics-grid,
+      .insight-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .dashboard {
+        padding: 25px 4% 45px;
+      }
+
+      .stats-grid {
+        gap: 9px;
+      }
+
+      .stat-card {
+        min-height: 125px;
+        padding: 14px;
+      }
+
+      .stat-label {
+        font-size: 9px;
+      }
+
+      .stat-number {
+        font-size: 32px;
+      }
+
+      .panel,
+      .insight-panel {
+        padding: 16px;
+      }
+
+      .toolbar-left,
+      .toolbar-right {
+        width: 100%;
+      }
+
+      .toolbar-left .dash-input,
+      .toolbar-left .dash-select {
+        width: 100%;
+      }
+
+      .document-item {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<header class="site-header">
+  <nav class="navbar">
+
+    <a class="brand" href="index.html">
+      <img src="LOGO.jpeg" alt="CREDORA">
+      <span>CREDORA</span>
+    </a>
+
+    <button class="menu-toggle" type="button"
+      aria-label="Toggle navigation" aria-expanded="false">☰</button>
+
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="applications.html" class="active">Applications</a>
+      <a href="lenders.html">Lenders</a>
+      <a href="reports.html">Reports</a>
+      <a href="about.html">About</a>
+    </div>
+
+    <div class="nav-auth" id="navAuth">
+      <a href="login.html" class="nav-login" id="loginLink">
+        LOGIN <span>↗</span>
+      </a>
+
+      <div class="profile-container" id="profileContainer" hidden>
+        <button class="profile-button" id="profileButton"
+          type="button" aria-label="Open profile menu"
+          aria-expanded="false">
+          <img id="profileImage" src="profile.png" alt="Profile">
+        </button>
+
+        <div class="profile-dropdown" id="profileDropdown" hidden>
+          <div class="profile-info">
+            <strong id="profileName">User</strong>
+            <span id="profileEmail">user@example.com</span>
+          </div>
+          <a href="profile.html">My Profile</a>
+          <a href="applications.html">My Applications</a>
+          <button type="button" id="logoutButton">Logout</button>
+        </div>
+      </div>
+    </div>
+
+  </nav>
+</header>
+
+<!-- ================= DASHBOARD ================= -->
+<main class="dashboard">
+
+  <div class="dash-topline">
+    <span class=""></span>
+    <span class="live-status">
+      <span class="live-dot"></span>
+      <span id="connectionStatus">LOCAL DATA</span>
+    </span>
+  </div>
+
+  <section class="dash-heading">
+    <h1>LENDER<br>DASHBOARD.</h1>
+    <p>
+      Monitor incoming applications, review submitted documents,
+      track application status and analyse your current workload
+      from one central dashboard.
+    </p>
+
+    <div class="dash-actions">
+      <button class="dash-btn primary" id="refreshButton" type="button">
+        ↻ REFRESH DATA
+      </button>
+      <button class="dash-btn" id="exportCsvButton" type="button">
+        EXPORT APPLICATIONS ↓
+      </button>
+      <button class="dash-btn" id="exportReportButton" type="button">
+        DOWNLOAD SUMMARY ↓
+      </button>
+    </div>
+  </section>
+
+  <!-- LIVE COUNTERS -->
+  <div class="section-label">
+    <h2>Application overview</h2>
+    <span id="lastUpdated">Waiting for data...</span>
+  </div>
+
+  <section class="stats-grid" aria-label="Application statistics">
+
+    <article class="stat-card">
+      <div class="stat-label">Total applications</div>
+      <div class="stat-number" id="totalCount">0</div>
+      <div class="stat-foot">All available records</div>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-label">Received</div>
+      <div class="stat-number" id="receivedCount">0</div>
+      <div class="stat-foot">Awaiting initial review</div>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-label">Under review</div>
+      <div class="stat-number" id="reviewCount">0</div>
+      <div class="stat-foot">Currently being reviewed</div>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-label">Completed</div>
+      <div class="stat-number" id="completedCount">0</div>
+      <div class="stat-foot">Marked completed</div>
+    </article>
+
+  </section>
+
+  <!-- ANALYTICS -->
+  <div class="section-label">
+    <h2>Application analytics</h2>
+    <span>Based on currently available records</span>
+  </div>
+
+  <section class="analytics-grid">
+
+    <article class="panel">
+      <h3>Status distribution</h3>
+      <p class="panel-subtitle">
+        Number and proportion of applications by current status.
+      </p>
+
+      <div id="statusChart">
+        <div class="status-row">
+          <div class="status-info">
+            <span>Received</span><span>0</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill"></div></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="panel">
+      <h3>Recent applications</h3>
+      <p class="panel-subtitle">
+        The latest records available in this browser or connected source.
+      </p>
+      <div class="activity-list" id="recentActivity">
+        <div class="empty-state">
+          No application records are available yet.
+        </div>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- AI-STYLE SUMMARY AND ANALYSIS -->
+  <div class="section-label">
+    <h2>Summary & analysis</h2>
+    <span>Automatically recalculated when data changes</span>
+  </div>
+
+  <section class="insight-grid">
+
+    <article class="insight-panel">
+      <div class="insight-heading">
+        <div class="insight-icon">AI</div>
+        <h3>Application summary</h3>
+      </div>
+      <div class="insight-content" id="aiSummary" aria-live="polite">
+        No application data is available to summarise.
+      </div>
+      <div class="notice">
+        This version generates a rule-based summary from the records
+        available to the page. It is not connected to an external AI model.
+      </div>
+    </article>
+
+    <article class="insight-panel">
+      <div class="insight-heading">
+        <div class="insight-icon">↗</div>
+        <h3>Review analysis</h3>
+      </div>
+      <div class="insight-content" id="aiAnalysis" aria-live="polite">
+        Analysis will appear when application data is available.
+      </div>
+      <div class="notice">
+        These are administrative review indicators, not credit approval
+        decisions or predictions of an applicant's ability to repay.
+      </div>
+    </article>
+
+  </section>
+
+  <!-- APPLICATION RECORDS -->
+  <div class="section-label">
+    <h2>Application monitoring</h2>
+    <span id="recordCountLabel">0 records</span>
+  </div>
+
+  <section>
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <label class="visually-hidden" for="applicationSearch">Search applications</label>
+        <input class="dash-input" id="applicationSearch"
+          placeholder="Search reference or applicant...">
+
+        <label class="visually-hidden" for="statusFilter">Filter by status</label>
+        <select class="dash-select" id="statusFilter">
+          <option value="">All statuses</option>
+          <option value="Received">Received</option>
+          <option value="Under Review">Under Review</option>
+          <option value="Documents Required">Documents Required</option>
+          <option value="Completed">Completed</option>
+          <option value="On Hold">On Hold</option>
+        </select>
+      </div>
+
+      <div class="toolbar-right">
+        <button class="dash-btn" id="exportFilteredButton" type="button">
+          EXPORT FILTERED ↓
+        </button>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Reference</th>
+            <th>Applicant</th>
+            <th>Loan type</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Documents</th>
+          </tr>
+        </thead>
+        <tbody id="applicationsTableBody">
+          <tr>
+            <td colspan="7">Loading application records...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- USER-UPLOADED DOCUMENTS -->
+  <div class="section-label">
+    <h2>Submitted documents</h2>
+    <span id="documentCountLabel">0 documents</span>
+  </div>
+
+  <section class="panel">
+    <h3>Document centre</h3>
+    <p class="panel-subtitle">
+      Available uploaded files and their associated application references.
+    </p>
+
+    <div class="document-list" id="documentList">
+      <div class="empty-state">
+        No accessible uploaded documents were found.
+      </div>
+    </div>
+
+    <p class="document-note">
+      Files must be stored in an accessible data source and associated
+      with an application. This page can download files only when their
+      file data or a valid download URL is available to the browser.
+    </p>
+  </section>
+
+  <div class="dash-footer-note">
+    CREDORA LENDER WORKSPACE · Application counts reflect only records
+    accessible to this page. Verify applicant information and documents
+    before making lending decisions.
+  </div>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p class="footer-copy">© <span data-year></span> CREDORA</p>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="risk-review.html">Risk Review</a>
+      <a href="about.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(() => {
+  "use strict";
+
+  /*
+   * DATA CONNECTION
+   * This page checks the local browser storage keys below.
+   * Change these names to match the keys used by your existing
+   * application submission and document upload pages.
+   *
+   * Shared, cross-user live data requires a backend/API connection.
+   */
+
+  const APPLICATION_KEYS = [
+    "credora_applications_v1",
+    "applications",
+    "loanApplications"
+  ];
+
+  const DOCUMENT_KEYS = [
+    "credora_uploaded_documents_v1",
+    "credora_documents_v1",
+    "uploadedDocuments",
+    "documents"
+  ];
+
+  let applications = [];
+  let documents = [];
+
+  const $ = id => document.getElementById(id);
+
+  function readArray(keys) {
+    for (const key of keys) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) continue;
+
+        const parsed = JSON.parse(raw);
+        const rows = Array.isArray(parsed)
+          ? parsed
+          : parsed && Array.isArray(parsed.records)
+            ? parsed.records
+            : parsed && Array.isArray(parsed.applications)
+              ? parsed.applications
+              : parsed && Array.isArray(parsed.documents)
+                ? parsed.documents
+                : null;
+
+        if (rows) return rows;
+      } catch (error) {
+        console.warn("Could not read local storage key:", key);
+      }
+    }
+
+    return [];
+  }
+
+  function firstValue(object, keys, fallback = "") {
+    for (const key of keys) {
+      if (object && object[key] !== undefined &&
+          object[key] !== null && object[key] !== "") {
+        return object[key];
+      }
+    }
+    return fallback;
+  }
+
+  function normalizeStatus(value) {
+    const status = String(value || "").trim().toLowerCase();
+
+    if (status === "received" || status === "submitted" ||
+        status === "new") return "Received";
+
+    if (status === "under review" || status === "review" ||
+        status === "in review" || status === "pending") {
+      return "Under Review";
+    }
+
+    if (status === "documents required" ||
+        status === "document required" ||
+        status === "missing documents") {
+      return "Documents Required";
+    }
+
+    if (status === "completed" || status === "complete") {
+      return "Completed";
+    }
+
+    if (status === "on hold" || status === "hold") {
+      return "On Hold";
+    }
+
+    return value ? String(value) : "Unspecified";
+  }
+
+  function getReference(app) {
+    return String(firstValue(app, [
+      "reference", "applicationRef", "applicationReference",
+      "applicationId", "id"
+    ], "—"));
+  }
+
+  function getApplicant(app) {
+    return String(firstValue(app, [
+      "applicant", "applicantName", "name", "fullName",
+      "userName", "customerName"
+    ], "Not provided"));
+  }
+
+  function getLoanType(app) {
+    return String(firstValue(app, [
+      "loanType", "loan_type", "type"
+    ], "—"));
+  }
+
+  function getAmount(app) {
+    const amount = firstValue(app, [
+      "amount", "loanAmount", "requestedAmount"
+    ], "");
+
+    if (amount === "") return "—";
+
+    const number = Number(amount);
+    return Number.isFinite(number)
+      ? number.toLocaleString("en-IN", {
+          maximumFractionDigits: 2
+        })
+      : String(amount);
+  }
+
+  function getDate(app) {
+    return String(firstValue(app, [
+      "date", "applicationDate", "createdAt",
+      "submittedAt", "timestamp"
+    ], "—"));
+  }
+
+  function getStatus(app) {
+    return normalizeStatus(firstValue(app, [
+      "status", "applicationStatus"
+    ], ""));
+  }
+
+  function getLinkedDocuments(app) {
+    const ref = getReference(app);
+
+    return documents.filter(doc => {
+      const docRef = String(firstValue(doc, [
+        "reference", "applicationRef", "applicationReference",
+        "applicationId", "recordId"
+      ], ""));
+
+      return docRef !== "" && docRef === ref;
+    });
+  }
+
+  function escapeHTML(value) {
+    return String(value).replace(/[&<>"']/g, character => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[character]);
+  }
+
+  function statusCounts(rows) {
+    const counts = {
+      "Received": 0,
+      "Under Review": 0,
+      "Documents Required": 0,
+      "Completed": 0,
+      "On Hold": 0,
+      "Unspecified": 0
+    };
+
+    rows.forEach(app => {
+      const status = getStatus(app);
+      counts[status] = (counts[status] || 0) + 1;
+    });
+
+    return counts;
+  }
+
+  function renderStats() {
+    const counts = statusCounts(applications);
+
+    $("totalCount").textContent = applications.length;
+    $("receivedCount").textContent = counts["Received"] || 0;
+    $("reviewCount").textContent = counts["Under Review"] || 0;
+    $("completedCount").textContent = counts["Completed"] || 0;
+    $("recordCountLabel").textContent =
+      applications.length + (applications.length === 1 ? " record" : " records");
+
+    $("documentCountLabel").textContent =
+      documents.length + (documents.length === 1 ? " document" : " documents");
+
+    const chartStatuses = [
+      "Received",
+      "Under Review",
+      "Documents Required",
+      "Completed",
+      "On Hold",
+      "Unspecified"
+    ];
+
+    $("statusChart").innerHTML = chartStatuses.map(status => {
+      const count = counts[status] || 0;
+      const percentage = applications.length
+        ? Math.round(count / applications.length * 100)
+        : 0;
+
+      return `
+        <div class="status-row">
+          <div class="status-info">
+            <span>${escapeHTML(status)}</span>
+            <span>${count} · ${percentage}%</span>
+          </div>
+          <div class="bar-track"
+            role="progressbar"
+            aria-label="${escapeHTML(status)}"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="${percentage}">
+            <div class="bar-fill" style="width:${percentage}%"></div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function dateValue(app) {
+    const raw = getDate(app);
+    const timestamp = Date.parse(raw);
+    return Number.isFinite(timestamp) ? timestamp : 0;
+  }
+
+  function renderRecentActivity() {
+    const recent = [...applications]
+      .sort((a, b) => dateValue(b) - dateValue(a))
+      .slice(0, 5);
+
+    if (!recent.length) {
+      $("recentActivity").innerHTML =
+        '<div class="empty-state">No application activity is available yet.</div>';
+      return;
+    }
+
+    $("recentActivity").innerHTML = recent.map(app => `
+      <div class="activity-item">
+        <div>
+          <div class="activity-title">
+            ${escapeHTML(getReference(app))} — ${escapeHTML(getApplicant(app))}
+          </div>
+          <div class="activity-meta">
+            ${escapeHTML(getLoanType(app))} · ${escapeHTML(getDate(app))}
+          </div>
+        </div>
+        <span class="status-tag">${escapeHTML(getStatus(app))}</span>
+      </div>
+    `).join("");
+  }
+
+  function renderInsights() {
+    const total = applications.length;
+    const counts = statusCounts(applications);
+
+    if (!total) {
+      $("aiSummary").textContent =
+        "No application records are available. When records are connected, this section will summarise the application volume and status distribution.";
+
+      $("aiAnalysis").textContent =
+        "No analysis is available without application records. Connect the application data source to identify pending reviews, document follow-ups and incomplete records.";
+      return;
+    }
+
+    const received = counts["Received"] || 0;
+    const review = counts["Under Review"] || 0;
+    const docsRequired = counts["Documents Required"] || 0;
+    const completed = counts["Completed"] || 0;
+    const onHold = counts["On Hold"] || 0;
+    const other = total - received - review - docsRequired - completed - onHold;
+
+    const active = received + review + docsRequired + onHold;
+    const completionRate = Math.round(completed / total * 100);
+
+    $("aiSummary").innerHTML = `
+      <ul>
+        <li><strong>${total}</strong> application record(s) are currently available.</li>
+        <li><strong>${received}</strong> are marked Received and <strong>${review}</strong> are Under Review.</li>
+        <li><strong>${docsRequired}</strong> require documents according to their recorded status.</li>
+        <li><strong>${completed}</strong> are marked Completed, representing ${completionRate}% of all records.</li>
+        <li><strong>${active}</strong> record(s) are not marked Completed.</li>
+        ${other > 0 ? `<li><strong>${other}</strong> record(s) have an unspecified or unrecognised status.</li>` : ""}
+      </ul>
+    `;
+
+    const missingApplicant = applications.filter(app =>
+      getApplicant(app) === "Not provided"
+    ).length;
+
+    const missingReference = applications.filter(app =>
+      getReference(app) === "—"
+    ).length;
+
+    const missingDate = applications.filter(app =>
+      getDate(app) === "—"
+    ).length;
+
+    const observations = [];
+
+    if (received > 0) {
+      observations.push(`${received} application(s) are marked Received. Check whether initial reviews are required.`);
+    }
+
+    if (docsRequired > 0) {
+      observations.push(`${docsRequired} application(s) are marked Documents Required. Verify which documents are missing.`);
+    }
+
+    if (onHold > 0) {
+      observations.push(`${onHold} application(s) are marked On Hold. Review their recorded reasons before taking action.`);
+    }
+
+    if (review > 0) {
+      observations.push(`${review} application(s) are Under Review. Monitor their progress and record any updates.`);
+    }
+
+    if (missingApplicant > 0) {
+      observations.push(`${missingApplicant} record(s) have no recognised applicant name.`);
+    }
+
+    if (missingReference > 0) {
+      observations.push(`${missingReference} record(s) have no recognised application reference.`);
+    }
+
+    if (missingDate > 0) {
+      observations.push(`${missingDate} record(s) have no recognised application date.`);
+    }
+
+    if (!observations.length) {
+      observations.push("No pending statuses or missing basic fields were identified from the available records. This does not verify the completeness or accuracy of the documents.");
+    }
+
+    $("aiAnalysis").innerHTML = `
+      <p><strong>Completion rate:</strong> ${completionRate}%</p>
+      <p><strong>Records not marked Completed:</strong> ${active}</p>
+      <ul>${observations.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul>
+    `;
+  }
+
+  function renderApplications() {
+    const query = $("applicationSearch").value.trim().toLowerCase();
+    const selectedStatus = $("statusFilter").value;
+
+    const filtered = applications.filter(app => {
+      const text = [
+        getReference(app),
+        getApplicant(app),
+        getLoanType(app),
+        getStatus(app),
+        getDate(app)
+      ].join(" ").toLowerCase();
+
+      return text.includes(query) &&
+        (!selectedStatus || getStatus(app) === selectedStatus);
+    });
+
+    if (!filtered.length) {
+      $("applicationsTableBody").innerHTML = `
+        <tr><td colspan="7">
+          ${applications.length
+            ? "No applications match the selected filters."
+            : "No application records are available."}
+        </td></tr>
+      `;
+      return;
+    }
+
+    $("applicationsTableBody").innerHTML = filtered.map(app => {
+      const linked = getLinkedDocuments(app);
+
+      return `
+        <tr>
+          <td><strong>${escapeHTML(getReference(app))}</strong></td>
+          <td>${escapeHTML(getApplicant(app))}</td>
+          <td>${escapeHTML(getLoanType(app))}</td>
+          <td>${escapeHTML(getAmount(app))}</td>
+          <td><span class="status-tag">${escapeHTML(getStatus(app))}</span></td>
+          <td>${escapeHTML(getDate(app))}</td>
+          <td>${linked.length} file(s)</td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  function filenameFromDocument(doc) {
+    return String(firstValue(doc, [
+      "fileName", "filename", "name", "originalName"
+    ], "document"));
+  }
+
+  function mimeFromDocument(doc) {
+    return String(firstValue(doc, [
+      "mimeType", "type", "contentType"
+    ], "application/octet-stream"));
+  }
+
+  function getDocumentPayload(doc) {
+    return firstValue(doc, [
+      "dataUrl", "dataURL", "base64Data", "base64",
+      "content", "fileData"
+    ], "");
+  }
+
+  function safeFilename(name) {
+    return String(name).replace(/[\\/:*?"<>|]/g, "_").slice(0, 180) || "document";
+  }
+
+  function downloadDataUrl(dataUrl, filename) {
+    const link = document.createElement("a");
+    link.href = dataUrl;
+    link.download = safeFilename(filename);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  }
+
+  function downloadBase64(payload, mime, filename) {
+    const clean = String(payload).replace(/\s/g, "");
+    const binary = atob(clean);
+    const chunks = [];
+
+    for (let offset = 0; offset < binary.length; offset += 1024) {
+      const part = binary.slice(offset, offset + 1024);
+      const bytes = new Uint8Array(part.length);
+
+      for (let i = 0; i < part.length; i++) {
+        bytes[i] = part.charCodeAt(i);
+      }
+
+      chunks.push(bytes);
+    }
+
+    const blob = new Blob(chunks, { type: mime });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = safeFilename(filename);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  function downloadDocument(index) {
+    const doc = documents[index];
+    if (!doc) return;
+
+    const filename = filenameFromDocument(doc);
+    const mime = mimeFromDocument(doc);
+    const payload = getDocumentPayload(doc);
+
+    try {
+      if (typeof payload === "string" &&
+          payload.startsWith("data:")) {
+        downloadDataUrl(payload, filename);
+        return;
+      }
+
+      if (typeof payload === "string" && payload.length > 0) {
+        const clean = payload.replace(/\s/g, "");
+        const isBase64 = /^[A-Za-z0-9+/]*={0,2}$/.test(clean);
+
+        if (isBase64) {
+          downloadBase64(clean, mime, filename);
+          return;
+        }
+
+        alert("This document's stored content format is not recognised.");
+        return;
+      }
+
+      const url = firstValue(doc, [
+        "downloadUrl", "url", "fileUrl"
+      ], "");
+
+      if (url) {
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = safeFilename(filename);
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        return;
+      }
+
+      alert(
+        "The file metadata exists, but its file content or download URL is unavailable. Connect the original file storage service to download it."
+      );
+    } catch (error) {
+      console.error("Document download failed:", error);
+      alert("The document could not be downloaded.");
+    }
+  }
+
+  function renderDocuments() {
+    if (!documents.length) {
+      $("documentList").innerHTML = `
+        <div class="empty-state">
+          No accessible uploaded documents were found in the configured browser storage keys.
+        </div>
+      `;
+      return;
+    }
+
+    $("documentList").innerHTML = documents.map((doc, index) => {
+      const reference = firstValue(doc, [
+        "reference", "applicationRef", "applicationReference",
+        "applicationId", "recordId"
+      ], "Not linked");
+
+      const filename = filenameFromDocument(doc);
+      const size = firstValue(doc, ["size", "fileSize"], "");
+      const readableSize = Number(size) > 0
+        ? (Number(size) / 1024).toFixed(1) + " KB"
+        : "Size unavailable";
+
+      const payload = getDocumentPayload(doc);
+      const url = firstValue(doc, ["downloadUrl", "url", "fileUrl"], "");
+      const downloadable = Boolean(payload || url);
+
+      return `
+        <div class="document-item">
+          <div>
+            <div class="document-name">${escapeHTML(filename)}</div>
+            <div class="document-meta">
+              Application: ${escapeHTML(reference)} · ${escapeHTML(readableSize)}
+            </div>
+          </div>
+          <div class="document-actions">
+            <button type="button" class="small-btn"
+              data-download-document="${index}"
+              ${downloadable ? "" : "disabled"}>
+              DOWNLOAD ↓
+            </button>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    $("documentList").querySelectorAll("[data-download-document]").forEach(button => {
+      button.addEventListener("click", () => {
+        downloadDocument(Number(button.dataset.downloadDocument));
+      });
+    });
+  }
+
+  function csvCell(value) {
+    let text = String(value ?? "");
+
+    // Avoid treating spreadsheet formula-like values as formulas.
+    if (/^[\s]*[=+\-@]/.test(text)) {
+      text = "'" + text;
+    }
+
+    return '"' + text.replace(/"/g, '""') + '"';
+  }
+
+  function downloadCsv(rows, filename) {
+    if (!rows.length) {
+      alert("There are no records to export.");
+      return;
+    }
+
+    const headers = [
+      "Reference", "Applicant", "Loan type",
+      "Amount", "Status", "Date", "Document count"
+    ];
+
+    const lines = [
+      headers.map(csvCell).join(","),
+      ...rows.map(app => [
+        getReference(app),
+        getApplicant(app),
+        getLoanType(app),
+        getAmount(app),
+        getStatus(app),
+        getDate(app),
+        getLinkedDocuments(app).length
+      ].map(csvCell).join(","))
+    ];
+
+    const blob = new Blob(
+      ["\uFEFF" + lines.join("\r\n")],
+      { type: "text/csv;charset=utf-8;" }
+    );
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  function exportSummary() {
+    const total = applications.length;
+    const counts = statusCounts(applications);
+
+    const report = [
+      "CREDORA — LENDER DASHBOARD SUMMARY",
+      "Generated: " + new Date().toLocaleString(),
+      "",
+      "TOTAL APPLICATIONS: " + total,
+      "RECEIVED: " + (counts["Received"] || 0),
+      "UNDER REVIEW: " + (counts["Under Review"] || 0),
+      "DOCUMENTS REQUIRED: " + (counts["Documents Required"] || 0),
+      "COMPLETED: " + (counts["Completed"] || 0),
+      "ON HOLD: " + (counts["On Hold"] || 0),
+      "ACCESSIBLE DOCUMENT RECORDS: " + documents.length,
+      "",
+      "APPLICATIONS",
+      ...applications.map(app =>
+        `${getReference(app)} | ${getApplicant(app)} | ${getLoanType(app)} | ${getStatus(app)} | ${getDate(app)}`
+      ),
+      "",
+      "Note: This is a rule-based report from records available to this browser."
+    ].join("\r\n");
+
+    const blob = new Blob([report], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = "credora-dashboard-summary.txt";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  function refreshDashboard() {
+    applications = readArray(APPLICATION_KEYS);
+    documents = readArray(DOCUMENT_KEYS);
+
+    renderStats();
+    renderRecentActivity();
+    renderInsights();
+    renderApplications();
+    renderDocuments();
+
+    $("lastUpdated").textContent =
+      "Updated " + new Date().toLocaleTimeString();
+
+    $("connectionStatus").textContent = "LOCAL DATA";
+  }
+
+  $("refreshButton").addEventListener("click", refreshDashboard);
+
+  $("exportCsvButton").addEventListener("click", () => {
+    downloadCsv(applications, "credora-applications.csv");
+  });
+
+  $("exportFilteredButton").addEventListener("click", () => {
+    const query = $("applicationSearch").value.trim().toLowerCase();
+    const selectedStatus = $("statusFilter").value;
+
+    const filtered = applications.filter(app => {
+      const text = [
+        getReference(app), getApplicant(app),
+        getLoanType(app), getStatus(app), getDate(app)
+      ].join(" ").toLowerCase();
+
+      return text.includes(query) &&
+        (!selectedStatus || getStatus(app) === selectedStatus);
+    });
+
+    downloadCsv(filtered, "credora-filtered-applications.csv");
+  });
+
+  $("exportReportButton").addEventListener("click", exportSummary);
+  $("applicationSearch").addEventListener("input", renderApplications);
+  $("statusFilter").addEventListener("change", renderApplications);
+
+  // Update when another page or tab changes the same local storage.
+  window.addEventListener("storage", event => {
+    if ([...APPLICATION_KEYS, ...DOCUMENT_KEYS].includes(event.key) ||
+        event.key === null) {
+      refreshDashboard();
+    }
+  });
+
+  // Refresh visible data periodically. This is not a server connection.
+  setInterval(refreshDashboard, 15000);
+
+  // Footer year.
+  document.querySelectorAll("[data-year]").forEach(element => {
+    element.textContent = new Date().getFullYear();
+  });
+
+  refreshDashboard();
+})();
+</script>
+
+</body>
+</html>

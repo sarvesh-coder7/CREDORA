@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <title>CREDORA — Credit Workflow Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&family=Roboto:wght@400;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+  <link rel="icon" type="image/png" href="./ICON.png">
+</head>
+<body>
+<header class="site-header">
+  <nav class="navbar">
+    <a class="brand" href="index.html"><img src="LOGO.jpeg" alt="CREDORA"><span>CREDORA</span></a>
+    <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+    <div class="nav-links">
+      <a href="index.html">Home</a><a href="applications.html">Applications</a><a href="lenders.html">Lenders</a><a href="reports.html">Reports</a><a href="about.html">About</a>
+    </div>
+
+<!-- AUTH / PROFILE AREA -->
+<div class="nav-auth" id="navAuth">
+  <a href="login.html" class="nav-login" id="loginLink">
+    LOGIN <span>↗</span>
+  </a>
+
+  <div class="profile-container" id="profileContainer" hidden>
+    <button class="profile-button" id="profileButton"
+            type="button" aria-label="Open profile menu"
+            aria-expanded="false">
+      <img id="profileImage" src="profile.png" alt="Profile">
+    </button>
+
+    <div class="profile-dropdown" id="profileDropdown" hidden>
+      <div class="profile-info">
+        <strong id="profileName">User</strong>
+        <span id="profileEmail">user@example.com</span>
+      </div>
+      <a href="profile.html">My Profile</a>
+      <a href="applications.html">My Applications</a>
+      <button type="button" id="logoutButton">Logout</button>
+    </div>
+  </div>
+</div>
+
+  </nav>
+</header>
+
+<main>
+  <section class="home-hero">
+    <div class="container home-hero-grid">
+      <div>
+        <h1 class="home-title">CREDIT<span>MADE CLEAR.</span></h1>
+        <p class="page-description">Organize loan application records, document information, review workflows, and lender activities in one structured workspace.</p>
+        <div class="home-actions">
+          <a class="btn" href="applications.html">MANAGE APPLICATIONS ↗</a>
+          <a class="btn btn-outline" href="about.html">ABOUT CREDORA</a>
+        </div>
+      </div>
+      <aside class="home-aside">
+        <p class="eyebrow">The approach</p>
+        <h2>Structured information. Clearer workflows.</h2>
+        <p>Keep records organized, track the statuses entered by users, and make supporting information easier to review.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-heading">
+        <div><p class="eyebrow">Workspace</p><h2>Explore the platform</h2></div>
+      </div>
+      <div class="grid grid-3">
+        <a class="feature-link" href="applications.html"><p class="eyebrow">01 / Records</p><h3>Applications ↗</h3><p>Add, search, import, and export application records.</p></a>
+        <a class="feature-link" href="risk-review.html"><p class="eyebrow">02 / Assessment</p><h3>Risk Review ↗</h3><p>Organize review notes and user-entered review statuses.</p></a>
+        <a class="feature-link" href="lenders.html"><p class="eyebrow">03 / Workflow</p><h3>Lenders ↗</h3><p>Maintain lender workflow and activity records.</p></a>
+        <a class="feature-link" href="reports.html"><p class="eyebrow">04 / Documents</p><h3>Reports & Documents ↗</h3><p>Keep document metadata and preview supported files.</p></a>
+        <a class="feature-link" href="about.html"><p class="eyebrow">05 / Information</p><h3>About CREDORA ↗</h3><p>Learn about the platform and prepare an enquiry.</p></a>
+        <div class="feature-link"><p class="eyebrow">06 / Data</p><h3>Your workspace</h3><p>Records start empty. Add your own information when ready.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container grid grid-3">
+      <div class="card"><span class="card-label">Principle 01</span><h3>Organization</h3><p>Keep records arranged in consistent formats.</p></div>
+      <div class="card"><span class="card-label">Principle 02</span><h3>Visibility</h3><p>Search records and review user-entered statuses.</p></div>
+      <div class="card"><span class="card-label">Principle 03</span><h3>Human review</h3><p>Use verification and appropriate judgment for financial decisions.</p></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer"><div class="footer-inner"><p class="footer-copy">© <span data-year></span> CREDORA. All rights reserved.</p><div class="footer-links"><a href="index.html">Home</a><a href="applications.html">Applications</a><a href="reports.html">Reports</a><a href="about.html">Contact</a></div></div></footer>
+</body>
+</html>

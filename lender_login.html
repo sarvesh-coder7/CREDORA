@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ffffff">
+    <title>CREDORA | Lender Access</title>
+   <link rel="icon" type="image/png" href="./ICON.png">
+
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            background: #fff;
+            color: #000;
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            padding: 25px 7%;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        header img { width: 45px; height: 45px; object-fit: contain; }
+
+        header h1 {
+            font-size: 25px;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        .container {
+            width: min(430px, 90%);
+            margin: 35px auto 60px;
+            flex: 1;
+        }
+
+        .back {
+            display: inline-block;
+            color: #555;
+            text-decoration: none;
+            font-size: 13px;
+            margin-bottom: 35px;
+        }
+
+        .back:hover { color: #000; }
+
+        .eyebrow {
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            font-size: clamp(32px, 7vw, 43px);
+            letter-spacing: -2px;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            color: #777;
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        .tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            margin-bottom: 25px;
+            border: 1px solid #000;
+        }
+
+        .tab {
+            padding: 13px;
+            border: 0;
+            background: #fff;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .tab.active { background: #000; color: #fff; }
+
+        .field { margin-bottom: 18px; }
+
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 9px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ccc;
+            background: #fff;
+            color: #000;
+            font-size: 14px;
+            outline: none;
+        }
+
+        input:focus { border: 2px solid #000; }
+
+        .submit {
+            width: 100%;
+            padding: 16px;
+            background: #000;
+            color: #fff;
+            border: 2px solid #000;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .submit:hover { background: #fff; color: #000; }
+
+        .notice {
+            margin-top: 18px;
+            color: #777;
+            font-size: 11px;
+            line-height: 1.7;
+        }
+
+        footer {
+            padding: 20px 7%;
+            border-top: 1px solid #eee;
+            color: #777;
+            font-size: 11px;
+            text-align: center;
+        }
+
+        [hidden] { display: none !important; }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="./LOGO.jpeg" alt="CREDORA Logo">
+        <h1>CREDORA</h1>
+    </header>
+
+    <main class="container">
+        <a class="back" href="./introindex.html">← Back to home</a>
+
+        <p class="eyebrow">LENDER ACCOUNT</p>
+        <h2 id="heading">Welcome back.</h2>
+        <p class="subtitle" id="subtitle">
+            Sign in to access your CREDORA lender account.
+        </p>
+
+        <div class="tabs">
+            <button class="tab active" id="loginTab" type="button">Login</button>
+            <button class="tab" id="registerTab" type="button">Register</button>
+        </div>
+
+        <form id="lenderForm">
+            <div class="field" id="nameField" hidden>
+                <label for="name">FULL NAME</label>
+                <input id="name" name="name" autocomplete="name"
+                       placeholder="Enter your full name">
+            </div>
+
+            <div class="field" id="businessField" hidden>
+                <label for="business">LENDER / ORGANIZATION NAME</label>
+                <input id="business" name="business"
+                       placeholder="Enter lender or organization name">
+            </div>
+
+            <div class="field">
+                <label for="email">EMAIL ADDRESS</label>
+                <input id="email" name="email" type="email"
+                       autocomplete="email" placeholder="you@example.com" required>
+            </div>
+
+            <div class="field">
+                <label for="password">PASSWORD</label>
+                <input id="password" name="password" type="password"
+                       autocomplete="current-password"
+                       placeholder="Enter your password" required>
+            </div>
+
+            <div class="field" id="confirmField" hidden>
+                <label for="confirmPassword">CONFIRM PASSWORD</label>
+                <input id="confirmPassword" name="confirmPassword"
+                       type="password" autocomplete="new-password"
+                       placeholder="Re-enter your password">
+            </div>
+
+            <button class="submit" id="submitButton" type="submit">
+                LOGIN TO LENDER ACCOUNT →
+            </button>
+        </form>
+
+        <p class="notice" id="formMessage" aria-live="polite">
+            Keep your lender account credentials secure.
+        </p>
+        <p class="notice">
+            Looking for user access? <a href="./user-login.html" style="color:#000">User login →</a>
+        </p>
+    </main>
+
+    <footer>© <span id="year"></span> CREDORA</footer>
+
+    <script>
+        const form = document.getElementById("lenderForm");
+        const loginTab = document.getElementById("loginTab");
+        const registerTab = document.getElementById("registerTab");
+        const nameField = document.getElementById("nameField");
+        const businessField = document.getElementById("businessField");
+        const confirmField = document.getElementById("confirmField");
+        const nameInput = document.getElementById("name");
+        const businessInput = document.getElementById("business");
+        const confirmInput = document.getElementById("confirmPassword");
+        let mode = "login";
+
+        document.getElementById("year").textContent = new Date().getFullYear();
+
+        function setMode(nextMode) {
+            mode = nextMode;
+            const registering = mode === "register";
+
+            loginTab.classList.toggle("active", !registering);
+            registerTab.classList.toggle("active", registering);
+
+            nameField.hidden = !registering;
+            businessField.hidden = !registering;
+            confirmField.hidden = !registering;
+
+            nameInput.required = registering;
+            businessInput.required = registering;
+            confirmInput.required = registering;
+
+            document.getElementById("heading").textContent =
+                registering ? "Join as a lender." : "Welcome back.";
+
+            document.getElementById("subtitle").textContent =
+                registering
+                ? "Create your lender account to get started."
+                : "Sign in to access your CREDORA lender account.";
+
+            document.getElementById("submitButton").textContent =
+                registering ? "CREATE LENDER ACCOUNT →" : "LOGIN TO LENDER ACCOUNT →";
+
+            document.getElementById("password").autocomplete =
+                registering ? "new-password" : "current-password";
+
+            document.getElementById("formMessage").textContent =
+                "Keep your lender account credentials secure.";
+        }
+
+        loginTab.addEventListener("click", () => setMode("login"));
+        registerTab.addEventListener("click", () => setMode("register"));
+
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            if (mode === "register" &&
+                document.getElementById("password").value !== confirmInput.value) {
+                document.getElementById("formMessage").textContent =
+                    "Passwords do not match. Please check and try again.";
+                confirmInput.focus();
+                return;
+            }
+
+            document.getElementById("formMessage").textContent =
+                "The form is ready, but authentication is not connected yet. Connect this form to your existing backend to register or sign in.";
+        });
+    </script>
+</body>
+</html>

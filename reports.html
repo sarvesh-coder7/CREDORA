@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+
+  <title>Report an Issue — CREDORA</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&familys=Roboto:wght@400;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="style.css">
+   <link rel="icon" type="image/png" href="./ICON.png">
+
+  <script src="script.js" defer></script>
+
+  <style>
+    /* PAGE LAYOUT */
+    html,
+    body {
+      min-height: 100%;
+      margin: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    main {
+      flex: 1;
+    }
+
+    .site-footer {
+      margin-top: auto;
+      width: 100%;
+    }
+
+    /* HERO */
+    .report-hero {
+      padding: 55px 0 35px;
+    }
+
+    .report-hero h1 {
+      max-width: 850px;
+      margin: 15px 0;
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(34px, 6vw, 68px);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -2px;
+    }
+
+    .report-hero h1 span {
+      display: block;
+      color: #777;
+    }
+
+    .report-intro {
+      max-width: 650px;
+      line-height: 1.8;
+      color: #555;
+    }
+
+    /* MAIN GRID */
+    .report-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(250px, 0.8fr);
+      gap: 35px;
+      align-items: start;
+      padding-bottom: 65px;
+    }
+
+    .report-panel {
+      border: 1px solid #111;
+      padding: 30px;
+      background: #fff;
+    }
+
+    .report-panel h2 {
+      margin: 0 0 10px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 25px;
+    }
+
+    .report-subtitle {
+      margin: 0 0 28px;
+      color: #666;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    /* FORM */
+    .report-form {
+      display: grid;
+      gap: 20px;
+    }
+
+    .report-field {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .report-field label {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .report-field input,
+    .report-field select,
+    .report-field textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 14px;
+      border: 1px solid #bcbcbc;
+      border-radius: 0;
+      background: #fff;
+      color: #111;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+    }
+
+    .report-field input:focus,
+    .report-field select:focus,
+    .report-field textarea:focus {
+      outline: 2px solid #111;
+      outline-offset: 2px;
+      border-color: #111;
+    }
+
+    .report-field textarea {
+      min-height: 150px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    .report-field input::placeholder,
+    .report-field textarea::placeholder {
+      color: #888;
+    }
+
+    .report-two-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .report-consent {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      color: #555;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .report-consent input {
+      margin-top: 4px;
+      accent-color: #111;
+    }
+
+    .report-submit {
+      width: 100%;
+      min-height: 52px;
+      padding: 15px 20px;
+      border: 1px solid #111;
+      background: #111;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .report-submit:hover {
+      background: #fff;
+      color: #111;
+    }
+
+    .report-message {
+      padding: 14px;
+      border: 1px solid #111;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    /* CONTACT SIDEBAR */
+    .contact-panel {
+      display: grid;
+      gap: 0;
+      border: 1px solid #111;
+      background: #fff;
+    }
+
+    .contact-heading {
+      padding: 25px;
+      background: #111;
+      color: #fff;
+    }
+
+    .contact-heading h2 {
+      margin: 10px 0;
+      font-family: 'Poppins', sans-serif;
+      font-size: 24px;
+    }
+
+    .contact-heading p {
+      margin: 0;
+      color: #ccc;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .contact-item {
+      padding: 22px 25px;
+      border-top: 1px solid #ddd;
+    }
+
+    .contact-item:first-child {
+      border-top: none;
+    }
+
+    .contact-label {
+      margin: 0 0 8px;
+      color: #777;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+    }
+
+    .contact-value {
+      margin: 0;
+      color: #111;
+      font-size: 14px;
+      font-weight: 600;
+      overflow-wrap: anywhere;
+    }
+
+    .contact-value a {
+      color: #111;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .social-links {
+      display: grid;
+      gap: 10px;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 13px 15px;
+      border: 1px solid #ddd;
+      color: #111;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .social-link:hover {
+      background: #111;
+      color: #fff;
+      border-color: #111;
+    }
+
+    .social-arrow {
+      font-size: 17px;
+    }
+
+    .contact-note {
+      margin: 0;
+      padding: 20px 25px;
+      border-top: 1px solid #ddd;
+      color: #666;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 850px) {
+      .report-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-panel {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .report-hero {
+        padding-top: 35px;
+      }
+
+      .report-hero h1 {
+        letter-spacing: -1px;
+      }
+
+      .report-panel {
+        padding: 20px;
+      }
+
+      .report-two-columns {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <header class="site-header">
+    <nav class="navbar" aria-label="Main navigation">
+
+      <a class="brand" href="index.html">
+        <img src="LOGO.jpeg" alt="CREDORA">
+        <span>CREDORA</span>
+      </a>
+
+      <button
+        class="menu-toggle"
+        id="menuToggle"
+        type="button"
+        aria-label="Toggle navigation"
+        aria-controls="navLinks"
+        aria-expanded="false"
+      >☰</button>
+
+      <div class="nav-links" id="navLinks">
+        <a href="index.html">Home</a>
+        <a href="applications.html">Applications</a>
+        <a href="lenders.html">Lenders</a>
+        <a href="reports.html" aria-current="page">Reports</a>
+        <a href="about.html">About</a>
+      </div>
+
+      <!-- LOGIN / PROFILE -->
+      <div class="nav-auth" id="navAuth">
+
+        <a href="login.html" class="nav-login" id="loginLink">
+          LOGIN <span aria-hidden="true">↗</span>
+        </a>
+
+        <div class="profile-container" id="profileContainer" hidden>
+
+          <button
+            class="profile-button"
+            id="profileButton"
+            type="button"
+            aria-label="Open profile menu"
+            aria-controls="profileDropdown"
+            aria-expanded="false"
+          >
+            <img id="profileImage" src="profile.png" alt="">
+          </button>
+
+          <div class="profile-dropdown" id="profileDropdown" hidden>
+            <div class="profile-info">
+              <strong id="profileName">User</strong>
+              <span id="profileEmail">user@example.com</span>
+            </div>
+
+            <a href="profile.html">My Profile</a>
+            <a href="applications.html">My Applications</a>
+
+            <button type="button" id="logoutButton">
+              Logout
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </nav>
+  </header>
+
+
+  <!-- MAIN -->
+  <main>
+
+    <!-- HERO -->
+    <section class="report-hero">
+      <div class="container">
+
+        <h1>
+          REPORT AN
+          <span>ISSUE.</span>
+        </h1>
+
+        <p class="report-intro">
+          Facing a problem or have a question? Tell us what happened.
+          Use this form to report website errors, account issues,
+          application problems, complaints, or general queries.
+        </p>
+
+      </div>
+    </section>
+
+
+    <!-- FORM AND CONTACT DETAILS -->
+    <section class="container report-layout">
+
+      <!-- REPORT FORM -->
+      <div class="report-panel">
+
+        <p class="eyebrow">01 / SUBMIT A REPORT</p>
+        <h2>What can we help with?</h2>
+
+        <p class="report-subtitle">
+          Provide accurate details so the support team can understand
+          your issue. Fields marked with * are required.
+        </p>
+
+        <form class="report-form" id="reportForm">
+
+          <div class="report-two-columns">
+
+            <div class="report-field">
+              <label for="reportName">Full name *</label>
+              <input
+                type="text"
+                id="reportName"
+                name="name"
+                placeholder="Enter your name"
+                autocomplete="name"
+                maxlength="100"
+                required
+              >
+            </div>
+
+            <div class="report-field">
+              <label for="reportEmail">Email address *</label>
+              <input
+                type="email"
+                id="reportEmail"
+                name="email"
+                placeholder="you@example.com"
+                autocomplete="email"
+                maxlength="254"
+                required
+              >
+            </div>
+
+          </div>
+
+          <div class="report-field">
+            <label for="reportType">Type of issue *</label>
+
+            <select id="reportType" name="issue_type" required>
+              <option value="" selected disabled>
+                Select an issue category
+              </option>
+              <option value="website-bug">Website error or bug</option>
+              <option value="login">Login or account issue</option>
+              <option value="application">Loan application issue</option>
+              <option value="lender">Lender directory issue</option>
+              <option value="document">Document or report issue</option>
+              <option value="complaint">Complaint about the website</option>
+              <option value="query">General question or query</option>
+              <option value="privacy">Privacy or security concern</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="report-two-columns">
+
+            <div class="report-field">
+              <label for="reportPage">Page where issue occurred</label>
+
+              <select id="reportPage" name="page">
+                <option value="">Select a page (optional)</option>
+                <option value="home">Home</option>
+                <option value="applications">Applications</option>
+                <option value="risk-review">Risk Review</option>
+                <option value="lenders">Lenders</option>
+                <option value="reports">Reports</option>
+                <option value="login">Login</option>
+                <option value="profile">Profile</option>
+                <option value="about">About</option>
+                <option value="other">Other page</option>
+              </select>
+            </div>
+
+            <div class="report-field">
+              <label for="reportPriority">Priority *</label>
+
+              <select
+                id="reportPriority"
+                name="priority"
+                required
+              >
+                <option value="" selected disabled>
+                  Select priority
+                </option>
+                <option value="low">Low — General question</option>
+                <option value="normal">Normal — Issue affecting use</option>
+                <option value="high">High — Major functionality issue</option>
+              </select>
+            </div>
+
+          </div>
+
+          <div class="report-field">
+            <label for="reportSubject">Subject *</label>
+
+            <input
+              type="text"
+              id="reportSubject"
+              name="subject"
+              placeholder="Briefly describe the issue"
+              maxlength="150"
+              required
+            >
+          </div>
+
+          <div class="report-field">
+            <label for="reportDescription">Issue description *</label>
+
+            <textarea
+              id="reportDescription"
+              name="description"
+              placeholder="Explain what happened, what you expected, and the steps to reproduce the issue..."
+              minlength="10"
+              maxlength="5000"
+              required
+            ></textarea>
+          </div>
+
+          <label class="report-consent">
+            <input
+              type="checkbox"
+              id="reportConsent"
+              name="consent"
+              required
+            >
+
+            <span>
+              I confirm that the information provided is accurate and
+              agree to be contacted about this report.
+            </span>
+          </label>
+
+          <button class="report-submit" type="submit">
+            SUBMIT REPORT ↗
+          </button>
+
+          <p
+            class="report-message"
+            id="reportMessage"
+            role="status"
+            aria-live="polite"
+            hidden
+          ></p>
+
+        </form>
+
+      </div>
+
+
+      <!-- CONTACT INFORMATION -->
+      <aside class="contact-panel">
+
+        <div class="contact-heading">
+          <p class="eyebrow">02 / GET IN TOUCH</p>
+          <h2>Contact CREDORA.</h2>
+          <p>
+            Choose a contact channel to ask a question or follow
+            official CREDORA updates.
+          </p>
+        </div>
+
+        <!-- Configure these details before publishing -->
+        <div class="contact-item">
+          <p class="contact-label">SUPPORT EMAIL</p>
+          <p class="contact-value">
+            <a href="about.html">Contact details to be configured</a>
+          </p>
+        </div>
+
+        <div class="contact-item">
+          <p class="contact-label">PHONE / SUPPORT NUMBER</p>
+          <p class="contact-value">
+            Add your official support number
+          </p>
+        </div>
+
+        <div class="contact-item">
+          <p class="contact-label">SOCIAL MEDIA</p>
+
+          <div class="social-links">
+
+            <!-- Replace each placeholder URL with your official page -->
+            <a
+              class="social-link"
+              href="https://www.facebook.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>Facebook</span>
+              <span class="social-arrow" aria-hidden="true">↗</span>
+            </a>
+
+            <a
+              class="social-link"
+              href="https://www.instagram.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>Instagram</span>
+              <span class="social-arrow" aria-hidden="true">↗</span>
+            </a>
+
+            <a
+              class="social-link"
+              href="https://www.linkedin.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>LinkedIn</span>
+              <span class="social-arrow" aria-hidden="true">↗</span>
+            </a>
+
+          </div>
+        </div>
+
+        <p class="contact-note">
+          Replace the contact placeholders and social media homepage
+          URLs with your official CREDORA contact details before
+          publishing this page.
+        </p>
+
+      </aside>
+
+    </section>
+
+  </main>
+
+<footer class="site-footer"><div class="footer-inner"><p class="footer-copy">© <span data-year></span> CREDORA. All rights reserved.</p><div class="footer-links"><a href="index.html">Home</a><a href="applications.html">Applications</a><a href="reports.html">Reports</a><a href="about.html">Contact</a></div></div></footer>
+
+  <!-- FORM VALIDATION -->
+  <script>
+    const reportForm = document.getElementById("reportForm");
+    const reportMessage = document.getElementById("reportMessage");
+
+    reportForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      if (!reportForm.reportValidity()) {
+        return;
+      }
+
+      reportMessage.hidden = false;
+      reportMessage.textContent =
+        "Your form is valid, but report submission is not connected yet. " +
+        "Connect a backend or support service before accepting reports.";
+
+      reportMessage.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest"
+      });
+    });
+  </script>
+
+</body>
+</html>
