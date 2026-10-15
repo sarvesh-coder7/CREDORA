@@ -360,7 +360,6 @@ const profileImage = document.getElementById("profileImage");
 const logoutButton = document.getElementById("logoutButton");
 
 function updateNavbar() {
-  // Demo only: replace with your backend's verified session.
   let user = null;
 
   try {
@@ -371,54 +370,78 @@ function updateNavbar() {
 
   const loggedIn = Boolean(user && user.email);
 
-  navLogin.hidden = loggedIn;
-  profileContainer.hidden = !loggedIn;
+  if (navLogin) navLogin.hidden = loggedIn;
+  if (profileContainer) profileContainer.hidden = !loggedIn;
 
   if (loggedIn) {
-    profileName.textContent = user.name || "CREDORA User";
-    profileEmail.textContent = user.email;
+    if (profileName) profileName.textContent = user.name || "CREDORA User";
+    if (profileEmail) profileEmail.textContent = user.email;
 
-    // Use a supplied profile image or the default image.
-    profileImage.src = user.image || "profile.png";
-    profileImage.onerror = () => {
-      profileImage.onerror = null;
-      profileImage.src =
-        "data:image/svg+xml," +
-        encodeURIComponent(
-          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">' +
-          '<rect width="100" height="100" fill="#eeeeee"/>' +
-          '<circle cx="50" cy="36" r="18" fill="#777777"/>' +
-          '<path d="M15 100 Q15 62 50 62 Q85 62 85 100" fill="#777777"/>' +
-          '</svg>'
-        );
-    };
+    if (profileImage) {
+      profileImage.src = user.image || "profile.png";
+      profileImage.onerror = () => {
+        profileImage.onerror = null;
+        profileImage.src =
+          "data:image/svg+xml," +
+          encodeURIComponent(
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">' +
+            '<rect width="100" height="100" fill="#eeeeee"/>' +
+            '<circle cx="50" cy="36" r="18" fill="#777777"/>' +
+            '<path d="M15 100 Q15 62 50 62 Q85 62 85 100" fill="#777777"/>' +
+            '</svg>'
+          );
+      };
+    }
   }
 
-  profileDropdown.hidden = true;
-  profileButton.setAttribute("aria-expanded", "false");
+  if (profileDropdown) profileDropdown.hidden = true;
+  if (profileButton) profileButton.setAttribute("aria-expanded", "false");
 }
 
-profileButton.addEventListener("click", () => {
-  const opening = profileDropdown.hidden;
-  profileDropdown.hidden = !opening;
-  profileButton.setAttribute("aria-expanded", String(opening));
-});
+if (profileButton && profileDropdown) {
+  profileButton.addEventListener("click", () => {
+    const opening = profileDropdown.hidden;
+    profileDropdown.hidden = !opening;
+    profileButton.setAttribute("aria-expanded", String(opening));
+  });
+}
 
 document.addEventListener("click", event => {
-  if (!profileContainer.contains(event.target)) {
-    profileDropdown.hidden = true;
-    profileButton.setAttribute("aria-expanded", "false");
+  if (profileContainer && !profileContainer.contains(event.target)) {
+    if (profileDropdown) profileDropdown.hidden = true;
+    if (profileButton) profileButton.setAttribute("aria-expanded", "false");
   }
 });
 
-logoutButton.addEventListener("click", () => {
-  // Demo only. In production, invalidate the server session too.
-  localStorage.removeItem("credoraUser");
+if (logoutButton) {
+  logoutButton.addEventListener("click", async () => {
+    if (window.CredoraAuth && typeof window.CredoraAuth.logout === 'function') {
+      await window.CredoraAuth.logout();
+    } else {
+      localStorage.removeItem("credoraUser");
+    }
+    updateNavbar();
+    window.location.href = "login.html";
+  });
+}
+
+// React to auth changes across windows or scripts
+window.addEventListener("credora:auth-change", () => {
   updateNavbar();
-  window.location.href = "index.html";
 });
 
-updateNavbar();
+window.addEventListener("storage", event => {
+  if (event.key === "credoraUser" || event.key === null) {
+    updateNavbar();
+  }
+});
+
+// Sync initial session on page load
+if (window.CredoraAuth && typeof window.CredoraAuth.checkSession === 'function') {
+  window.CredoraAuth.checkSession().then(() => updateNavbar());
+} else {
+  updateNavbar();
+}
 
 const lenders = [
   {
@@ -1050,69 +1073,4 @@ const LenderDirectory = (() => {
     renderLenders
   };
 })();
-
-/*
- * Future integration:
- *
- * const { data, error } = await supabase
- *   .from("lenders")
- *   .select("id, name, is_active, is_verified")
- *   .eq("is_active", true)
- *   .eq("is_verified", true)
- *   .order("name");
- *
- * if (error) {
- *   LenderDirectory.showError();
- * } else {
- *   LenderDirectory.showLenders(data ?? []);
- * }
- */
-let lenders = [];
-
-function renderLenders() {
-  const searchInput = document.getElementById("lenderSearch");
-  const lenderList = document.getElementById("lenderList");
-  const lenderCount = document.getElementById("lenderCount");
-  const lenderEmpty = document.getElementById("lenderEmpty");
-  const emptyTitle = document.getElementById("lenderEmptyTitle");
-  const emptyMessage = document.getElementById("lenderEmptyMessage");
-
-  const query = searchInput.value.trim().toLowerCase();
-
-  const results = lenders.filter(lender =>
-    lender.name.toLowerCase().includes(query)
-  );
-
-  lenderList.replaceChildren();
-
-  lenderCount.textContent =
-    `${results.length} LENDER${results.length === 1 ? "" : "S"} AVAILABLE`;
-
-  if (results.length === 0) {
-    lenderEmpty.hidden = false;
-
-    emptyTitle.textContent = query
-      ? "NO LENDERS FOUND"
-      : "NO LENDERS AVAILABLE";
-
-    emptyMessage.textContent = query
-      ? "No matching lender records were found."
-      : "No lender records are currently available.";
-
-    return;
-  }
-
-  lenderEmpty.hidden = true;
-
-  results.forEach(lender => {
-    const card = document.createElement("article");
-    card.className = "lender-card";
-
-    const name = document.createElement("h3");
-    name.textContent = lender.name;
-
-    card.appendChild(name);
-    lenderList.appendChild(card);
-  });
-}
 

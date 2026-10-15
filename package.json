@@ -1,0 +1,33 @@
+{
+  "name": "vsbec-24hrs-hackathon",
+  "version": "1.0.0",
+  "description": "<p align=\"center\">\r   <strong>Bridging Borrowers and Lenders Through Intelligent Document Analysis</strong>\r   <br />\r   A smarter, faster, and more transparent approach to loan document processing.\r </p>",
+  "main": "script.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "start": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sarvesh-coder7/VSBEC-24hrs-Hackathon.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/sarvesh-coder7/VSBEC-24hrs-Hackathon/issues"
+  },
+  "homepage": "https://github.com/sarvesh-coder7/VSBEC-24hrs-Hackathon#readme",
+  "devDependencies": {
+    "vite": "^8.3.4"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.118.0"
+  }
+}

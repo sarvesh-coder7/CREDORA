@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#ffffff">
     <title>CREDORA | Lender Access</title>
    <link rel="icon" type="image/png" href="./ICON.png">
-
+   <script type="module" src="supabaseClient.js"></script>
 
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -178,9 +178,9 @@
             </div>
 
             <div class="field">
-                <label for="email">EMAIL ADDRESS</label>
-                <input id="email" name="email" type="email"
-                       autocomplete="email" placeholder="you@example.com" required>
+                <label for="email" id="emailLabel">EMAIL ADDRESS OR LENDER ID</label>
+                <input id="email" name="email" type="text"
+                       autocomplete="username" placeholder="you@example.com or LEN-XXXX" required>
             </div>
 
             <div class="field">
@@ -206,13 +206,15 @@
             Keep your lender account credentials secure.
         </p>
         <p class="notice">
-            Looking for user access? <a href="./user-login.html" style="color:#000">User login →</a>
+            Looking for user access? <a href="./user_login.html" style="color:#000">User login →</a>
         </p>
     </main>
 
     <footer>© <span id="year"></span> CREDORA</footer>
 
-    <script>
+    <script type="module">
+        import { loginLender } from './supabaseClient.js';
+
         const form = document.getElementById("lenderForm");
         const loginTab = document.getElementById("loginTab");
         const registerTab = document.getElementById("registerTab");
@@ -222,6 +224,9 @@
         const nameInput = document.getElementById("name");
         const businessInput = document.getElementById("business");
         const confirmInput = document.getElementById("confirmPassword");
+        const formMessage = document.getElementById("formMessage");
+        const submitButton = document.getElementById("submitButton");
+        const emailLabel = document.getElementById("emailLabel");
         let mode = "login";
 
         document.getElementById("year").textContent = new Date().getFullYear();
@@ -241,40 +246,70 @@
             businessInput.required = registering;
             confirmInput.required = registering;
 
+            if (emailLabel) {
+                emailLabel.textContent = registering ? "ORGANIZATION EMAIL" : "EMAIL ADDRESS OR LENDER ID";
+            }
+
             document.getElementById("heading").textContent =
-                registering ? "Join as a lender." : "Welcome back.";
+                registering ? "Lender provisioning." : "Welcome back.";
 
             document.getElementById("subtitle").textContent =
                 registering
-                ? "Create your lender account to get started."
-                : "Sign in to access your CREDORA lender account.";
+                ? "Lender accounts are provisioned exclusively through authorized administrators."
+                : "Sign in using your registered Email or Lender ID.";
 
-            document.getElementById("submitButton").textContent =
-                registering ? "CREATE LENDER ACCOUNT →" : "LOGIN TO LENDER ACCOUNT →";
+            submitButton.textContent =
+                registering ? "VIEW PROVISIONING INFO →" : "LOGIN TO LENDER ACCOUNT →";
 
             document.getElementById("password").autocomplete =
                 registering ? "new-password" : "current-password";
 
-            document.getElementById("formMessage").textContent =
-                "Keep your lender account credentials secure.";
+            if (registering) {
+                formMessage.textContent =
+                    "Public lender registration is disabled for regulatory compliance. Institutional administrators must provision lender credentials using the Supabase admin procedure (admin_provision_lender).";
+                formMessage.style.color = "#000";
+            } else {
+                formMessage.textContent =
+                    "Keep your lender account credentials secure.";
+                formMessage.style.color = "#777";
+            }
         }
 
         loginTab.addEventListener("click", () => setMode("login"));
         registerTab.addEventListener("click", () => setMode("register"));
 
-        form.addEventListener("submit", function (event) {
+        form.addEventListener("submit", async function (event) {
             event.preventDefault();
 
-            if (mode === "register" &&
-                document.getElementById("password").value !== confirmInput.value) {
-                document.getElementById("formMessage").textContent =
-                    "Passwords do not match. Please check and try again.";
-                confirmInput.focus();
+            if (mode === "register") {
+                formMessage.textContent =
+                    "Self-service lender registration is not permitted. Please contact your organization administrator or CREDORA compliance team to provision your Lender ID.";
+                formMessage.style.color = "#900";
                 return;
             }
 
-            document.getElementById("formMessage").textContent =
-                "The form is ready, but authentication is not connected yet. Connect this form to your existing backend to register or sign in.";
+            const identifier = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+
+            submitButton.disabled = true;
+            submitButton.textContent = "AUTHENTICATING...";
+            formMessage.textContent = "Verifying lender credentials with Supabase...";
+            formMessage.style.color = "#555";
+
+            try {
+                const res = await loginLender(identifier, password);
+                formMessage.textContent = `Lender verified: ${res.profile?.full_name || 'Lender'}! Redirecting to Dashboard...`;
+                formMessage.style.color = "#080";
+                setTimeout(() => {
+                    window.location.href = "applications.html";
+                }, 600);
+            } catch (err) {
+                formMessage.textContent = err.message || "Lender authentication failed.";
+                formMessage.style.color = "#d00";
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = "LOGIN TO LENDER ACCOUNT →";
+            }
         });
     </script>
 </body>

@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
  <link rel="icon" type="image/png" href="./ICON.png">
-
+ <script type="module" src="supabaseClient.js"></script>
 
 <style>
 * {
@@ -588,10 +588,10 @@ body {
     <!-- LENDER LOGIN -->
     <form id="lender-login" class="auth-form">
       <div class="field">
-        <label for="lenderEmail">Registered Lender Email *</label>
-        <input id="lenderEmail" type="email" required
+        <label for="lenderEmail">Registered Lender Email or Lender ID *</label>
+        <input id="lenderEmail" type="text" required
                autocomplete="username"
-               placeholder="lender@company.com">
+               placeholder="lender@company.com or LEN-XXXX">
       </div>
 
       <div class="field">
@@ -636,7 +636,7 @@ body {
   </div>
 </main>
 
-<script>
+<script type="module">
 // INDIAN STATES AND UNION TERRITORIES
 // City lists are examples, not an exhaustive city directory.
 const locationData = {
@@ -761,55 +761,204 @@ document.querySelectorAll("[data-toggle]").forEach(button => {
   });
 });
 
-function showMessage(id, text) {
+import {
+  registerBorrower,
+  loginBorrower,
+  loginLender,
+  resetPassword,
+  checkSession
+} from './supabaseClient.js';
+
+function showMessage(id, text, isSuccess = false) {
   const element = document.getElementById(id);
+  if (!element) return;
   element.textContent = text;
+  element.style.borderColor = isSuccess ? "#080808" : "#d00";
+  element.style.background = isSuccess ? "#f5fff5" : "#fff5f5";
+  element.style.color = isSuccess ? "#050" : "#900";
   element.classList.add("show");
 }
 
-// BORROWER REGISTRATION VALIDATION
-document.getElementById("borrower-register").addEventListener("submit", event => {
-  event.preventDefault();
+function clearMessage(id) {
+  const element = document.getElementById(id);
+  if (!element) return;
+  element.textContent = "";
+  element.classList.remove("show");
+}
 
+// Check URL params for preselected view or auth errors
+const urlParams = new URLSearchParams(window.location.search);
+const requestedView = urlParams.get("view");
+if (requestedView && headings[requestedView]) {
+  showView(requestedView);
+}
+const authError = urlParams.get("auth_error");
+if (authError) {
+  const activeView = document.querySelector(".auth-form.active")?.id || "borrower-login";
+  const msgMap = {
+    "borrower-login": "borrowerLoginMessage",
+    "borrower-register": "registerMessage",
+    "lender-login": "lenderLoginMessage"
+  };
+  showMessage(msgMap[activeView] || "borrowerLoginMessage", authError, false);
+}
+
+// BORROWER REGISTRATION
+const registerForm = document.getElementById("borrower-register");
+registerForm.addEventListener("submit", async event => {
+  event.preventDefault();
+  clearMessage("registerMessage");
+
+  const fullName = document.getElementById("fullName").value.trim();
+  const email = document.getElementById("registerEmail").value.trim();
+  const mobile = document.getElementById("mobile").value.trim();
+  const state = document.getElementById("state").value.trim();
+  const city = document.getElementById("city").value.trim();
   const password = document.getElementById("registerPassword").value;
   const confirmPassword = document.getElementById("confirmPassword").value;
+  const terms = document.getElementById("acceptTerms").checked;
 
   if (password !== confirmPassword) {
-    showMessage("registerMessage", "Passwords do not match. Please try again.");
+    showMessage("registerMessage", "Passwords do not match. Please verify your password.", false);
     return;
   }
 
-  showMessage(
-    "registerMessage",
-    "Form validated successfully. Connect a secure backend to create your account."
-  );
+  if (!/^[6-9]\d{9}$/.test(mobile.replace(/[\s\-\+]/g, '').slice(-10))) {
+    showMessage("registerMessage", "Please enter a valid 10-digit Indian mobile number (e.g. 9876543210).", false);
+    return;
+  }
+
+  if (!state || !city) {
+    showMessage("registerMessage", "Please select your State and City.", false);
+    return;
+  }
+
+  if (!terms) {
+    showMessage("registerMessage", "Please accept the Privacy Policy and Terms & Conditions.", false);
+    return;
+  }
+
+  const submitBtn = registerForm.querySelector('button[type="submit"]');
+  const originalText = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = "CREATING ACCOUNT...";
+
+  try {
+    const result = await registerBorrower({
+      email,
+      password,
+      fullName,
+      mobile,
+      state,
+      city
+    });
+
+    if (result.requiresVerification) {
+      showMessage(
+        "registerMessage",
+        `Account registered! A verification link has been sent to ${email}. Please check your inbox and verify before signing in.`,
+        true
+      );
+      registerForm.reset();
+    } else {
+      showMessage(
+        "registerMessage",
+        "Registration successful! Redirecting to your dashboard...",
+        true
+      );
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 1200);
+    }
+  } catch (err) {
+    showMessage("registerMessage", err.message || "Registration failed. Please try again.", false);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalText;
+  }
 });
 
 // BORROWER LOGIN
-document.getElementById("borrower-login").addEventListener("submit", event => {
+const borrowerLoginForm = document.getElementById("borrower-login");
+borrowerLoginForm.addEventListener("submit", async event => {
   event.preventDefault();
+  clearMessage("borrowerLoginMessage");
 
-  showMessage(
-    "borrowerLoginMessage",
-    "Form validated. Connect your authentication backend to sign in securely."
-  );
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value;
+
+  const submitBtn = borrowerLoginForm.querySelector('button[type="submit"]');
+  const originalText = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = "LOGGING IN...";
+
+  try {
+    const result = await loginBorrower(email, password);
+    showMessage("borrowerLoginMessage", `Welcome back, ${result.profile?.full_name || 'Borrower'}! Redirecting...`, true);
+    setTimeout(() => {
+      window.location.href = "index.html";
+    }, 600);
+  } catch (err) {
+    showMessage("borrowerLoginMessage", err.message || "Login failed. Please check credentials.", false);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalText;
+  }
 });
 
 // LENDER LOGIN
-document.getElementById("lender-login").addEventListener("submit", event => {
+const lenderLoginForm = document.getElementById("lender-login");
+lenderLoginForm.addEventListener("submit", async event => {
   event.preventDefault();
+  clearMessage("lenderLoginMessage");
 
-  showMessage(
-    "lenderLoginMessage",
-    "Form validated. Secure lender authentication is not connected yet."
-  );
+  const identifier = document.getElementById("lenderEmail").value.trim();
+  const password = document.getElementById("lenderPassword").value;
+
+  const submitBtn = lenderLoginForm.querySelector('button[type="submit"]');
+  const originalText = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = "AUTHENTICATING...";
+
+  try {
+    const result = await loginLender(identifier, password);
+    showMessage("lenderLoginMessage", `Lender verified: ${result.profile?.full_name || 'Lender'}! Redirecting to Dashboard...`, true);
+    setTimeout(() => {
+      window.location.href = "applications.html";
+    }, 600);
+  } catch (err) {
+    showMessage("lenderLoginMessage", err.message || "Lender authentication failed.", false);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalText;
+  }
 });
 
-// PASSWORD RESET PLACEHOLDERS
+// PASSWORD RESET HANDLER
 document.querySelectorAll("[data-forgot]").forEach(link => {
-  link.addEventListener("click", event => {
+  link.addEventListener("click", async event => {
     event.preventDefault();
-    alert("Connect this link to your secure password-reset email workflow.");
+    const type = link.dataset.forgot;
+    const emailInput = type === "borrower" 
+      ? document.getElementById("loginEmail") 
+      : document.getElementById("lenderEmail");
+    
+    let email = emailInput?.value.trim();
+    if (!email || !email.includes("@")) {
+      email = prompt("Enter your registered email address to receive password reset instructions:", email || "");
+    }
+
+    if (!email || !email.includes("@")) {
+      alert("A valid email address is required to reset your password.");
+      return;
+    }
+
+    try {
+      await resetPassword(email);
+      alert(`Password reset link has been dispatched to ${email}. Please check your inbox.`);
+    } catch (err) {
+      alert(err.message || "Failed to initiate password reset.");
+    }
   });
 });
 </script>

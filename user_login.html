@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#ffffff">
     <title>CREDORA | User Access</title>
-   <link rel="icon" type="image/png" href="./ICON.png">
-
+    <link rel="icon" type="image/png" href="./ICON.png">
+    <script type="module" src="supabaseClient.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -205,13 +205,18 @@
             Your account details should be kept secure.
         </p>
         <p class="notice">
-            Are you a lender? <a href="./lender-login.html" style="color:#000">Lender access →</a>
+            Are you a lender? <a href="./lender_login.html" style="color:#000">Lender access →</a>
         </p>
     </main>
 
     <footer>© <span id="year"></span> CREDORA</footer>
 
-    <script>
+    <script type="module">
+        import {
+            registerBorrower,
+            loginBorrower
+        } from './supabaseClient.js';
+
         const form = document.getElementById("userForm");
         const loginTab = document.getElementById("loginTab");
         const registerTab = document.getElementById("registerTab");
@@ -221,6 +226,8 @@
         const nameInput = document.getElementById("name");
         const phoneInput = document.getElementById("phone");
         const confirmInput = document.getElementById("confirmPassword");
+        const formMessage = document.getElementById("formMessage");
+        const submitButton = document.getElementById("submitButton");
         let mode = "login";
 
         document.getElementById("year").textContent = new Date().getFullYear();
@@ -248,32 +255,96 @@
                 ? "Register to get started with CREDORA."
                 : "Sign in to access your CREDORA account.";
 
-            document.getElementById("submitButton").textContent =
+            submitButton.textContent =
                 registering ? "CREATE USER ACCOUNT →" : "LOGIN TO YOUR ACCOUNT →";
 
             document.getElementById("password").autocomplete =
                 registering ? "new-password" : "current-password";
 
-            document.getElementById("formMessage").textContent =
+            formMessage.textContent =
                 "Your account details should be kept secure.";
+            formMessage.style.color = "#777";
         }
 
         loginTab.addEventListener("click", () => setMode("login"));
         registerTab.addEventListener("click", () => setMode("register"));
 
-        form.addEventListener("submit", function (event) {
+        form.addEventListener("submit", async function (event) {
             event.preventDefault();
 
-            if (mode === "register" &&
-                document.getElementById("password").value !== confirmInput.value) {
-                document.getElementById("formMessage").textContent =
-                    "Passwords do not match. Please check and try again.";
-                confirmInput.focus();
-                return;
-            }
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
 
-            document.getElementById("formMessage").textContent =
-                "The form is ready, but authentication is not connected yet. Connect this form to your existing backend to register or sign in.";
+            if (mode === "register") {
+                if (password !== confirmInput.value) {
+                    formMessage.textContent = "Passwords do not match. Please check and try again.";
+                    formMessage.style.color = "#d00";
+                    confirmInput.focus();
+                    return;
+                }
+
+                const mobile = phoneInput.value.replace(/[\s\-\+]/g, '').slice(-10);
+                if (!/^[6-9]\d{9}$/.test(mobile)) {
+                    formMessage.textContent = "Please enter a valid 10-digit Indian mobile number (e.g. 9876543210).";
+                    formMessage.style.color = "#d00";
+                    phoneInput.focus();
+                    return;
+                }
+
+                submitButton.disabled = true;
+                submitButton.textContent = "CREATING ACCOUNT...";
+                formMessage.textContent = "Registering your account with CREDORA...";
+                formMessage.style.color = "#555";
+
+                try {
+                    const res = await registerBorrower({
+                        email,
+                        password,
+                        fullName: nameInput.value.trim(),
+                        mobile,
+                        state: "General",
+                        city: "General"
+                    });
+
+                    if (res.requiresVerification) {
+                        formMessage.textContent = `Registration successful! A verification email has been sent to ${email}. Please verify before logging in.`;
+                        formMessage.style.color = "#080";
+                        form.reset();
+                    } else {
+                        formMessage.textContent = "Registration successful! Redirecting to your dashboard...";
+                        formMessage.style.color = "#080";
+                        setTimeout(() => {
+                            window.location.href = "index.html";
+                        }, 1200);
+                    }
+                } catch (err) {
+                    formMessage.textContent = err.message || "Registration failed. Please try again.";
+                    formMessage.style.color = "#d00";
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.textContent = "CREATE USER ACCOUNT →";
+                }
+            } else {
+                submitButton.disabled = true;
+                submitButton.textContent = "SIGNING IN...";
+                formMessage.textContent = "Authenticating credentials...";
+                formMessage.style.color = "#555";
+
+                try {
+                    const res = await loginBorrower(email, password);
+                    formMessage.textContent = `Welcome back, ${res.profile?.full_name || 'User'}! Redirecting...`;
+                    formMessage.style.color = "#080";
+                    setTimeout(() => {
+                        window.location.href = "index.html";
+                    }, 600);
+                } catch (err) {
+                    formMessage.textContent = err.message || "Login failed. Please check credentials.";
+                    formMessage.style.color = "#d00";
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.textContent = "LOGIN TO YOUR ACCOUNT →";
+                }
+            }
         });
     </script>
 </body>
