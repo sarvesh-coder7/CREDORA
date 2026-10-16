@@ -413,7 +413,9 @@
     }
 
     @keyframes spin {
-      to { transform: rotate(360deg); }
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     .analysis-card {
@@ -765,7 +767,9 @@
         </p>
 
         <div class="notice" style="border-left: 3px solid #000; background: #f8f8f8;">
-          <strong>Secure document storage.</strong> Uploaded files are securely encrypted and stored in CREDORA's private storage bucket for Application ID <span id="appIdBadge" style="font-family:monospace; font-weight:700;">[Draft]</span>.
+          <strong>Secure document storage.</strong> Uploaded files are securely encrypted and stored in CREDORA's
+          private storage bucket for Application ID <span id="appIdBadge"
+            style="font-family:monospace; font-weight:700;">[Draft]</span>.
         </div>
 
         <div id="documentList"></div>
@@ -785,7 +789,8 @@
         <div class="analysis-card">
           <h3>Autonomous AI Document Analysis</h3>
           <p>
-            CREDORA AI parses uploaded document texts, extracts financial and identity metrics, cross-verifies details against your application declaration, and flags missing checklist items.
+            CREDORA AI parses uploaded document texts, extracts financial and identity metrics, cross-verifies details
+            against your application declaration, and flags missing checklist items.
           </p>
           <button type="button" class="btn" id="analyzeBtn">RUN CHECKLIST REVIEW →</button>
           <div id="analysisResults" class="analysis-results" aria-live="polite"></div>
@@ -811,7 +816,7 @@
       <div class="actions">
         <button type="button" class="btn secondary" id="previousBtn" hidden>← BACK</button>
         <button type="button" class="btn" id="nextBtn">CONTINUE →</button>
-        <button type="submit" class="btn" id="submitBtn" hidden>FINISH DEMO →</button>
+        <button type="submit" class="btn" id="submitBtn" hidden>SUBMIT →</button>
       </div>
     </form>
   </main>
@@ -1105,7 +1110,7 @@
       }
     }
 
-    window.retryDocUpload = function(docId) {
+    window.retryDocUpload = function (docId) {
       const input = document.getElementById(`doc-${docId}`);
       if (input && input.files && input.files[0]) {
         handleFileUpload(docId, input.files[0]);

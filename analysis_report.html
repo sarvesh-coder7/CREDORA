@@ -831,9 +831,48 @@
     loadReport();
   </script>
 
-  <!-- PDF generation libraries -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
+  <!-- PDF generation libraries loaded dynamically with fallbacks -->
+  <script>
+    // Dynamic script loader with CDN fallbacks
+    function loadScript(urls) {
+      return new Promise((resolve, reject) => {
+        function tryNext(index) {
+          if (index >= urls.length) {
+            reject(new Error('All CDN sources failed for: ' + urls[0]));
+            return;
+          }
+          const script = document.createElement('script');
+          script.src = urls[index];
+          script.onload = resolve;
+          script.onerror = () => {
+            console.warn('CDN failed:', urls[index]);
+            document.head.removeChild(script);
+            tryNext(index + 1);
+          };
+          document.head.appendChild(script);
+        }
+        tryNext(0);
+      });
+    }
+
+    // Load both libraries with fallback CDNs
+    Promise.all([
+      loadScript([
+        'https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js',
+        'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'
+      ]),
+      loadScript([
+        'https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js',
+        'https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js'
+      ])
+    ]).then(() => {
+      console.log('[CREDORA] PDF libraries loaded successfully. jsPDF:', typeof window.jspdf);
+    }).catch(err => {
+      console.error('[CREDORA] Failed to load PDF libraries:', err);
+    });
+  </script>
 
   <script>
     // Toast notification element
@@ -860,6 +899,32 @@
       });
 
       try {
+        // Check if libraries are loaded
+        if (typeof html2canvas === 'undefined' || !window.jspdf) {
+          showToast('⏳ Loading PDF libraries... Please try again in a moment.');
+          // Try to load them again
+          try {
+            await Promise.all([
+              loadScript([
+                'https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js',
+                'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js'
+              ]),
+              loadScript([
+                'https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js',
+                'https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js'
+              ])
+            ]);
+          } catch (loadErr) {
+            showToast('✕ Could not load PDF libraries. Check your internet connection and try again.');
+            return;
+          }
+          // Verify again after reload attempt
+          if (typeof html2canvas === 'undefined' || !window.jspdf) {
+            showToast('✕ PDF libraries failed to load. Please refresh the page and try again.');
+            return;
+          }
+        }
+
         const reportContainer = document.getElementById('reportContainer');
         if (!reportContainer || reportContainer.style.display === 'none') {
           showToast('⚠ Report not loaded yet. Please wait for data to load.');
