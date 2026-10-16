@@ -124,12 +124,16 @@ Interactive API documentation is available at: [http://127.0.0.1:8001/docs](http
 In a separate terminal window:
 
 ```powershell
-cd c:\HACKATHON\VSBEC-24hrs-Hackathon
-.\venv\Scripts\Activate.ps1
-.\venv\Scripts\python -m uvicorn backend.main:app --port 8000 --reload
+# Option A: Start Node.js / Express Backend (Primary API)
+npm run server
+# or: node server.js
+
+# Option B: Start Python FastAPI Gateway (Alternative / Development)
+py -m uvicorn backend.main:app --port 8000 --reload
 ```
 
-Interactive API documentation is available at: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+Interactive API documentation (FastAPI) is available at: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+Express API documentation / Health Check is available at: [http://127.0.0.1:8000/api/health](http://127.0.0.1:8000/api/health)
 
 ---
 

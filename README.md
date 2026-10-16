@@ -238,80 +238,137 @@ Add other variables required by your actual configuration, such as a server-side
 
 **Important:** These are illustrative variable names. Match them to the code in your repository. Never commit real API keys, passwords, service-role keys, or private credentials to GitHub.
 
-### 4. Start the backend
+### 4. Python Environment & Dependencies
 
-Use the script defined in your backend's `package.json`. For example:
+Before running the AI server or Python tests, activate your Python virtual environment. In Windows PowerShell:
 
-```bash
+```powershell
+# If a virtual environment (.venv or venv) already exists:
+.\venv\Scripts\Activate.ps1
+# Or if using .venv:
+.\.venv\Scripts\Activate.ps1
+
+# If creating a new virtual environment:
+py -m venv venv
+.\venv\Scripts\Activate.ps1
+
+# Install intended dependencies from requirements.txt:
+pip install -r requirements.txt
+```
+
+> **Note on PowerShell Execution Policy:** If script execution is restricted on your machine, run `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` prior to running the activation script.
+
+### 5. Start the Services
+
+Open separate Windows PowerShell terminals for each service:
+
+**Terminal 1 — Backend (Node.js / Express REST API, Port 8000):**
+```powershell
+npm run server
+# or directly:
+node server.js
+```
+
+**Terminal 2 — Frontend (Vite Dev Server, Port 5173):**
+```powershell
 npm run dev
 ```
 
-If the project does not define a `dev` script, add the appropriate script for its configured server entry point.
+**Terminal 3 — AI Microservice (FastAPI AI Engine, Port 8001):**
+```powershell
+# From project root:
+py -m uvicorn app:app --app-dir ai-server --port 8001
+# Or from ai-server directory:
+cd ai-server
+py -m uvicorn app:app --port 8001
+```
 
-### 5. Start the frontend
+### 6. Verify the Application & Run Tests
 
-Open a second terminal and navigate to the frontend directory.
+```powershell
+# 1. Express server integration test suite (11/11 tests)
+npm run test:server
 
-Use the command specified by the frontend's `package.json`. For a simple static frontend, you can use a local development server such as the VS Code Live Server extension.
+# 2. Supabase Auth & RLS verification suite (10/10 tests)
+npm run test:auth
 
-### 6. Verify the application
+# 3. AI Service & cross-document verification tests (174 tests)
+py -m pytest ai-server/tests
 
-Confirm that:
+# 4. Python backend flow & submission tests
+py tests/test_backend_flow.py
 
-- The frontend loads successfully.
-- Borrower and lender registration validate required fields.
-- API requests reach the backend.
-- Database records are stored correctly.
-- Document uploads are authorized and retrievable by permitted users.
-- Document analysis returns valid results when configured.
-- Unauthorized users cannot access restricted records or files.
-
-## Example API Structure
-
-The following endpoints illustrate a possible REST API design. Their actual paths and request formats must match the implementation.
-
-| Method | Endpoint | Purpose |
-|---|---|---|
-| `POST` | `/api/borrowers/register` | Register a borrower |
-| `GET` | `/api/borrowers/:id` | Retrieve an authorized borrower profile |
-| `POST` | `/api/lenders/register` | Register a lender |
-| `GET` | `/api/lenders/:id` | Retrieve an authorized lender profile |
-| `POST` | `/api/documents/upload` | Upload a document |
-| `POST` | `/api/documents/:id/analyze` | Request document analysis |
-| `GET` | `/api/documents/:id/status` | Retrieve processing status |
-
-These are proposed endpoint examples, not a claim that every route already exists.
+# 5. Production frontend build check
+npm run build
+```
 
 ## Project Structure
 
-A possible structure for the application is:
+The project follows a clean, decoupled, and professional multi-tier architecture matching the SIH reference structure:
 
 ```text
-VSBEC/
-├── frontend/
-│   ├── index.html
-│   ├── css/
-│   ├── js/
-│   └── assets/
-│
-├── backend/
-│   ├── src/
-│   │   ├── routes/
-│   │   ├── controllers/
-│   │   ├── middleware/
-│   │   ├── services/
-│   │   ├── config/
-│   │   └── app.js
-│   ├── package.json
-│   └── .env.example
-│
-├── docs/
-│   └── architecture.md
-├── .gitignore
-└── README.md
+CREDORA/
+├── .git/
+├── .vscode/                    # VS Code editor settings & recommended extensions
+│   ├── settings.json
+│   └── extensions.json
+├── ai-server/                  # Dedicated Python AI document analysis microservice
+│   ├── app.py                  # Port 8001 FastAPI AI microservice
+│   ├── financial_calculator.py # Deterministic FOIR, DTI, EMI engine
+│   ├── ocr_support.py          # PyMuPDF & Tesseract OCR engine
+│   ├── tests/                  # 174 automated unit & integration tests
+│   └── README.md               # AI service documentation
+├── node_modules/               # Node.js dependencies
+├── public/                     # Static assets served at root
+│   ├── ICON.png                # Platform icon
+│   ├── LOGO.jpeg               # CREDORA brand logo
+│   └── profile.png             # User profile avatar asset
+├── scratch/                    # Temporary scratchpad & processing directory
+├── src/                        # Modular Express backend architecture
+│   ├── app.js                  # Express app setup, CORS, and middleware
+│   ├── config/                 # Central environment & credentials configuration
+│   │   └── index.js
+│   ├── routes/                 # REST API route handlers
+│   │   ├── applications.routes.js
+│   │   ├── auth.routes.js
+│   │   ├── documents.routes.js
+│   │   ├── geo.routes.js
+│   │   └── health.routes.js
+│   └── services/               # Supabase, OTP, and AI services
+│       ├── ai.service.js
+│       ├── otp.service.js
+│       └── supabase.service.js
+├── supabase/                   # Supabase PostgreSQL migrations & schemas
+│   └── migrations/
+├── backend/                    # Python backend gateway & launcher
+│   ├── main.py                 # FastAPI application gateway
+│   └── server.js               # Backward-compatible Express delegate
+├── shared/                     # Shared datasets
+│   └── india_geo_data.json     # 28 States & 8 UTs registry
+├── tests/                      # Automated test suites
+│   ├── test_server.js          # Express server integration tests (11/11 passed)
+│   ├── tests_auth_suite.js     # Supabase Auth test suite (10/10 passed)
+│   └── test_backend_flow.py    # Python backend flow tests (Passed)
+├── types/                      # TypeScript database schemas & typings
+│   └── database.types.ts
+├── docs/                       # Architecture, audit, and service documentation
+├── .env                        # Central environment configuration (git-ignored)
+├── .env.example                # Sanitized environment template
+├── .gitignore                  # Git ignore rules
+├── cleanup_seed_data.mjs       # Safe Supabase seed & test data cleanup utility
+├── metadata.json               # Project manifest & microservice metadata
+├── package.json                # Project dependencies and npm scripts
+├── package-lock.json           # Active npm lockfile
+├── server.js                   # Node.js / Express backend entry point
+├── tsconfig.json               # TypeScript configuration
+├── vite.config.ts              # Vite frontend build and /api proxy configuration
+├── style.css                   # Global styling system
+├── script.js                   # Client-side UI & DOM interactions
+├── supabaseClient.js           # Supabase client & authentication helpers
+├── document_analyzer.py        # Core loan document extraction & analysis engine
+├── cross_document_verifier.py  # Deterministic cross-document verification engine
+└── [HTML Application Pages]   # index.html, applications.html, login.html, etc.
 ```
-
-Adapt this structure to the files and directories that actually exist in your repository.
 
 ## Challenges and Engineering Approach
 
