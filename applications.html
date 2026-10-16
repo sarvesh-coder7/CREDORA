@@ -1,20 +1,19 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#FFFFFF">
   <title>Lender Dashboard — CREDORA</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-   <link rel="icon" type="image/png" href="./ICON.png">
-   <script type="module">
-     import { guardLenderRoute } from './supabaseClient.js';
-     guardLenderRoute();
-   </script>
-   <script src="script.js" defer></script>
+  <link rel="icon" type="image/png" href="./ICON.png">
+
+  <script src="script.js" defer></script>
 
   <style>
     /* ==================================
@@ -40,7 +39,9 @@
       font-family: 'Inter', sans-serif;
     }
 
-    button, input, select {
+    button,
+    input,
+    select {
       font: inherit;
     }
 
@@ -89,7 +90,9 @@
     }
 
     @keyframes pulse {
-      50% { opacity: .35; }
+      50% {
+        opacity: .35;
+      }
     }
 
     .dash-heading {
@@ -575,506 +578,505 @@
 
 <body>
 
-<!-- ================= NAVBAR ================= -->
-<header class="site-header">
-  <nav class="navbar">
+  <!-- ================= NAVBAR ================= -->
+  <header class="site-header">
+    <nav class="navbar">
 
-    <a class="brand" href="index.html">
-      <img src="LOGO.jpeg" alt="CREDORA">
-      <span>CREDORA</span>
-    </a>
-
-    <button class="menu-toggle" type="button"
-      aria-label="Toggle navigation" aria-expanded="false">☰</button>
-
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="applications.html" class="active">Applications</a>
-      <a href="lenders.html">Lenders</a>
-      <a href="reports.html">Reports</a>
-      <a href="about.html">About</a>
-    </div>
-
-    <div class="nav-auth" id="navAuth">
-      <a href="login.html" class="nav-login" id="loginLink">
-        LOGIN <span>↗</span>
+      <a class="brand" href="index.html">
+        <img src="LOGO.jpeg" alt="CREDORA">
+        <span>CREDORA</span>
       </a>
 
-      <div class="profile-container" id="profileContainer" hidden>
-        <button class="profile-button" id="profileButton"
-          type="button" aria-label="Open profile menu"
-          aria-expanded="false">
-          <img id="profileImage" src="profile.png" alt="Profile">
+      <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="applications.html" class="active">Applications</a>
+        <a href="lenders.html">Lenders</a>
+        <a href="reports.html">Reports</a>
+        <a href="about.html">About</a>
+      </div>
+
+      <div class="nav-auth" id="navAuth">
+        <a href="login.html" class="nav-login" id="loginLink">
+          LOGIN <span>↗</span>
+        </a>
+
+        <div class="profile-container" id="profileContainer" hidden>
+          <button class="profile-button" id="profileButton" type="button" aria-label="Open profile menu"
+            aria-expanded="false">
+            <img id="profileImage" src="profile.png" alt="Profile">
+          </button>
+
+          <div class="profile-dropdown" id="profileDropdown" hidden>
+            <div class="profile-info">
+              <strong id="profileName">User</strong>
+              <span id="profileEmail">user@example.com</span>
+            </div>
+            <a href="profile.html">My Profile</a>
+            <a href="applications.html">My Applications</a>
+            <button type="button" id="logoutButton">Logout</button>
+          </div>
+        </div>
+      </div>
+
+    </nav>
+  </header>
+
+  <!-- ================= DASHBOARD ================= -->
+  <main class="dashboard">
+
+    <div class="dash-topline">
+      <span class=""></span>
+      <span class="live-status">
+        <span class="live-dot"></span>
+        <span id="connectionStatus">LOCAL DATA</span>
+      </span>
+    </div>
+
+    <section class="dash-heading">
+      <h1>LENDER<br>DASHBOARD.</h1>
+      <p>
+        Monitor incoming applications, review submitted documents,
+        track application status and analyse your current workload
+        from one central dashboard.
+      </p>
+
+      <div class="dash-actions">
+        <button class="dash-btn primary" id="refreshButton" type="button">
+          ↻ REFRESH DATA
         </button>
-
-        <div class="profile-dropdown" id="profileDropdown" hidden>
-          <div class="profile-info">
-            <strong id="profileName">User</strong>
-            <span id="profileEmail">user@example.com</span>
-          </div>
-          <a href="profile.html">My Profile</a>
-          <a href="applications.html">My Applications</a>
-          <button type="button" id="logoutButton">Logout</button>
-        </div>
+        <button class="dash-btn" id="exportCsvButton" type="button">
+          EXPORT APPLICATIONS ↓
+        </button>
+        <button class="dash-btn" id="exportReportButton" type="button">
+          DOWNLOAD SUMMARY ↓
+        </button>
       </div>
+    </section>
+
+    <!-- LIVE COUNTERS -->
+    <div class="section-label">
+      <h2>Application overview</h2>
+      <span id="lastUpdated">Waiting for data...</span>
     </div>
 
-  </nav>
-</header>
+    <section class="stats-grid" aria-label="Application statistics">
 
-<!-- ================= DASHBOARD ================= -->
-<main class="dashboard">
+      <article class="stat-card">
+        <div class="stat-label">Total applications</div>
+        <div class="stat-number" id="totalCount">0</div>
+        <div class="stat-foot">All available records</div>
+      </article>
 
-  <div class="dash-topline">
-    <span class=""></span>
-    <span class="live-status">
-      <span class="live-dot"></span>
-      <span id="connectionStatus">LOCAL DATA</span>
-    </span>
-  </div>
+      <article class="stat-card">
+        <div class="stat-label">Received</div>
+        <div class="stat-number" id="receivedCount">0</div>
+        <div class="stat-foot">Awaiting initial review</div>
+      </article>
 
-  <section class="dash-heading">
-    <h1>LENDER<br>DASHBOARD.</h1>
-    <p>
-      Monitor incoming applications, review submitted documents,
-      track application status and analyse your current workload
-      from one central dashboard.
-    </p>
+      <article class="stat-card">
+        <div class="stat-label">Under review</div>
+        <div class="stat-number" id="reviewCount">0</div>
+        <div class="stat-foot">Currently being reviewed</div>
+      </article>
 
-    <div class="dash-actions">
-      <button class="dash-btn primary" id="refreshButton" type="button">
-        ↻ REFRESH DATA
-      </button>
-      <button class="dash-btn" id="exportCsvButton" type="button">
-        EXPORT APPLICATIONS ↓
-      </button>
-      <button class="dash-btn" id="exportReportButton" type="button">
-        DOWNLOAD SUMMARY ↓
-      </button>
+      <article class="stat-card">
+        <div class="stat-label">Completed</div>
+        <div class="stat-number" id="completedCount">0</div>
+        <div class="stat-foot">Marked completed</div>
+      </article>
+
+    </section>
+
+    <!-- ANALYTICS -->
+    <div class="section-label">
+      <h2>Application analytics</h2>
+      <span>Based on currently available records</span>
     </div>
-  </section>
 
-  <!-- LIVE COUNTERS -->
-  <div class="section-label">
-    <h2>Application overview</h2>
-    <span id="lastUpdated">Waiting for data...</span>
-  </div>
+    <section class="analytics-grid">
 
-  <section class="stats-grid" aria-label="Application statistics">
+      <article class="panel">
+        <h3>Status distribution</h3>
+        <p class="panel-subtitle">
+          Number and proportion of applications by current status.
+        </p>
 
-    <article class="stat-card">
-      <div class="stat-label">Total applications</div>
-      <div class="stat-number" id="totalCount">0</div>
-      <div class="stat-foot">All available records</div>
-    </article>
-
-    <article class="stat-card">
-      <div class="stat-label">Received</div>
-      <div class="stat-number" id="receivedCount">0</div>
-      <div class="stat-foot">Awaiting initial review</div>
-    </article>
-
-    <article class="stat-card">
-      <div class="stat-label">Under review</div>
-      <div class="stat-number" id="reviewCount">0</div>
-      <div class="stat-foot">Currently being reviewed</div>
-    </article>
-
-    <article class="stat-card">
-      <div class="stat-label">Completed</div>
-      <div class="stat-number" id="completedCount">0</div>
-      <div class="stat-foot">Marked completed</div>
-    </article>
-
-  </section>
-
-  <!-- ANALYTICS -->
-  <div class="section-label">
-    <h2>Application analytics</h2>
-    <span>Based on currently available records</span>
-  </div>
-
-  <section class="analytics-grid">
-
-    <article class="panel">
-      <h3>Status distribution</h3>
-      <p class="panel-subtitle">
-        Number and proportion of applications by current status.
-      </p>
-
-      <div id="statusChart">
-        <div class="status-row">
-          <div class="status-info">
-            <span>Received</span><span>0</span>
+        <div id="statusChart">
+          <div class="status-row">
+            <div class="status-info">
+              <span>Received</span><span>0</span>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill"></div>
+            </div>
           </div>
-          <div class="bar-track"><div class="bar-fill"></div></div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <h3>Recent applications</h3>
+        <p class="panel-subtitle">
+          The latest records available in this browser or connected source.
+        </p>
+        <div class="activity-list" id="recentActivity">
+          <div class="empty-state">
+            No application records are available yet.
+          </div>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- AI-STYLE SUMMARY AND ANALYSIS -->
+    <div class="section-label">
+      <h2>Summary & analysis</h2>
+      <span>Automatically recalculated when data changes</span>
+    </div>
+
+    <section class="insight-grid">
+
+      <article class="insight-panel">
+        <div class="insight-heading">
+          <div class="insight-icon">AI</div>
+          <h3>Application summary</h3>
+        </div>
+        <div class="insight-content" id="aiSummary" aria-live="polite">
+          No application data is available to summarise.
+        </div>
+        <div class="notice">
+          This version generates a rule-based summary from the records
+          available to the page. It is not connected to an external AI model.
+        </div>
+      </article>
+
+      <article class="insight-panel">
+        <div class="insight-heading">
+          <div class="insight-icon">↗</div>
+          <h3>Review analysis</h3>
+        </div>
+        <div class="insight-content" id="aiAnalysis" aria-live="polite">
+          Analysis will appear when application data is available.
+        </div>
+        <div class="notice">
+          These are administrative review indicators, not credit approval
+          decisions or predictions of an applicant's ability to repay.
+        </div>
+      </article>
+
+    </section>
+
+    <!-- APPLICATION RECORDS -->
+    <div class="section-label">
+      <h2>Application monitoring</h2>
+      <span id="recordCountLabel">0 records</span>
+    </div>
+
+    <section>
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <label class="visually-hidden" for="applicationSearch">Search applications</label>
+          <input class="dash-input" id="applicationSearch" placeholder="Search reference or applicant...">
+
+          <label class="visually-hidden" for="statusFilter">Filter by status</label>
+          <select class="dash-select" id="statusFilter">
+            <option value="">All statuses</option>
+            <option value="Received">Received</option>
+            <option value="Under Review">Under Review</option>
+            <option value="Documents Required">Documents Required</option>
+            <option value="Completed">Completed</option>
+            <option value="On Hold">On Hold</option>
+          </select>
+        </div>
+
+        <div class="toolbar-right">
+          <button class="dash-btn" id="exportFilteredButton" type="button">
+            EXPORT FILTERED ↓
+          </button>
         </div>
       </div>
-    </article>
 
-    <article class="panel">
-      <h3>Recent applications</h3>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Reference</th>
+              <th>Applicant</th>
+              <th>Loan type</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Documents</th>
+            </tr>
+          </thead>
+          <tbody id="applicationsTableBody">
+            <tr>
+              <td colspan="7">Loading application records...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- USER-UPLOADED DOCUMENTS -->
+    <div class="section-label">
+      <h2>Submitted documents</h2>
+      <span id="documentCountLabel">0 documents</span>
+    </div>
+
+    <section class="panel">
+      <h3>Document centre</h3>
       <p class="panel-subtitle">
-        The latest records available in this browser or connected source.
+        Available uploaded files and their associated application references.
       </p>
-      <div class="activity-list" id="recentActivity">
+
+      <div class="document-list" id="documentList">
         <div class="empty-state">
-          No application records are available yet.
+          No accessible uploaded documents were found.
         </div>
       </div>
-    </article>
 
-  </section>
+      <p class="document-note">
+        Files must be stored in an accessible data source and associated
+        with an application. This page can download files only when their
+        file data or a valid download URL is available to the browser.
+      </p>
+    </section>
 
-  <!-- AI-STYLE SUMMARY AND ANALYSIS -->
-  <div class="section-label">
-    <h2>Summary & analysis</h2>
-    <span>Automatically recalculated when data changes</span>
-  </div>
-
-  <section class="insight-grid">
-
-    <article class="insight-panel">
-      <div class="insight-heading">
-        <div class="insight-icon">AI</div>
-        <h3>Application summary</h3>
-      </div>
-      <div class="insight-content" id="aiSummary" aria-live="polite">
-        No application data is available to summarise.
-      </div>
-      <div class="notice">
-        This version generates a rule-based summary from the records
-        available to the page. It is not connected to an external AI model.
-      </div>
-    </article>
-
-    <article class="insight-panel">
-      <div class="insight-heading">
-        <div class="insight-icon">↗</div>
-        <h3>Review analysis</h3>
-      </div>
-      <div class="insight-content" id="aiAnalysis" aria-live="polite">
-        Analysis will appear when application data is available.
-      </div>
-      <div class="notice">
-        These are administrative review indicators, not credit approval
-        decisions or predictions of an applicant's ability to repay.
-      </div>
-    </article>
-
-  </section>
-
-  <!-- APPLICATION RECORDS -->
-  <div class="section-label">
-    <h2>Application monitoring</h2>
-    <span id="recordCountLabel">0 records</span>
-  </div>
-
-  <section>
-    <div class="toolbar">
-      <div class="toolbar-left">
-        <label class="visually-hidden" for="applicationSearch">Search applications</label>
-        <input class="dash-input" id="applicationSearch"
-          placeholder="Search reference or applicant...">
-
-        <label class="visually-hidden" for="statusFilter">Filter by status</label>
-        <select class="dash-select" id="statusFilter">
-          <option value="">All statuses</option>
-          <option value="Received">Received</option>
-          <option value="Under Review">Under Review</option>
-          <option value="Documents Required">Documents Required</option>
-          <option value="Completed">Completed</option>
-          <option value="On Hold">On Hold</option>
-        </select>
-      </div>
-
-      <div class="toolbar-right">
-        <button class="dash-btn" id="exportFilteredButton" type="button">
-          EXPORT FILTERED ↓
-        </button>
-      </div>
+    <div class="dash-footer-note">
+      CREDORA LENDER WORKSPACE · Application counts reflect only records
+      accessible to this page. Verify applicant information and documents
+      before making lending decisions.
     </div>
 
-    <div class="table-wrap">
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>Reference</th>
-            <th>Applicant</th>
-            <th>Loan type</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Date</th>
-            <th>Documents</th>
-          </tr>
-        </thead>
-        <tbody id="applicationsTableBody">
-          <tr>
-            <td colspan="7">Loading application records...</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
+  </main>
 
-  <!-- USER-UPLOADED DOCUMENTS -->
-  <div class="section-label">
-    <h2>Submitted documents</h2>
-    <span id="documentCountLabel">0 documents</span>
-  </div>
-
-  <section class="panel">
-    <h3>Document centre</h3>
-    <p class="panel-subtitle">
-      Available uploaded files and their associated application references.
-    </p>
-
-    <div class="document-list" id="documentList">
-      <div class="empty-state">
-        No accessible uploaded documents were found.
+  <!-- ================= FOOTER ================= -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-copy">© <span data-year></span> CREDORA</p>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="risk-review.html">Risk Review</a>
+        <a href="about.html">Contact</a>
       </div>
     </div>
+  </footer>
 
-    <p class="document-note">
-      Files must be stored in an accessible data source and associated
-      with an application. This page can download files only when their
-      file data or a valid download URL is available to the browser.
-    </p>
-  </section>
+  <script>
+    (() => {
+      "use strict";
 
-  <div class="dash-footer-note">
-    CREDORA LENDER WORKSPACE · Application counts reflect only records
-    accessible to this page. Verify applicant information and documents
-    before making lending decisions.
-  </div>
+      /*
+       * DATA CONNECTION
+       * This page checks the local browser storage keys below.
+       * Change these names to match the keys used by your existing
+       * application submission and document upload pages.
+       *
+       * Shared, cross-user live data requires a backend/API connection.
+       */
 
-</main>
+      const APPLICATION_KEYS = [
+        "credora_applications_v1",
+        "applications",
+        "loanApplications"
+      ];
 
-<!-- ================= FOOTER ================= -->
-<footer class="site-footer">
-  <div class="footer-inner">
-    <p class="footer-copy">© <span data-year></span> CREDORA</p>
-    <div class="footer-links">
-      <a href="index.html">Home</a>
-      <a href="risk-review.html">Risk Review</a>
-      <a href="about.html">Contact</a>
-    </div>
-  </div>
-</footer>
+      const DOCUMENT_KEYS = [
+        "credora_uploaded_documents_v1",
+        "credora_documents_v1",
+        "uploadedDocuments",
+        "documents"
+      ];
 
-<script>
-(() => {
-  "use strict";
+      let applications = [];
+      let documents = [];
 
-  /*
-   * DATA CONNECTION
-   * This page checks the local browser storage keys below.
-   * Change these names to match the keys used by your existing
-   * application submission and document upload pages.
-   *
-   * Shared, cross-user live data requires a backend/API connection.
-   */
+      const $ = id => document.getElementById(id);
 
-  const APPLICATION_KEYS = [
-    "credora_applications_v1",
-    "applications",
-    "loanApplications"
-  ];
+      function readArray(keys) {
+        for (const key of keys) {
+          try {
+            const raw = localStorage.getItem(key);
+            if (!raw) continue;
 
-  const DOCUMENT_KEYS = [
-    "credora_uploaded_documents_v1",
-    "credora_documents_v1",
-    "uploadedDocuments",
-    "documents"
-  ];
+            const parsed = JSON.parse(raw);
+            const rows = Array.isArray(parsed)
+              ? parsed
+              : parsed && Array.isArray(parsed.records)
+                ? parsed.records
+                : parsed && Array.isArray(parsed.applications)
+                  ? parsed.applications
+                  : parsed && Array.isArray(parsed.documents)
+                    ? parsed.documents
+                    : null;
 
-  let applications = [];
-  let documents = [];
+            if (rows) return rows;
+          } catch (error) {
+            console.warn("Could not read local storage key:", key);
+          }
+        }
 
-  const $ = id => document.getElementById(id);
-
-  function readArray(keys) {
-    for (const key of keys) {
-      try {
-        const raw = localStorage.getItem(key);
-        if (!raw) continue;
-
-        const parsed = JSON.parse(raw);
-        const rows = Array.isArray(parsed)
-          ? parsed
-          : parsed && Array.isArray(parsed.records)
-            ? parsed.records
-            : parsed && Array.isArray(parsed.applications)
-              ? parsed.applications
-              : parsed && Array.isArray(parsed.documents)
-                ? parsed.documents
-                : null;
-
-        if (rows) return rows;
-      } catch (error) {
-        console.warn("Could not read local storage key:", key);
+        return [];
       }
-    }
 
-    return [];
-  }
-
-  function firstValue(object, keys, fallback = "") {
-    for (const key of keys) {
-      if (object && object[key] !== undefined &&
-          object[key] !== null && object[key] !== "") {
-        return object[key];
+      function firstValue(object, keys, fallback = "") {
+        for (const key of keys) {
+          if (object && object[key] !== undefined &&
+            object[key] !== null && object[key] !== "") {
+            return object[key];
+          }
+        }
+        return fallback;
       }
-    }
-    return fallback;
-  }
 
-  function normalizeStatus(value) {
-    const status = String(value || "").trim().toLowerCase();
+      function normalizeStatus(value) {
+        const status = String(value || "").trim().toLowerCase();
 
-    if (status === "received" || status === "submitted" ||
-        status === "new") return "Received";
+        if (status === "received" || status === "submitted" ||
+          status === "new") return "Received";
 
-    if (status === "under review" || status === "review" ||
-        status === "in review" || status === "pending") {
-      return "Under Review";
-    }
+        if (status === "under review" || status === "review" ||
+          status === "in review" || status === "pending") {
+          return "Under Review";
+        }
 
-    if (status === "documents required" ||
-        status === "document required" ||
-        status === "missing documents") {
-      return "Documents Required";
-    }
+        if (status === "documents required" ||
+          status === "document required" ||
+          status === "missing documents") {
+          return "Documents Required";
+        }
 
-    if (status === "completed" || status === "complete") {
-      return "Completed";
-    }
+        if (status === "completed" || status === "complete") {
+          return "Completed";
+        }
 
-    if (status === "on hold" || status === "hold") {
-      return "On Hold";
-    }
+        if (status === "on hold" || status === "hold") {
+          return "On Hold";
+        }
 
-    return value ? String(value) : "Unspecified";
-  }
+        return value ? String(value) : "Unspecified";
+      }
 
-  function getReference(app) {
-    return String(firstValue(app, [
-      "reference", "applicationRef", "applicationReference",
-      "applicationId", "id"
-    ], "—"));
-  }
+      function getReference(app) {
+        return String(firstValue(app, [
+          "reference", "applicationRef", "applicationReference",
+          "applicationId", "id"
+        ], "—"));
+      }
 
-  function getApplicant(app) {
-    return String(firstValue(app, [
-      "applicant", "applicantName", "name", "fullName",
-      "userName", "customerName"
-    ], "Not provided"));
-  }
+      function getApplicant(app) {
+        return String(firstValue(app, [
+          "applicant", "applicantName", "name", "fullName",
+          "userName", "customerName"
+        ], "Not provided"));
+      }
 
-  function getLoanType(app) {
-    return String(firstValue(app, [
-      "loanType", "loan_type", "type"
-    ], "—"));
-  }
+      function getLoanType(app) {
+        return String(firstValue(app, [
+          "loanType", "loan_type", "type"
+        ], "—"));
+      }
 
-  function getAmount(app) {
-    const amount = firstValue(app, [
-      "amount", "loanAmount", "requestedAmount"
-    ], "");
+      function getAmount(app) {
+        const amount = firstValue(app, [
+          "amount", "loanAmount", "requestedAmount"
+        ], "");
 
-    if (amount === "") return "—";
+        if (amount === "") return "—";
 
-    const number = Number(amount);
-    return Number.isFinite(number)
-      ? number.toLocaleString("en-IN", {
-          maximumFractionDigits: 2
-        })
-      : String(amount);
-  }
+        const number = Number(amount);
+        return Number.isFinite(number)
+          ? number.toLocaleString("en-IN", {
+            maximumFractionDigits: 2
+          })
+          : String(amount);
+      }
 
-  function getDate(app) {
-    return String(firstValue(app, [
-      "date", "applicationDate", "createdAt",
-      "submittedAt", "timestamp"
-    ], "—"));
-  }
+      function getDate(app) {
+        return String(firstValue(app, [
+          "date", "applicationDate", "createdAt",
+          "submittedAt", "timestamp"
+        ], "—"));
+      }
 
-  function getStatus(app) {
-    return normalizeStatus(firstValue(app, [
-      "status", "applicationStatus"
-    ], ""));
-  }
+      function getStatus(app) {
+        return normalizeStatus(firstValue(app, [
+          "status", "applicationStatus"
+        ], ""));
+      }
 
-  function getLinkedDocuments(app) {
-    const ref = getReference(app);
+      function getLinkedDocuments(app) {
+        const ref = getReference(app);
 
-    return documents.filter(doc => {
-      const docRef = String(firstValue(doc, [
-        "reference", "applicationRef", "applicationReference",
-        "applicationId", "recordId"
-      ], ""));
+        return documents.filter(doc => {
+          const docRef = String(firstValue(doc, [
+            "reference", "applicationRef", "applicationReference",
+            "applicationId", "recordId"
+          ], ""));
 
-      return docRef !== "" && docRef === ref;
-    });
-  }
+          return docRef !== "" && docRef === ref;
+        });
+      }
 
-  function escapeHTML(value) {
-    return String(value).replace(/[&<>"']/g, character => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;"
-    })[character]);
-  }
+      function escapeHTML(value) {
+        return String(value).replace(/[&<>"']/g, character => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;"
+        })[character]);
+      }
 
-  function statusCounts(rows) {
-    const counts = {
-      "Received": 0,
-      "Under Review": 0,
-      "Documents Required": 0,
-      "Completed": 0,
-      "On Hold": 0,
-      "Unspecified": 0
-    };
+      function statusCounts(rows) {
+        const counts = {
+          "Received": 0,
+          "Under Review": 0,
+          "Documents Required": 0,
+          "Completed": 0,
+          "On Hold": 0,
+          "Unspecified": 0
+        };
 
-    rows.forEach(app => {
-      const status = getStatus(app);
-      counts[status] = (counts[status] || 0) + 1;
-    });
+        rows.forEach(app => {
+          const status = getStatus(app);
+          counts[status] = (counts[status] || 0) + 1;
+        });
 
-    return counts;
-  }
+        return counts;
+      }
 
-  function renderStats() {
-    const counts = statusCounts(applications);
+      function renderStats() {
+        const counts = statusCounts(applications);
 
-    $("totalCount").textContent = applications.length;
-    $("receivedCount").textContent = counts["Received"] || 0;
-    $("reviewCount").textContent = counts["Under Review"] || 0;
-    $("completedCount").textContent = counts["Completed"] || 0;
-    $("recordCountLabel").textContent =
-      applications.length + (applications.length === 1 ? " record" : " records");
+        $("totalCount").textContent = applications.length;
+        $("receivedCount").textContent = counts["Received"] || 0;
+        $("reviewCount").textContent = counts["Under Review"] || 0;
+        $("completedCount").textContent = counts["Completed"] || 0;
+        $("recordCountLabel").textContent =
+          applications.length + (applications.length === 1 ? " record" : " records");
 
-    $("documentCountLabel").textContent =
-      documents.length + (documents.length === 1 ? " document" : " documents");
+        $("documentCountLabel").textContent =
+          documents.length + (documents.length === 1 ? " document" : " documents");
 
-    const chartStatuses = [
-      "Received",
-      "Under Review",
-      "Documents Required",
-      "Completed",
-      "On Hold",
-      "Unspecified"
-    ];
+        const chartStatuses = [
+          "Received",
+          "Under Review",
+          "Documents Required",
+          "Completed",
+          "On Hold",
+          "Unspecified"
+        ];
 
-    $("statusChart").innerHTML = chartStatuses.map(status => {
-      const count = counts[status] || 0;
-      const percentage = applications.length
-        ? Math.round(count / applications.length * 100)
-        : 0;
+        $("statusChart").innerHTML = chartStatuses.map(status => {
+          const count = counts[status] || 0;
+          const percentage = applications.length
+            ? Math.round(count / applications.length * 100)
+            : 0;
 
-      return `
+          return `
         <div class="status-row">
           <div class="status-info">
             <span>${escapeHTML(status)}</span>
@@ -1090,27 +1092,27 @@
           </div>
         </div>
       `;
-    }).join("");
-  }
+        }).join("");
+      }
 
-  function dateValue(app) {
-    const raw = getDate(app);
-    const timestamp = Date.parse(raw);
-    return Number.isFinite(timestamp) ? timestamp : 0;
-  }
+      function dateValue(app) {
+        const raw = getDate(app);
+        const timestamp = Date.parse(raw);
+        return Number.isFinite(timestamp) ? timestamp : 0;
+      }
 
-  function renderRecentActivity() {
-    const recent = [...applications]
-      .sort((a, b) => dateValue(b) - dateValue(a))
-      .slice(0, 5);
+      function renderRecentActivity() {
+        const recent = [...applications]
+          .sort((a, b) => dateValue(b) - dateValue(a))
+          .slice(0, 5);
 
-    if (!recent.length) {
-      $("recentActivity").innerHTML =
-        '<div class="empty-state">No application activity is available yet.</div>';
-      return;
-    }
+        if (!recent.length) {
+          $("recentActivity").innerHTML =
+            '<div class="empty-state">No application activity is available yet.</div>';
+          return;
+        }
 
-    $("recentActivity").innerHTML = recent.map(app => `
+        $("recentActivity").innerHTML = recent.map(app => `
       <div class="activity-item">
         <div>
           <div class="activity-title">
@@ -1123,32 +1125,32 @@
         <span class="status-tag">${escapeHTML(getStatus(app))}</span>
       </div>
     `).join("");
-  }
+      }
 
-  function renderInsights() {
-    const total = applications.length;
-    const counts = statusCounts(applications);
+      function renderInsights() {
+        const total = applications.length;
+        const counts = statusCounts(applications);
 
-    if (!total) {
-      $("aiSummary").textContent =
-        "No application records are available. When records are connected, this section will summarise the application volume and status distribution.";
+        if (!total) {
+          $("aiSummary").textContent =
+            "No application records are available. When records are connected, this section will summarise the application volume and status distribution.";
 
-      $("aiAnalysis").textContent =
-        "No analysis is available without application records. Connect the application data source to identify pending reviews, document follow-ups and incomplete records.";
-      return;
-    }
+          $("aiAnalysis").textContent =
+            "No analysis is available without application records. Connect the application data source to identify pending reviews, document follow-ups and incomplete records.";
+          return;
+        }
 
-    const received = counts["Received"] || 0;
-    const review = counts["Under Review"] || 0;
-    const docsRequired = counts["Documents Required"] || 0;
-    const completed = counts["Completed"] || 0;
-    const onHold = counts["On Hold"] || 0;
-    const other = total - received - review - docsRequired - completed - onHold;
+        const received = counts["Received"] || 0;
+        const review = counts["Under Review"] || 0;
+        const docsRequired = counts["Documents Required"] || 0;
+        const completed = counts["Completed"] || 0;
+        const onHold = counts["On Hold"] || 0;
+        const other = total - received - review - docsRequired - completed - onHold;
 
-    const active = received + review + docsRequired + onHold;
-    const completionRate = Math.round(completed / total * 100);
+        const active = received + review + docsRequired + onHold;
+        const completionRate = Math.round(completed / total * 100);
 
-    $("aiSummary").innerHTML = `
+        $("aiSummary").innerHTML = `
       <ul>
         <li><strong>${total}</strong> application record(s) are currently available.</li>
         <li><strong>${received}</strong> are marked Received and <strong>${review}</strong> are Under Review.</li>
@@ -1159,91 +1161,91 @@
       </ul>
     `;
 
-    const missingApplicant = applications.filter(app =>
-      getApplicant(app) === "Not provided"
-    ).length;
+        const missingApplicant = applications.filter(app =>
+          getApplicant(app) === "Not provided"
+        ).length;
 
-    const missingReference = applications.filter(app =>
-      getReference(app) === "—"
-    ).length;
+        const missingReference = applications.filter(app =>
+          getReference(app) === "—"
+        ).length;
 
-    const missingDate = applications.filter(app =>
-      getDate(app) === "—"
-    ).length;
+        const missingDate = applications.filter(app =>
+          getDate(app) === "—"
+        ).length;
 
-    const observations = [];
+        const observations = [];
 
-    if (received > 0) {
-      observations.push(`${received} application(s) are marked Received. Check whether initial reviews are required.`);
-    }
+        if (received > 0) {
+          observations.push(`${received} application(s) are marked Received. Check whether initial reviews are required.`);
+        }
 
-    if (docsRequired > 0) {
-      observations.push(`${docsRequired} application(s) are marked Documents Required. Verify which documents are missing.`);
-    }
+        if (docsRequired > 0) {
+          observations.push(`${docsRequired} application(s) are marked Documents Required. Verify which documents are missing.`);
+        }
 
-    if (onHold > 0) {
-      observations.push(`${onHold} application(s) are marked On Hold. Review their recorded reasons before taking action.`);
-    }
+        if (onHold > 0) {
+          observations.push(`${onHold} application(s) are marked On Hold. Review their recorded reasons before taking action.`);
+        }
 
-    if (review > 0) {
-      observations.push(`${review} application(s) are Under Review. Monitor their progress and record any updates.`);
-    }
+        if (review > 0) {
+          observations.push(`${review} application(s) are Under Review. Monitor their progress and record any updates.`);
+        }
 
-    if (missingApplicant > 0) {
-      observations.push(`${missingApplicant} record(s) have no recognised applicant name.`);
-    }
+        if (missingApplicant > 0) {
+          observations.push(`${missingApplicant} record(s) have no recognised applicant name.`);
+        }
 
-    if (missingReference > 0) {
-      observations.push(`${missingReference} record(s) have no recognised application reference.`);
-    }
+        if (missingReference > 0) {
+          observations.push(`${missingReference} record(s) have no recognised application reference.`);
+        }
 
-    if (missingDate > 0) {
-      observations.push(`${missingDate} record(s) have no recognised application date.`);
-    }
+        if (missingDate > 0) {
+          observations.push(`${missingDate} record(s) have no recognised application date.`);
+        }
 
-    if (!observations.length) {
-      observations.push("No pending statuses or missing basic fields were identified from the available records. This does not verify the completeness or accuracy of the documents.");
-    }
+        if (!observations.length) {
+          observations.push("No pending statuses or missing basic fields were identified from the available records. This does not verify the completeness or accuracy of the documents.");
+        }
 
-    $("aiAnalysis").innerHTML = `
+        $("aiAnalysis").innerHTML = `
       <p><strong>Completion rate:</strong> ${completionRate}%</p>
       <p><strong>Records not marked Completed:</strong> ${active}</p>
       <ul>${observations.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul>
     `;
-  }
+      }
 
-  function renderApplications() {
-    const query = $("applicationSearch").value.trim().toLowerCase();
-    const selectedStatus = $("statusFilter").value;
+      function renderApplications() {
+        const query = $("applicationSearch").value.trim().toLowerCase();
+        const selectedStatus = $("statusFilter").value;
 
-    const filtered = applications.filter(app => {
-      const text = [
-        getReference(app),
-        getApplicant(app),
-        getLoanType(app),
-        getStatus(app),
-        getDate(app)
-      ].join(" ").toLowerCase();
+        const filtered = applications.filter(app => {
+          const text = [
+            getReference(app),
+            getApplicant(app),
+            getLoanType(app),
+            getStatus(app),
+            getDate(app)
+          ].join(" ").toLowerCase();
 
-      return text.includes(query) &&
-        (!selectedStatus || getStatus(app) === selectedStatus);
-    });
+          return text.includes(query) &&
+            (!selectedStatus || getStatus(app) === selectedStatus);
+        });
 
-    if (!filtered.length) {
-      $("applicationsTableBody").innerHTML = `
+        if (!filtered.length) {
+          $("applicationsTableBody").innerHTML = `
         <tr><td colspan="7">
           ${applications.length
-            ? "No applications match the selected filters."
-            : "No application records are available."}
+              ? "No applications match the selected filters."
+              : "No application records are available."}
         </td></tr>
       `;
-      return;
-    }
+          return;
+        }
 
-    $("applicationsTableBody").innerHTML = filtered.map(app => {
-      const linked = getLinkedDocuments(app);
+        $("applicationsTableBody").innerHTML = filtered.map(app => {
+          const linked = getLinkedDocuments(app);
 
-      return `
+          return `
         <tr>
           <td><strong>${escapeHTML(getReference(app))}</strong></td>
           <td>${escapeHTML(getApplicant(app))}</td>
@@ -1254,150 +1256,150 @@
           <td>${linked.length} file(s)</td>
         </tr>
       `;
-    }).join("");
-  }
-
-  function filenameFromDocument(doc) {
-    return String(firstValue(doc, [
-      "fileName", "filename", "name", "originalName"
-    ], "document"));
-  }
-
-  function mimeFromDocument(doc) {
-    return String(firstValue(doc, [
-      "mimeType", "type", "contentType"
-    ], "application/octet-stream"));
-  }
-
-  function getDocumentPayload(doc) {
-    return firstValue(doc, [
-      "dataUrl", "dataURL", "base64Data", "base64",
-      "content", "fileData"
-    ], "");
-  }
-
-  function safeFilename(name) {
-    return String(name).replace(/[\\/:*?"<>|]/g, "_").slice(0, 180) || "document";
-  }
-
-  function downloadDataUrl(dataUrl, filename) {
-    const link = document.createElement("a");
-    link.href = dataUrl;
-    link.download = safeFilename(filename);
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-  }
-
-  function downloadBase64(payload, mime, filename) {
-    const clean = String(payload).replace(/\s/g, "");
-    const binary = atob(clean);
-    const chunks = [];
-
-    for (let offset = 0; offset < binary.length; offset += 1024) {
-      const part = binary.slice(offset, offset + 1024);
-      const bytes = new Uint8Array(part.length);
-
-      for (let i = 0; i < part.length; i++) {
-        bytes[i] = part.charCodeAt(i);
+        }).join("");
       }
 
-      chunks.push(bytes);
-    }
-
-    const blob = new Blob(chunks, { type: mime });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-
-    link.href = url;
-    link.download = safeFilename(filename);
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  }
-
-  function downloadDocument(index) {
-    const doc = documents[index];
-    if (!doc) return;
-
-    const filename = filenameFromDocument(doc);
-    const mime = mimeFromDocument(doc);
-    const payload = getDocumentPayload(doc);
-
-    try {
-      if (typeof payload === "string" &&
-          payload.startsWith("data:")) {
-        downloadDataUrl(payload, filename);
-        return;
+      function filenameFromDocument(doc) {
+        return String(firstValue(doc, [
+          "fileName", "filename", "name", "originalName"
+        ], "document"));
       }
 
-      if (typeof payload === "string" && payload.length > 0) {
-        const clean = payload.replace(/\s/g, "");
-        const isBase64 = /^[A-Za-z0-9+/]*={0,2}$/.test(clean);
-
-        if (isBase64) {
-          downloadBase64(clean, mime, filename);
-          return;
-        }
-
-        alert("This document's stored content format is not recognised.");
-        return;
+      function mimeFromDocument(doc) {
+        return String(firstValue(doc, [
+          "mimeType", "type", "contentType"
+        ], "application/octet-stream"));
       }
 
-      const url = firstValue(doc, [
-        "downloadUrl", "url", "fileUrl"
-      ], "");
+      function getDocumentPayload(doc) {
+        return firstValue(doc, [
+          "dataUrl", "dataURL", "base64Data", "base64",
+          "content", "fileData"
+        ], "");
+      }
 
-      if (url) {
+      function safeFilename(name) {
+        return String(name).replace(/[\\/:*?"<>|]/g, "_").slice(0, 180) || "document";
+      }
+
+      function downloadDataUrl(dataUrl, filename) {
         const link = document.createElement("a");
-        link.href = url;
+        link.href = dataUrl;
         link.download = safeFilename(filename);
-        link.target = "_blank";
-        link.rel = "noopener noreferrer";
         document.body.appendChild(link);
         link.click();
         link.remove();
-        return;
       }
 
-      alert(
-        "The file metadata exists, but its file content or download URL is unavailable. Connect the original file storage service to download it."
-      );
-    } catch (error) {
-      console.error("Document download failed:", error);
-      alert("The document could not be downloaded.");
-    }
-  }
+      function downloadBase64(payload, mime, filename) {
+        const clean = String(payload).replace(/\s/g, "");
+        const binary = atob(clean);
+        const chunks = [];
 
-  function renderDocuments() {
-    if (!documents.length) {
-      $("documentList").innerHTML = `
+        for (let offset = 0; offset < binary.length; offset += 1024) {
+          const part = binary.slice(offset, offset + 1024);
+          const bytes = new Uint8Array(part.length);
+
+          for (let i = 0; i < part.length; i++) {
+            bytes[i] = part.charCodeAt(i);
+          }
+
+          chunks.push(bytes);
+        }
+
+        const blob = new Blob(chunks, { type: mime });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = safeFilename(filename);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+
+      function downloadDocument(index) {
+        const doc = documents[index];
+        if (!doc) return;
+
+        const filename = filenameFromDocument(doc);
+        const mime = mimeFromDocument(doc);
+        const payload = getDocumentPayload(doc);
+
+        try {
+          if (typeof payload === "string" &&
+            payload.startsWith("data:")) {
+            downloadDataUrl(payload, filename);
+            return;
+          }
+
+          if (typeof payload === "string" && payload.length > 0) {
+            const clean = payload.replace(/\s/g, "");
+            const isBase64 = /^[A-Za-z0-9+/]*={0,2}$/.test(clean);
+
+            if (isBase64) {
+              downloadBase64(clean, mime, filename);
+              return;
+            }
+
+            alert("This document's stored content format is not recognised.");
+            return;
+          }
+
+          const url = firstValue(doc, [
+            "downloadUrl", "url", "fileUrl"
+          ], "");
+
+          if (url) {
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = safeFilename(filename);
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            return;
+          }
+
+          alert(
+            "The file metadata exists, but its file content or download URL is unavailable. Connect the original file storage service to download it."
+          );
+        } catch (error) {
+          console.error("Document download failed:", error);
+          alert("The document could not be downloaded.");
+        }
+      }
+
+      function renderDocuments() {
+        if (!documents.length) {
+          $("documentList").innerHTML = `
         <div class="empty-state">
           No accessible uploaded documents were found in the configured browser storage keys.
         </div>
       `;
-      return;
-    }
+          return;
+        }
 
-    $("documentList").innerHTML = documents.map((doc, index) => {
-      const reference = firstValue(doc, [
-        "reference", "applicationRef", "applicationReference",
-        "applicationId", "recordId"
-      ], "Not linked");
+        $("documentList").innerHTML = documents.map((doc, index) => {
+          const reference = firstValue(doc, [
+            "reference", "applicationRef", "applicationReference",
+            "applicationId", "recordId"
+          ], "Not linked");
 
-      const filename = filenameFromDocument(doc);
-      const size = firstValue(doc, ["size", "fileSize"], "");
-      const readableSize = Number(size) > 0
-        ? (Number(size) / 1024).toFixed(1) + " KB"
-        : "Size unavailable";
+          const filename = filenameFromDocument(doc);
+          const size = firstValue(doc, ["size", "fileSize"], "");
+          const readableSize = Number(size) > 0
+            ? (Number(size) / 1024).toFixed(1) + " KB"
+            : "Size unavailable";
 
-      const payload = getDocumentPayload(doc);
-      const url = firstValue(doc, ["downloadUrl", "url", "fileUrl"], "");
-      const downloadable = Boolean(payload || url);
+          const payload = getDocumentPayload(doc);
+          const url = firstValue(doc, ["downloadUrl", "url", "fileUrl"], "");
+          const downloadable = Boolean(payload || url);
 
-      return `
+          return `
         <div class="document-item">
           <div>
             <div class="document-name">${escapeHTML(filename)}</div>
@@ -1414,166 +1416,167 @@
           </div>
         </div>
       `;
-    }).join("");
+        }).join("");
 
-    $("documentList").querySelectorAll("[data-download-document]").forEach(button => {
-      button.addEventListener("click", () => {
-        downloadDocument(Number(button.dataset.downloadDocument));
+        $("documentList").querySelectorAll("[data-download-document]").forEach(button => {
+          button.addEventListener("click", () => {
+            downloadDocument(Number(button.dataset.downloadDocument));
+          });
+        });
+      }
+
+      function csvCell(value) {
+        let text = String(value ?? "");
+
+        // Avoid treating spreadsheet formula-like values as formulas.
+        if (/^[\s]*[=+\-@]/.test(text)) {
+          text = "'" + text;
+        }
+
+        return '"' + text.replace(/"/g, '""') + '"';
+      }
+
+      function downloadCsv(rows, filename) {
+        if (!rows.length) {
+          alert("There are no records to export.");
+          return;
+        }
+
+        const headers = [
+          "Reference", "Applicant", "Loan type",
+          "Amount", "Status", "Date", "Document count"
+        ];
+
+        const lines = [
+          headers.map(csvCell).join(","),
+          ...rows.map(app => [
+            getReference(app),
+            getApplicant(app),
+            getLoanType(app),
+            getAmount(app),
+            getStatus(app),
+            getDate(app),
+            getLinkedDocuments(app).length
+          ].map(csvCell).join(","))
+        ];
+
+        const blob = new Blob(
+          ["\uFEFF" + lines.join("\r\n")],
+          { type: "text/csv;charset=utf-8;" }
+        );
+
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+
+      function exportSummary() {
+        const total = applications.length;
+        const counts = statusCounts(applications);
+
+        const report = [
+          "CREDORA — LENDER DASHBOARD SUMMARY",
+          "Generated: " + new Date().toLocaleString(),
+          "",
+          "TOTAL APPLICATIONS: " + total,
+          "RECEIVED: " + (counts["Received"] || 0),
+          "UNDER REVIEW: " + (counts["Under Review"] || 0),
+          "DOCUMENTS REQUIRED: " + (counts["Documents Required"] || 0),
+          "COMPLETED: " + (counts["Completed"] || 0),
+          "ON HOLD: " + (counts["On Hold"] || 0),
+          "ACCESSIBLE DOCUMENT RECORDS: " + documents.length,
+          "",
+          "APPLICATIONS",
+          ...applications.map(app =>
+            `${getReference(app)} | ${getApplicant(app)} | ${getLoanType(app)} | ${getStatus(app)} | ${getDate(app)}`
+          ),
+          "",
+          "Note: This is a rule-based report from records available to this browser."
+        ].join("\r\n");
+
+        const blob = new Blob([report], { type: "text/plain;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = "credora-dashboard-summary.txt";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+
+      function refreshDashboard() {
+        applications = readArray(APPLICATION_KEYS);
+        documents = readArray(DOCUMENT_KEYS);
+
+        renderStats();
+        renderRecentActivity();
+        renderInsights();
+        renderApplications();
+        renderDocuments();
+
+        $("lastUpdated").textContent =
+          "Updated " + new Date().toLocaleTimeString();
+
+        $("connectionStatus").textContent = "LOCAL DATA";
+      }
+
+      $("refreshButton").addEventListener("click", refreshDashboard);
+
+      $("exportCsvButton").addEventListener("click", () => {
+        downloadCsv(applications, "credora-applications.csv");
       });
-    });
-  }
 
-  function csvCell(value) {
-    let text = String(value ?? "");
+      $("exportFilteredButton").addEventListener("click", () => {
+        const query = $("applicationSearch").value.trim().toLowerCase();
+        const selectedStatus = $("statusFilter").value;
 
-    // Avoid treating spreadsheet formula-like values as formulas.
-    if (/^[\s]*[=+\-@]/.test(text)) {
-      text = "'" + text;
-    }
+        const filtered = applications.filter(app => {
+          const text = [
+            getReference(app), getApplicant(app),
+            getLoanType(app), getStatus(app), getDate(app)
+          ].join(" ").toLowerCase();
 
-    return '"' + text.replace(/"/g, '""') + '"';
-  }
+          return text.includes(query) &&
+            (!selectedStatus || getStatus(app) === selectedStatus);
+        });
 
-  function downloadCsv(rows, filename) {
-    if (!rows.length) {
-      alert("There are no records to export.");
-      return;
-    }
+        downloadCsv(filtered, "credora-filtered-applications.csv");
+      });
 
-    const headers = [
-      "Reference", "Applicant", "Loan type",
-      "Amount", "Status", "Date", "Document count"
-    ];
+      $("exportReportButton").addEventListener("click", exportSummary);
+      $("applicationSearch").addEventListener("input", renderApplications);
+      $("statusFilter").addEventListener("change", renderApplications);
 
-    const lines = [
-      headers.map(csvCell).join(","),
-      ...rows.map(app => [
-        getReference(app),
-        getApplicant(app),
-        getLoanType(app),
-        getAmount(app),
-        getStatus(app),
-        getDate(app),
-        getLinkedDocuments(app).length
-      ].map(csvCell).join(","))
-    ];
+      // Update when another page or tab changes the same local storage.
+      window.addEventListener("storage", event => {
+        if ([...APPLICATION_KEYS, ...DOCUMENT_KEYS].includes(event.key) ||
+          event.key === null) {
+          refreshDashboard();
+        }
+      });
 
-    const blob = new Blob(
-      ["\uFEFF" + lines.join("\r\n")],
-      { type: "text/csv;charset=utf-8;" }
-    );
+      // Refresh visible data periodically. This is not a server connection.
+      setInterval(refreshDashboard, 15000);
 
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
+      // Footer year.
+      document.querySelectorAll("[data-year]").forEach(element => {
+        element.textContent = new Date().getFullYear();
+      });
 
-    link.href = url;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  }
-
-  function exportSummary() {
-    const total = applications.length;
-    const counts = statusCounts(applications);
-
-    const report = [
-      "CREDORA — LENDER DASHBOARD SUMMARY",
-      "Generated: " + new Date().toLocaleString(),
-      "",
-      "TOTAL APPLICATIONS: " + total,
-      "RECEIVED: " + (counts["Received"] || 0),
-      "UNDER REVIEW: " + (counts["Under Review"] || 0),
-      "DOCUMENTS REQUIRED: " + (counts["Documents Required"] || 0),
-      "COMPLETED: " + (counts["Completed"] || 0),
-      "ON HOLD: " + (counts["On Hold"] || 0),
-      "ACCESSIBLE DOCUMENT RECORDS: " + documents.length,
-      "",
-      "APPLICATIONS",
-      ...applications.map(app =>
-        `${getReference(app)} | ${getApplicant(app)} | ${getLoanType(app)} | ${getStatus(app)} | ${getDate(app)}`
-      ),
-      "",
-      "Note: This is a rule-based report from records available to this browser."
-    ].join("\r\n");
-
-    const blob = new Blob([report], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-
-    link.href = url;
-    link.download = "credora-dashboard-summary.txt";
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  }
-
-  function refreshDashboard() {
-    applications = readArray(APPLICATION_KEYS);
-    documents = readArray(DOCUMENT_KEYS);
-
-    renderStats();
-    renderRecentActivity();
-    renderInsights();
-    renderApplications();
-    renderDocuments();
-
-    $("lastUpdated").textContent =
-      "Updated " + new Date().toLocaleTimeString();
-
-    $("connectionStatus").textContent = "LOCAL DATA";
-  }
-
-  $("refreshButton").addEventListener("click", refreshDashboard);
-
-  $("exportCsvButton").addEventListener("click", () => {
-    downloadCsv(applications, "credora-applications.csv");
-  });
-
-  $("exportFilteredButton").addEventListener("click", () => {
-    const query = $("applicationSearch").value.trim().toLowerCase();
-    const selectedStatus = $("statusFilter").value;
-
-    const filtered = applications.filter(app => {
-      const text = [
-        getReference(app), getApplicant(app),
-        getLoanType(app), getStatus(app), getDate(app)
-      ].join(" ").toLowerCase();
-
-      return text.includes(query) &&
-        (!selectedStatus || getStatus(app) === selectedStatus);
-    });
-
-    downloadCsv(filtered, "credora-filtered-applications.csv");
-  });
-
-  $("exportReportButton").addEventListener("click", exportSummary);
-  $("applicationSearch").addEventListener("input", renderApplications);
-  $("statusFilter").addEventListener("change", renderApplications);
-
-  // Update when another page or tab changes the same local storage.
-  window.addEventListener("storage", event => {
-    if ([...APPLICATION_KEYS, ...DOCUMENT_KEYS].includes(event.key) ||
-        event.key === null) {
       refreshDashboard();
-    }
-  });
-
-  // Refresh visible data periodically. This is not a server connection.
-  setInterval(refreshDashboard, 15000);
-
-  // Footer year.
-  document.querySelectorAll("[data-year]").forEach(element => {
-    element.textContent = new Date().getFullYear();
-  });
-
-  refreshDashboard();
-})();
-</script>
+    })();
+  </script>
 
 </body>
+
 </html>

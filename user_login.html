@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +9,11 @@
     <link rel="icon" type="image/png" href="./ICON.png">
     <script type="module" src="supabaseClient.js"></script>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         body {
             min-height: 100vh;
@@ -27,7 +31,11 @@
             gap: 12px;
         }
 
-        header img { width: 45px; height: 45px; object-fit: contain; }
+        header img {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+        }
 
         header h1 {
             font-size: 25px;
@@ -49,7 +57,9 @@
             margin-bottom: 35px;
         }
 
-        .back:hover { color: #000; }
+        .back:hover {
+            color: #000;
+        }
 
         .eyebrow {
             font-size: 11px;
@@ -87,9 +97,14 @@
             cursor: pointer;
         }
 
-        .tab.active { background: #000; color: #fff; }
+        .tab.active {
+            background: #000;
+            color: #fff;
+        }
 
-        .field { margin-bottom: 18px; }
+        .field {
+            margin-bottom: 18px;
+        }
 
         label {
             display: block;
@@ -108,7 +123,9 @@
             outline: none;
         }
 
-        input:focus { border: 2px solid #000; }
+        input:focus {
+            border: 2px solid #000;
+        }
 
         .submit {
             width: 100%;
@@ -122,7 +139,10 @@
             margin-top: 5px;
         }
 
-        .submit:hover { background: #fff; color: #000; }
+        .submit:hover {
+            background: #fff;
+            color: #000;
+        }
 
         .notice {
             margin-top: 18px;
@@ -139,7 +159,9 @@
             text-align: center;
         }
 
-        [hidden] { display: none !important; }
+        [hidden] {
+            display: none !important;
+        }
     </style>
 </head>
 
@@ -150,9 +172,10 @@
     </header>
 
     <main class="container">
-        <a class="back" href="./introindex.html">← Back to home</a>
+
 
         <p class="eyebrow">USER ACCOUNT</p>
+        <a class="back" href="./introindex.html">← Back to home</a>
         <h2 id="heading">Welcome back.</h2>
         <p class="subtitle" id="subtitle">
             Sign in to access your CREDORA account.
@@ -166,34 +189,29 @@
         <form id="userForm">
             <div class="field" id="nameField" hidden>
                 <label for="name">FULL NAME</label>
-                <input id="name" name="name" autocomplete="name"
-                       placeholder="Enter your full name">
+                <input id="name" name="name" autocomplete="name" placeholder="Enter your full name">
             </div>
 
             <div class="field">
                 <label for="email">EMAIL ADDRESS</label>
-                <input id="email" name="email" type="email"
-                       autocomplete="email" placeholder="you@example.com" required>
+                <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
             </div>
 
             <div class="field" id="phoneField" hidden>
                 <label for="phone">PHONE NUMBER</label>
-                <input id="phone" name="phone" type="tel"
-                       autocomplete="tel" placeholder="Enter phone number">
+                <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="Enter phone number">
             </div>
 
             <div class="field">
                 <label for="password">PASSWORD</label>
-                <input id="password" name="password" type="password"
-                       autocomplete="current-password"
-                       placeholder="Enter your password" required>
+                <input id="password" name="password" type="password" autocomplete="current-password"
+                    placeholder="Enter your password" required>
             </div>
 
             <div class="field" id="confirmField" hidden>
                 <label for="confirmPassword">CONFIRM PASSWORD</label>
-                <input id="confirmPassword" name="confirmPassword"
-                       type="password" autocomplete="new-password"
-                       placeholder="Re-enter your password">
+                <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password"
+                    placeholder="Re-enter your password">
             </div>
 
             <button class="submit" id="submitButton" type="submit">
@@ -252,8 +270,8 @@
 
             document.getElementById("subtitle").textContent =
                 registering
-                ? "Register to get started with CREDORA."
-                : "Sign in to access your CREDORA account.";
+                    ? "Register to get started with CREDORA."
+                    : "Sign in to access your CREDORA account.";
 
             submitButton.textContent =
                 registering ? "CREATE USER ACCOUNT →" : "LOGIN TO YOUR ACCOUNT →";
@@ -348,4 +366,5 @@
         });
     </script>
 </body>
+
 </html>
