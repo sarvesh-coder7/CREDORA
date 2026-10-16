@@ -64,10 +64,10 @@ export async function resolveOrCreateBorrowerProfile(email, fullName, phone, use
     if (!insertError && created && created.length > 0) {
       return created[0].id;
     }
-    return fallbackId;
+    return null;
   } catch (err) {
     console.warn('[Supabase Service] resolveOrCreateBorrowerProfile error:', err.message);
-    return crypto.randomUUID();
+    return null;
   }
 }
 
@@ -265,4 +265,307 @@ export async function updateApplicationStatus(applicationId, newStatus, userToke
   }
 
   return cached || { id: applicationId, status: newStatus };
+}
+
+/**
+ * Downloads a file buffer from Supabase Storage.
+ */
+export async function downloadStorageFile(bucket, storagePath, userToken) {
+  const client = getSupabaseClient(userToken);
+  try {
+    const { data, error } = await client.storage.from(bucket).download(storagePath);
+    if (error || !data) {
+      console.warn(`[Supabase Storage] Download error from ${bucket}/${storagePath}:`, error?.message);
+      return null;
+    }
+    const arrayBuffer = await data.arrayBuffer();
+    return Buffer.from(arrayBuffer);
+  } catch (err) {
+    console.warn(`[Supabase Storage] Download exception from ${bucket}/${storagePath}:`, err.message);
+    return null;
+  }
+}
+
+/**
+ * Uploads a document into loan-documents private bucket and records metadata in loan_documents table.
+ */
+export async function uploadLoanDocument({ applicationId, fileBuffer, originalFilename, mimeType, documentType, userToken }) {
+  const client = getSupabaseClient(userToken);
+  const cleanFilename = (originalFilename || 'document.dat').replace(/[^\w.-]/g, '_');
+  const storagePath = `${applicationId}/${cleanFilename}`;
+
+  // 1. Upload to Supabase Storage loan-documents bucket
+  const { error: storageError } = await client.storage
+    .from('loan-documents')
+    .upload(storagePath, fileBuffer, {
+      contentType: mimeType || 'application/octet-stream',
+      upsert: true
+    });
+
+  if (storageError) {
+    console.warn('[Supabase Storage] Failed uploading to loan-documents:', storageError.message);
+  }
+
+  // 2. Persist metadata into public.loan_documents
+  const docId = crypto.randomUUID();
+  const docRecord = {
+    id: docId,
+    application_id: applicationId,
+    document_type: documentType || 'general',
+    original_filename: cleanFilename,
+    storage_path: storagePath,
+    mime_type: mimeType || 'application/octet-stream',
+    file_size: fileBuffer.length,
+    upload_status: 'uploaded',
+    created_at: new Date().toISOString()
+  };
+
+  try {
+    const { data, error } = await client
+      .from('loan_documents')
+      .insert(docRecord)
+      .select();
+
+    if (error) {
+      console.warn('[Supabase Service] Failed inserting loan_documents record:', error.message);
+    } else if (data && data.length > 0) {
+      return data[0];
+    }
+  } catch (err) {
+    console.warn('[Supabase Service] loan_documents insert exception:', err.message);
+  }
+
+  return docRecord;
+}
+
+/**
+ * Retrieves all uploaded documents for a loan application.
+ */
+export async function getApplicationLoanDocuments(applicationId, userToken) {
+  const client = getSupabaseClient(userToken);
+  try {
+    const { data, error } = await client
+      .from('loan_documents')
+      .select('*')
+      .eq('application_id', applicationId)
+      .order('created_at', { ascending: true });
+
+    if (!error && Array.isArray(data)) {
+      return data;
+    }
+  } catch (err) {
+    console.warn('[Supabase Service] getApplicationLoanDocuments error:', err.message);
+  }
+  return [];
+}
+
+/**
+ * Upserts a loan application with all required fields.
+ */
+export async function insertOrUpdateLoanApplication(appPayload, userToken) {
+  const client = getSupabaseClient(userToken);
+  const now = new Date().toISOString();
+
+  const loanAmt = parseFloat(appPayload.requested_loan_amount ?? appPayload.loan_amount ?? 0) || 0;
+  const emiVal = parseFloat(appPayload.existing_monthly_emis ?? appPayload.existing_monthly_debt ?? 0) || 0;
+  const incVal = parseFloat(appPayload.monthly_income ?? 0) || 0;
+
+  const record = {
+    id: appPayload.id,
+    borrower_id: appPayload.borrower_id || null,
+    full_name: appPayload.full_name || appPayload.applicant_name || 'Borrower Applicant',
+    applicant_name: appPayload.full_name || appPayload.applicant_name || 'Borrower Applicant',
+    email: (appPayload.email || appPayload.applicant_email || '').toLowerCase(),
+    applicant_email: (appPayload.email || appPayload.applicant_email || '').toLowerCase(),
+    phone: appPayload.phone || appPayload.applicant_phone || '',
+    applicant_phone: appPayload.phone || appPayload.applicant_phone || '',
+    lender_type: appPayload.lender_type || 'Bank',
+    loan_type: appPayload.loan_type || 'Personal Loan',
+    employment_type: appPayload.employment_type || 'Salaried',
+    monthly_income: incVal,
+    requested_loan_amount: loanAmt,
+    loan_amount: loanAmt,
+    existing_monthly_emis: emiVal,
+    existing_monthly_debt: emiVal,
+    preferred_tenure: appPayload.preferred_tenure || appPayload.tenure || '3-5 years',
+    tenure: appPayload.preferred_tenure || appPayload.tenure || '3-5 years',
+    loan_purpose: appPayload.loan_purpose || 'General loan requirement',
+    application_status: appPayload.application_status || appPayload.status || 'draft',
+    status: appPayload.application_status || appPayload.status || 'draft',
+    analysis_status: appPayload.analysis_status || 'pending',
+    updated_at: now
+  };
+
+  if (!record.created_at) {
+    record.created_at = appPayload.created_at || now;
+  }
+
+  LOCAL_APPLICATIONS_CACHE.set(record.id, {
+    ...(LOCAL_APPLICATIONS_CACHE.get(record.id) || {}),
+    ...record
+  });
+
+  try {
+    const { data, error } = await client
+      .from('loan_applications')
+      .upsert(record)
+      .select();
+
+    if (!error && data && data.length > 0) {
+      return data[0];
+    }
+    if (error) {
+      console.warn('[Supabase Service] loan_applications upsert error:', error.message);
+    }
+  } catch (err) {
+    console.warn('[Supabase Service] loan_applications upsert exception:', err.message);
+  }
+
+  return record;
+}
+
+/**
+ * Saves document analysis report and updates loan application analysis status.
+ */
+export async function saveDocumentAnalysisReport(applicationId, reportData, userToken) {
+  const client = getSupabaseClient(userToken);
+  const reportId = reportData.id || crypto.randomUUID();
+  const now = new Date().toISOString();
+
+  const reportPayload = {
+    id: reportId,
+    application_id: applicationId,
+    overall_status: reportData.overall_status || 'completed',
+    executive_summary: reportData.executive_summary || '',
+    extracted_information: reportData.extracted_information || {},
+    document_results: reportData.document_results || [],
+    missing_documents: reportData.missing_documents || [],
+    inconsistencies: reportData.inconsistencies || [],
+    risk_flags: reportData.risk_flags || [],
+    recommendations: reportData.recommendations || [],
+    limitations: reportData.limitations || 'Preliminary automated review. Final terms subject to credit policy.',
+    model_name: reportData.model_name || 'gemini-2.0-flash',
+    created_at: now
+  };
+
+  try {
+    const { data, error } = await client
+      .from('document_analysis_reports')
+      .insert(reportPayload)
+      .select();
+
+    if (error) {
+      console.warn('[Supabase Service] document_analysis_reports insert error:', error.message);
+    }
+
+    // Update application analysis status
+    await client
+      .from('loan_applications')
+      .update({
+        analysis_status: reportPayload.overall_status,
+        updated_at: now
+      })
+      .eq('id', applicationId);
+
+  } catch (err) {
+    console.warn('[Supabase Service] saveDocumentAnalysisReport exception:', err.message);
+  }
+
+  return reportPayload;
+}
+
+/**
+ * Retrieves the latest document analysis report for an application.
+ */
+export async function getDocumentAnalysisReport(applicationId, userToken) {
+  const client = getSupabaseClient(userToken);
+  try {
+    const { data, error } = await client
+      .from('document_analysis_reports')
+      .select('*')
+      .eq('application_id', applicationId)
+      .order('created_at', { ascending: false })
+      .limit(1);
+
+    if (!error && data && data.length > 0) {
+      return data[0];
+    }
+  } catch (err) {
+    console.warn('[Supabase Service] getDocumentAnalysisReport error:', err.message);
+  }
+  return null;
+}
+
+/**
+ * Uploads a generated PDF report to Supabase Storage and records the path in the report row.
+ */
+export async function saveReportPdf(applicationId, pdfBuffer, userToken) {
+  const client = getSupabaseClient(userToken);
+  const now = new Date().toISOString();
+  const storagePath = `reports/${applicationId}/assessment_report_${Date.now()}.pdf`;
+
+  // 1. Upload PDF to storage bucket 'report-pdfs'
+  const { error: uploadError } = await client.storage
+    .from('report-pdfs')
+    .upload(storagePath, pdfBuffer, {
+      contentType: 'application/pdf',
+      upsert: true
+    });
+
+  if (uploadError) {
+    console.warn('[Supabase Service] PDF upload error:', uploadError.message);
+    // Try creating the bucket if it doesn't exist
+    try {
+      await client.storage.createBucket('report-pdfs', { public: false });
+      const { error: retryErr } = await client.storage
+        .from('report-pdfs')
+        .upload(storagePath, pdfBuffer, {
+          contentType: 'application/pdf',
+          upsert: true
+        });
+      if (retryErr) {
+        console.error('[Supabase Service] PDF retry upload error:', retryErr.message);
+      }
+    } catch (bucketErr) {
+      console.warn('[Supabase Service] Bucket creation attempt:', bucketErr.message);
+    }
+  }
+
+  // 2. Update the report row with pdf_storage_path
+  try {
+    await client
+      .from('document_analysis_reports')
+      .update({ pdf_storage_path: storagePath, updated_at: now })
+      .eq('application_id', applicationId);
+  } catch (err) {
+    console.warn('[Supabase Service] Could not update report with PDF path:', err.message);
+  }
+
+  return { storagePath, applicationId };
+}
+
+/**
+ * Retrieves PDF buffer from Supabase Storage for a given application.
+ */
+export async function getReportPdfBuffer(applicationId, userToken) {
+  const client = getSupabaseClient(userToken);
+
+  // Find the storage path from the report record
+  const report = await getDocumentAnalysisReport(applicationId, userToken);
+  if (!report || !report.pdf_storage_path) {
+    return null;
+  }
+
+  const { data, error } = await client.storage
+    .from('report-pdfs')
+    .download(report.pdf_storage_path);
+
+  if (error || !data) {
+    console.warn('[Supabase Service] PDF download error:', error?.message);
+    return null;
+  }
+
+  // Convert Blob to Buffer
+  const arrayBuffer = await data.arrayBuffer();
+  return Buffer.from(arrayBuffer);
 }

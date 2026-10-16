@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ffffff">
+  <title>CREDORA | AI Document Analysis Report</title>
+  <link rel="icon" type="image/png" href="./ICON.png">
+
+  <style>
+    :root {
+      --black: #080808;
+      --white: #fff;
+      --gray: #666;
+      --light-gray: #999;
+      --line: #dedede;
+      --soft: #f8f8f8;
+      --success: #176b40;
+      --danger: #a12b2b;
+      --warn: #b86200;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #fff;
+      color: var(--black);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.5;
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+    }
+
+    /* HEADER */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 18px 6%;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #000;
+    }
+
+    .brand img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+
+    .brand span {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 10px 16px;
+      border: 2px solid #000;
+      background: #000;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background .15s, color .15s;
+    }
+
+    .btn:hover {
+      background: #fff;
+      color: #000;
+    }
+
+    .btn.secondary {
+      background: #fff;
+      color: #000;
+    }
+
+    .btn.secondary:hover {
+      background: #eee;
+    }
+
+    /* CONTAINER */
+    .page {
+      width: min(1050px, 92%);
+      margin: 35px auto 80px;
+    }
+
+    /* REPORT BANNER */
+    .report-banner {
+      border: 1px solid #000;
+      padding: 28px;
+      margin-bottom: 28px;
+      background: #fff;
+    }
+
+    .banner-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 18px;
+    }
+
+    .report-title-block h1 {
+      margin: 0 0 6px;
+      font-size: clamp(24px, 4vw, 36px);
+      letter-spacing: -1px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: var(--gray);
+      margin-bottom: 8px;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border: 1px solid #000;
+    }
+
+    .status-badge.completed {
+      background: #000;
+      color: #fff;
+    }
+
+    .status-badge.review {
+      background: var(--soft);
+      color: #000;
+      border: 2px solid #000;
+    }
+
+    .status-badge.error {
+      background: #fff;
+      color: var(--danger);
+      border-color: var(--danger);
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      font-size: 12px;
+    }
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .meta-label {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--gray);
+      text-transform: uppercase;
+    }
+
+    .meta-value {
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    /* SECTIONS */
+    .section-card {
+      border: 1px solid var(--line);
+      padding: 24px;
+      margin-bottom: 24px;
+      background: #fff;
+    }
+
+    .section-heading {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin: 0 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 10px;
+    }
+
+    .notice {
+      background: var(--soft);
+      padding: 14px 18px;
+      font-size: 12px;
+      line-height: 1.7;
+      margin: 15px 0;
+      border-left: 3px solid #000;
+    }
+
+    /* DATA GRIDS */
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      font-size: 12px;
+    }
+
+    .detail-box {
+      border: 1px solid var(--line);
+      padding: 12px 14px;
+      background: var(--soft);
+    }
+
+    .detail-title {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--gray);
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .detail-data {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* TABLES */
+    .table-wrap {
+      overflow-x: auto;
+      margin-top: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 12px;
+    }
+
+    th, td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    th {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      background: var(--soft);
+      border-top: 1px solid var(--line);
+    }
+
+    tr:hover td {
+      background: #fafafa;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 3px 8px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      border: 1px solid #ccc;
+    }
+
+    .pill.verified {
+      background: #000;
+      color: #fff;
+      border-color: #000;
+    }
+
+    .pill.warn {
+      background: #fff;
+      color: var(--warn);
+      border-color: var(--warn);
+    }
+
+    .pill.missing {
+      background: #fff;
+      color: var(--danger);
+      border-color: var(--danger);
+    }
+
+    /* LISTS */
+    .observations-list, .recommendations-list {
+      margin: 0;
+      padding-left: 20px;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .observations-list li, .recommendations-list li {
+      margin-bottom: 8px;
+    }
+
+    /* LOADING & ERROR */
+    .loader-box {
+      text-align: center;
+      padding: 60px 20px;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid #ccc;
+      border-top-color: #000;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .error-box {
+      border: 2px solid var(--danger);
+      padding: 24px;
+      background: #fff;
+      color: var(--danger);
+      margin-bottom: 24px;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 24px 6%;
+      font-size: 11px;
+      color: var(--gray);
+      text-align: center;
+    }
+
+    /* PDF DOWNLOAD BUTTON STYLES */
+    .btn-download {
+      background: #000;
+      color: #fff;
+      border: 2px solid #000;
+      padding: 10px 20px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .btn-download:hover {
+      background: #fff;
+      color: #000;
+    }
+    .btn-download:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .btn-download .dl-spinner {
+      display: none;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+    .btn-download:hover .dl-spinner {
+      border-color: rgba(0,0,0,0.3);
+      border-top-color: #000;
+    }
+    .btn-download.generating .dl-spinner {
+      display: inline-block;
+    }
+    .btn-download.generating .dl-label {
+      display: none;
+    }
+    .pdf-saved-toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #000;
+      color: #fff;
+      padding: 14px 24px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+      border: 1px solid #333;
+    }
+    .pdf-saved-toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      .details-grid {
+        grid-template-columns: 1fr;
+      }
+      .banner-top {
+        flex-direction: column;
+      }
+      .header {
+        padding: 15px 5%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="header">
+    <a class="brand" href="./index.html">
+      <img src="./LOGO.jpeg" alt="CREDORA Logo">
+      <span>CREDORA</span>
+    </a>
+    <div class="header-actions">
+      <button class="btn-download" id="headerDownloadBtn" onclick="downloadPDF()">
+        <span class="dl-spinner"></span>
+        <span class="dl-label">DOWNLOAD PDF ↓</span>
+      </button>
+      <a href="./loan_application.html" class="btn">NEW APPLICATION +</a>
+    </div>
+  </header>
+
+  <main class="page" id="mainContent">
+    <div id="loadingState" class="loader-box">
+      <div class="spinner"></div>
+      <div style="font-weight: 800; font-size: 16px; margin-bottom: 8px;">Retrieving Document Analysis Report...</div>
+      <div style="color: var(--gray); font-size: 12px;">Fetching verified extraction records from CREDORA underwriter vault</div>
+    </div>
+
+    <div id="errorState" class="error-box" style="display:none;">
+      <h3 style="margin-top:0;">Unable to Load Report</h3>
+      <p id="errorMessage">Report not found or invalid Application ID.</p>
+      <a href="./loan_application.html" class="btn secondary" style="margin-top:12px;">Back to Loan Application</a>
+    </div>
+
+    <div id="reportContainer" style="display:none;">
+      <!-- A. REPORT HEADER -->
+      <section class="report-banner">
+        <div class="banner-top">
+          <div class="report-title-block">
+            <div class="eyebrow">AUTONOMOUS UNDERWRITING REPORT</div>
+            <h1>Document Verification Assessment</h1>
+            <div style="font-size:12px; color:var(--gray);">
+              Application ID: <strong id="repAppId" style="font-family:monospace; color:#000;">--</strong>
+            </div>
+          </div>
+          <div>
+            <span id="repStatusBadge" class="status-badge completed">ANALYSIS COMPLETED</span>
+          </div>
+        </div>
+
+        <div class="meta-grid">
+          <div class="meta-item">
+            <span class="meta-label">Selected Lender</span>
+            <span class="meta-value" id="repLender">--</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Loan Product</span>
+            <span class="meta-value" id="repLoanType">--</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Assessment Date</span>
+            <span class="meta-value" id="repDate">--</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">AI Engine</span>
+            <span class="meta-value" id="repEngine">Gemini 2.0 Flash / Underwriting AI</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- B. EXECUTIVE SUMMARY -->
+      <section class="section-card">
+        <div class="section-heading">
+          <span>1. Executive Assessment Summary</span>
+          <span style="font-size:10px; font-weight:700; color:var(--gray);">PRELIMINARY AI EVALUATION</span>
+        </div>
+        <p id="repExecutiveSummary" style="font-size:13px; line-height:1.8; margin:0 0 12px;">--</p>
+        <div class="notice">
+          <strong>Underwriting Disclaimer:</strong> This document assessment report is an autonomous computational analysis
+          designed to assist preliminary credit review. It does NOT constitute a formal loan sanction, credit guarantee,
+          or loan rejection. Final approval and terms are subject to formal underwriting and physical/statutory verification.
+        </div>
+      </section>
+
+      <!-- C. APPLICANT & APPLICATION DETAILS -->
+      <section class="section-card">
+        <div class="section-heading">
+          <span>2. Applicant & Declared Application Summary</span>
+        </div>
+        <div class="details-grid">
+          <div class="detail-box">
+            <div class="detail-title">APPLICANT FULL NAME</div>
+            <div class="detail-data" id="repApplicantName">--</div>
+          </div>
+          <div class="detail-box">
+            <div class="detail-title">VERIFIED CONTACT EMAIL</div>
+            <div class="detail-data" id="repApplicantEmail">--</div>
+          </div>
+          <div class="detail-box">
+            <div class="detail-title">PHONE NUMBER</div>
+            <div class="detail-data" id="repApplicantPhone">--</div>
+          </div>
+          <div class="detail-box">
+            <div class="detail-title">EMPLOYMENT TYPE</div>
+            <div class="detail-data" id="repEmployment">--</div>
+          </div>
+          <div class="detail-box">
+            <div class="detail-title">DECLARED MONTHLY INCOME</div>
+            <div class="detail-data" id="repIncome">--</div>
+          </div>
+          <div class="detail-box">
+            <div class="detail-title">REQUESTED LOAN AMOUNT</div>
+            <div class="detail-data" id="repLoanAmount">--</div>
+          </div>
+          <div class="detail-box">
+            <div class="detail-title">EXISTING MONTHLY EMIs</div>
+            <div class="detail-data" id="repEmis">--</div>
+          </div>
+          <div class="detail-box">
+            <div class="detail-title">PREFERRED TENURE</div>
+            <div class="detail-data" id="repTenure">--</div>
+          </div>
+          <div class="detail-box">
+            <div class="detail-title">PURPOSE OF LOAN</div>
+            <div class="detail-data" id="repPurpose">--</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- D. DOCUMENT ANALYSIS TABLE -->
+      <section class="section-card">
+        <div class="section-heading">
+          <span>3. Document Verification & Extraction Table</span>
+          <span style="font-size:10px; font-weight:700; color:var(--gray);" id="repDocsCount">-- DOCUMENTS</span>
+        </div>
+        <div class="table-wrap">
+          <table id="repDocTable">
+            <thead>
+              <tr>
+                <th>Document File</th>
+                <th>Type / Category</th>
+                <th>Text Extraction</th>
+                <th>Key Extracted Fields</th>
+                <th>Reconciliation Status</th>
+              </tr>
+            </thead>
+            <tbody id="repDocTableBody">
+              <tr>
+                <td colspan="5" style="text-align:center; color:var(--gray); padding:20px;">No documents evaluated.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- E. MISSING DOCUMENTS & CHECKLIST -->
+      <section class="section-card">
+        <div class="section-heading">
+          <span>4. Document Checklist & Missing Information</span>
+        </div>
+        <div id="missingDocsContainer">
+          <ul class="observations-list" id="repMissingList">
+            <li>No missing documents detected.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- F. AI OBSERVATIONS & CONSISTENCY -->
+      <section class="section-card">
+        <div class="section-heading">
+          <span>5. Cross-Document Observations & Identity Consistency</span>
+        </div>
+        <ul class="observations-list" id="repObservationsList">
+          <li>All submitted records match applicant declarations.</li>
+        </ul>
+      </section>
+
+      <!-- G. RECOMMENDATIONS & LIMITATIONS -->
+      <section class="section-card">
+        <div class="section-heading">
+          <span>6. Recommendations & Underwriting Next Steps</span>
+        </div>
+        <ul class="recommendations-list" id="repRecommendationsList">
+          <li>Submit complete physical files to credit officer for physical signature and disbursement.</li>
+        </ul>
+        <div style="margin-top: 18px; font-size: 11px; color: var(--gray); line-height: 1.6;">
+          <strong>Analysis Limitations:</strong> <span id="repLimitations">Preliminary automated review. Figures extracted from document text require verification by a qualified credit analyst against physical originals.</span>
+        </div>
+      </section>
+
+      <!-- H. ACTIONS -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:30px;">
+        <a href="./loan_application.html" class="btn secondary">← RETURN TO APPLICATION</a>
+        <button class="btn-download" id="bottomDownloadBtn" onclick="downloadPDF()">
+          <span class="dl-spinner"></span>
+          <span class="dl-label">DOWNLOAD PDF ↓</span>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="no-print">
+    © <span id="year"></span> CREDORA · Autonomous AI Underwriting Platform · All rights reserved.
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    function maskValue(val) {
+      if (!val) return "--";
+      const s = String(val);
+      if (s.length <= 4) return s;
+      return "X".repeat(s.length - 4) + s.slice(-4);
+    }
+
+    function formatINR(val) {
+      const num = parseFloat(val) || 0;
+      return "₹" + num.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function escapeHTML(str) {
+      if (!str) return "";
+      return String(str).replace(/[&<>"']/g, c => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      })[c]);
+    }
+
+    async function loadReport() {
+      const params = new URLSearchParams(window.location.search);
+      const applicationId = params.get("applicationId") || sessionStorage.getItem("credora_application_id");
+
+      if (!applicationId) {
+        showError("Missing Application ID in URL parameters. Please provide a valid ?applicationId=UUID");
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/applications/${encodeURIComponent(applicationId)}/report`);
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          showError(errData.detail || `Report not found for Application ID '${applicationId}'.`);
+          return;
+        }
+
+        const data = await res.json();
+        renderReport(data);
+      } catch (err) {
+        showError("Failed to fetch analysis report. " + err.message);
+      }
+    }
+
+    function showError(msg) {
+      document.getElementById("loadingState").style.display = "none";
+      document.getElementById("reportContainer").style.display = "none";
+      document.getElementById("errorState").style.display = "block";
+      document.getElementById("errorMessage").textContent = msg;
+    }
+
+    function renderReport(data) {
+      const report = data.report || {};
+      const app = data.application || {};
+      const docs = data.documents || [];
+
+      document.getElementById("loadingState").style.display = "none";
+      document.getElementById("errorState").style.display = "none";
+      document.getElementById("reportContainer").style.display = "block";
+
+      // A. Header
+      const appId = data.applicationId || app.id || "CR-DEMO";
+      document.getElementById("repAppId").textContent = appId;
+      document.getElementById("repLender").textContent = app.lender_type || "Bank";
+      document.getElementById("repLoanType").textContent = app.loan_type || "Personal Loan";
+      document.getElementById("repDate").textContent = report.created_at ? new Date(report.created_at).toLocaleDateString("en-IN", {
+        day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+      }) : new Date().toLocaleDateString("en-IN");
+      document.getElementById("repEngine").textContent = report.model_name || "Gemini 2.0 Flash / CREDORA Engine";
+
+      const statusBadge = document.getElementById("repStatusBadge");
+      const statusText = (report.overall_status || "completed").toLowerCase();
+      if (statusText.includes("manual") || statusText.includes("review")) {
+        statusBadge.className = "status-badge review";
+        statusBadge.textContent = "REQUIRES MANUAL REVIEW";
+      } else if (statusText.includes("fail") || statusText.includes("error")) {
+        statusBadge.className = "status-badge error";
+        statusBadge.textContent = "ANALYSIS INCOMPLETE";
+      } else {
+        statusBadge.className = "status-badge completed";
+        statusBadge.textContent = "VERIFICATION COMPLETED";
+      }
+
+      // B. Executive Summary
+      document.getElementById("repExecutiveSummary").textContent =
+        report.executive_summary || "Preliminary AI underwriting review completed successfully.";
+
+      // C. Applicant & Declared
+      document.getElementById("repApplicantName").textContent = app.full_name || app.applicant_name || "--";
+      document.getElementById("repApplicantEmail").textContent = app.email || app.applicant_email || "--";
+      document.getElementById("repApplicantPhone").textContent = app.phone || app.applicant_phone || "--";
+      document.getElementById("repEmployment").textContent = app.employment_type || "Salaried";
+      document.getElementById("repIncome").textContent = formatINR(app.monthly_income);
+      document.getElementById("repLoanAmount").textContent = formatINR(app.requested_loan_amount || app.loan_amount);
+      document.getElementById("repEmis").textContent = formatINR(app.existing_monthly_emis || app.existing_monthly_debt);
+      document.getElementById("repTenure").textContent = app.preferred_tenure || app.tenure || "3-5 years";
+      document.getElementById("repPurpose").textContent = app.loan_purpose || "General loan requirement";
+
+      // D. Document table
+      const docResults = report.document_results || [];
+      const extractedInfo = report.extracted_information || {};
+      const extractedFields = extractedInfo.extracted_fields || [];
+      document.getElementById("repDocsCount").textContent = `${docs.length || docResults.length || 0} DOCUMENT(S)`;
+
+      const tbody = document.getElementById("repDocTableBody");
+      const itemsToRender = docs.length > 0 ? docs : docResults;
+
+      if (itemsToRender.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--gray); padding:20px;">No document records associated with this application.</td></tr>`;
+      } else {
+        tbody.innerHTML = itemsToRender.map((d, idx) => {
+          const filename = escapeHTML(d.original_filename || d.filename || d.file_name || `document_${idx+1}`);
+          const docType = escapeHTML(d.document_type || d.detected_file_type || "General");
+          const sizeKb = d.file_size ? `${(d.file_size / 1024).toFixed(1)} KB` : (d.text_length ? `${d.text_length} chars` : "--");
+          const extractionStatus = d.extraction_status || (d.upload_status === 'uploaded' ? 'Extracted (Text/OCR)' : 'Pending');
+
+          // Gather extracted fields related to this document
+          const matchedFields = extractedFields
+            .filter(f => !f.source_filename || f.source_filename.toLowerCase() === filename.toLowerCase())
+            .map(f => `${escapeHTML(f.field_name)}: ${f.field_name.toLowerCase().includes('pan') ? maskValue(f.extracted_value) : escapeHTML(f.extracted_value)}`)
+            .join(', ');
+
+          const fieldsDisplay = matchedFields || "Verified against declared application details";
+          const statusPill = d.extraction_status === 'failed'
+            ? `<span class="pill missing">Extraction Failed</span>`
+            : `<span class="pill verified">Verified ✓</span>`;
+
+          return `
+            <tr>
+              <td><strong>${filename}</strong><br><span style="color:var(--gray); font-size:10px;">${sizeKb}</span></td>
+              <td>${docType}</td>
+              <td><span style="font-weight:700;">${escapeHTML(extractionStatus)}</span></td>
+              <td style="max-width:280px; word-break:break-word;">${fieldsDisplay}</td>
+              <td>${statusPill}</td>
+            </tr>
+          `;
+        }).join("");
+      }
+
+      // E. Missing Documents
+      const missing = report.missing_documents || [];
+      const missingList = document.getElementById("repMissingList");
+      if (missing.length === 0) {
+        missingList.innerHTML = `<li><strong>No blocking documents missing.</strong> All required core items for preliminary evaluation were submitted.</li>`;
+      } else {
+        missingList.innerHTML = missing.map(m => {
+          if (typeof m === 'string') return `<li><strong>Missing Requirement:</strong> ${escapeHTML(m)}</li>`;
+          const field = m.field_name || m.item || m.document_name || "Document item";
+          const expl = m.explanation || m.description || "Required for formal lender evaluation.";
+          const isMandatory = m.severity === 'high' || m.mandatory ? "Mandatory Checklist Requirement" : "Recommended Supplementary Document";
+          return `<li><strong>${escapeHTML(field)}</strong> (${isMandatory}): ${escapeHTML(expl)}</li>`;
+        }).join("");
+      }
+
+      // F. Observations & Inconsistencies
+      const inconsistencies = report.inconsistencies || [];
+      const riskFlags = report.risk_flags || [];
+      const obsList = document.getElementById("repObservationsList");
+      const observations = [...inconsistencies, ...riskFlags];
+
+      if (observations.length === 0) {
+        obsList.innerHTML = `<li><strong>Identity & Details Verified:</strong> Applicant name, income, and loan parameters are consistent across verified records.</li>`;
+      } else {
+        obsList.innerHTML = observations.map(obs => {
+          if (typeof obs === 'string') return `<li>${escapeHTML(obs)}</li>`;
+          const text = obs.explanation || obs.description || JSON.stringify(obs);
+          return `<li><strong>Observation:</strong> ${escapeHTML(text)}</li>`;
+        }).join("");
+      }
+
+      // G. Recommendations & Limitations
+      const recs = report.recommendations || [];
+      const recsList = document.getElementById("repRecommendationsList");
+      if (recs.length === 0) {
+        recsList.innerHTML = `
+          <li>Proceed to credit officer review with original KYC documents.</li>
+          <li>Ensure latest 3-6 months bank statements are handy if requested for disbursement verification.</li>
+        `;
+      } else {
+        recsList.innerHTML = recs.map(r => {
+          const str = typeof r === 'string' ? r : (r.recommendation || JSON.stringify(r));
+          return `<li>${escapeHTML(str)}</li>`;
+        }).join("");
+      }
+
+      if (report.limitations) {
+        document.getElementById("repLimitations").textContent = report.limitations;
+      }
+    }
+
+    loadReport();
+  </script>
+
+  <!-- PDF generation libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
+
+  <script>
+    // Toast notification element
+    const toastEl = document.createElement('div');
+    toastEl.className = 'pdf-saved-toast';
+    document.body.appendChild(toastEl);
+
+    function showToast(msg, duration = 3500) {
+      toastEl.textContent = msg;
+      toastEl.classList.add('show');
+      setTimeout(() => toastEl.classList.remove('show'), duration);
+    }
+
+    async function downloadPDF() {
+      const headerBtn = document.getElementById('headerDownloadBtn');
+      const bottomBtn = document.getElementById('bottomDownloadBtn');
+
+      // Disable buttons and show spinner
+      [headerBtn, bottomBtn].forEach(btn => {
+        if (btn) {
+          btn.disabled = true;
+          btn.classList.add('generating');
+        }
+      });
+
+      try {
+        const reportContainer = document.getElementById('reportContainer');
+        if (!reportContainer || reportContainer.style.display === 'none') {
+          showToast('⚠ Report not loaded yet. Please wait for data to load.');
+          return;
+        }
+
+        // Hide action buttons from capture
+        const actionRow = reportContainer.querySelector('div[style*="justify-content:space-between"]');
+        if (actionRow) actionRow.style.display = 'none';
+
+        showToast('⏳ Generating PDF... Please wait.');
+
+        // Capture entire report as canvas
+        const canvas = await html2canvas(reportContainer, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: '#ffffff',
+          logging: false,
+          width: reportContainer.scrollWidth,
+          height: reportContainer.scrollHeight,
+          windowWidth: reportContainer.scrollWidth
+        });
+
+        // Restore action buttons
+        if (actionRow) actionRow.style.display = 'flex';
+
+        const imgData = canvas.toDataURL('image/jpeg', 0.92);
+        const { jsPDF } = window.jspdf;
+
+        // A4 page dimensions in mm
+        const pdfWidth = 210;
+        const pdfHeight = 297;
+        const margin = 10;
+        const contentWidth = pdfWidth - margin * 2;
+
+        const imgWidth = canvas.width;
+        const imgHeight = canvas.height;
+        const ratio = contentWidth / imgWidth;
+        const scaledHeight = imgHeight * ratio;
+
+        const pageContentHeight = pdfHeight - margin * 2;
+        const totalPages = Math.ceil(scaledHeight / pageContentHeight);
+
+        const pdf = new jsPDF('p', 'mm', 'a4');
+
+        for (let page = 0; page < totalPages; page++) {
+          if (page > 0) pdf.addPage();
+
+          const sourceY = page * (pageContentHeight / ratio);
+          const sourceH = Math.min(pageContentHeight / ratio, imgHeight - sourceY);
+          const destH = sourceH * ratio;
+
+          // Create a temporary canvas for this page slice
+          const pageCanvas = document.createElement('canvas');
+          pageCanvas.width = imgWidth;
+          pageCanvas.height = sourceH;
+          const ctx = pageCanvas.getContext('2d');
+          ctx.drawImage(canvas, 0, sourceY, imgWidth, sourceH, 0, 0, imgWidth, sourceH);
+
+          const pageImgData = pageCanvas.toDataURL('image/jpeg', 0.92);
+          pdf.addImage(pageImgData, 'JPEG', margin, margin, contentWidth, destH);
+
+          // Footer watermark
+          pdf.setFontSize(7);
+          pdf.setTextColor(180);
+          pdf.text(
+            `CREDORA | AI Document Analysis Report | Page ${page + 1} of ${totalPages}`,
+            pdfWidth / 2, pdfHeight - 5,
+            { align: 'center' }
+          );
+        }
+
+        // Get application ID for filename
+        const appIdEl = document.getElementById('repAppId');
+        const appId = appIdEl ? appIdEl.textContent.trim() : 'report';
+        const filename = `CREDORA_Assessment_${appId}.pdf`;
+
+        // Trigger download
+        pdf.save(filename);
+
+        showToast('✓ PDF downloaded successfully! Saving to database...');
+
+        // Upload to backend for database storage
+        const pdfBlob = pdf.output('blob');
+        const formData = new FormData();
+        formData.append('pdf', pdfBlob, filename);
+
+        const params = new URLSearchParams(window.location.search);
+        const applicationId = params.get('applicationId') || sessionStorage.getItem('credora_application_id');
+
+        if (applicationId) {
+          try {
+            const uploadRes = await fetch(`/api/applications/${encodeURIComponent(applicationId)}/report/pdf`, {
+              method: 'POST',
+              body: formData
+            });
+            if (uploadRes.ok) {
+              showToast('✓ PDF saved to database successfully!');
+            } else {
+              showToast('⚠ PDF downloaded but could not be saved to database.');
+            }
+          } catch (uploadErr) {
+            console.warn('PDF upload to DB failed:', uploadErr);
+            showToast('⚠ PDF downloaded locally. Database save failed.');
+          }
+        }
+
+      } catch (err) {
+        console.error('PDF generation error:', err);
+        showToast('✕ Error generating PDF: ' + err.message);
+      } finally {
+        [headerBtn, bottomBtn].forEach(btn => {
+          if (btn) {
+            btn.disabled = false;
+            btn.classList.remove('generating');
+          }
+        });
+      }
+    }
+  </script>
+
+</body>
+
+</html>

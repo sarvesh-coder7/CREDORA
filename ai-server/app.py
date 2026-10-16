@@ -304,13 +304,13 @@ class AnalyzeResponse(BaseModel):
     document_classifications: list[dict[str, Any]] = Field(default_factory=list)
     extracted_fields: list[dict[str, Any]] = Field(default_factory=list)
     cross_document_checks: list[dict[str, Any]] = Field(default_factory=list)
-    missing_information: list[str] = Field(default_factory=list)
+    missing_information: list[Any] = Field(default_factory=list)
     financial_summary: dict[str, Any] | None = Field(default_factory=dict)
     document_checklist_status: dict[str, Any] | None = Field(default_factory=dict)
     risk_flags: list[Any] = Field(default_factory=list)
     manual_review_items: list[Any] = Field(default_factory=list)
-    analysis_limitations: list[str] = Field(default_factory=list)
-    errors: list[str] = Field(default_factory=list)
+    analysis_limitations: list[Any] = Field(default_factory=list)
+    errors: list[Any] = Field(default_factory=list)
     processing_metadata: dict[str, Any] = Field(default_factory=dict)
 
     # Backward compatibility aliases & fields

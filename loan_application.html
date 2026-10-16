@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ffffff">
+  <title>CREDORA | Loan Application</title>
+  <link rel="icon" type="image/png" href="./ICON.png">
+
+  <style>
+    :root {
+      --black: #080808;
+      --white: #fff;
+      --gray: #777;
+      --line: #dedede;
+      --soft: #f5f5f5;
+      --success: #176b40;
+      --danger: #a12b2b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #fff;
+      color: var(--black);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button,
+    label,
+    select {
+      cursor: pointer;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 20px 6%;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #000;
+    }
+
+    .brand img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+    }
+
+    .brand span {
+      font-size: 23px;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+
+    .header-note {
+      color: var(--gray);
+      font-size: 12px;
+    }
+
+    .page {
+      width: min(1050px, 92%);
+      margin: 35px auto 70px;
+    }
+
+    .intro {
+      margin-bottom: 30px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(30px, 5vw, 48px);
+      letter-spacing: -2px;
+    }
+
+    .intro p {
+      color: var(--gray);
+      font-size: 14px;
+      line-height: 1.8;
+      max-width: 650px;
+    }
+
+    .progress {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      margin: 30px 0;
+      border: 1px solid var(--line);
+    }
+
+    .progress-step {
+      padding: 16px 8px;
+      text-align: center;
+      border-right: 1px solid var(--line);
+      color: var(--gray);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .progress-step:last-child {
+      border-right: 0;
+    }
+
+    .progress-step .number {
+      display: block;
+      margin: 0 auto 7px;
+      border: 1px solid #bbb;
+      width: 28px;
+      height: 28px;
+      line-height: 26px;
+      border-radius: 50%;
+      font-weight: bold;
+    }
+
+    .progress-step.active {
+      background: #000;
+      color: #fff;
+    }
+
+    .progress-step.active .number {
+      border-color: #fff;
+    }
+
+    .progress-step.done .number {
+      background: #fff;
+      color: #000;
+      border-color: #fff;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      padding: clamp(20px, 4vw, 36px);
+    }
+
+    .step {
+      display: none;
+    }
+
+    .step.active {
+      display: block;
+    }
+
+    .step-heading {
+      font-size: 24px;
+      letter-spacing: -0.7px;
+      margin: 0 0 9px;
+    }
+
+    .step-description {
+      color: var(--gray);
+      font-size: 13px;
+      line-height: 1.7;
+      margin-bottom: 25px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 17px;
+    }
+
+    .field {
+      min-width: 0;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    .field label,
+    .label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 9px;
+    }
+
+    input:not([type="radio"]):not([type="checkbox"]):not([type="file"]),
+    select,
+    textarea {
+      width: 100%;
+      min-height: 46px;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 0;
+      background: #fff;
+      color: #000;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border: 2px solid #000;
+    }
+
+    .hint {
+      display: block;
+      color: var(--gray);
+      font-size: 11px;
+      line-height: 1.6;
+      margin-top: 7px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .choice {
+      position: relative;
+      display: block;
+    }
+
+    .choice input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .choice-content {
+      display: block;
+      height: 100%;
+      min-height: 105px;
+      border: 1px solid #ccc;
+      padding: 17px;
+      transition: background .15s, color .15s;
+    }
+
+    .choice-title {
+      display: block;
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 9px;
+    }
+
+    .choice-desc {
+      display: block;
+      font-size: 11px;
+      color: var(--gray);
+      line-height: 1.6;
+    }
+
+    .choice input:checked+.choice-content {
+      background: #000;
+      color: #fff;
+      border-color: #000;
+    }
+
+    .choice input:checked+.choice-content .choice-desc {
+      color: #ccc;
+    }
+
+    .choice input:focus-visible+.choice-content {
+      outline: 3px solid #777;
+      outline-offset: 3px;
+    }
+
+    .notice {
+      background: var(--soft);
+      padding: 15px;
+      font-size: 12px;
+      line-height: 1.8;
+      margin-top: 22px;
+    }
+
+    .doc-group {
+      margin: 25px 0;
+    }
+
+    .doc-group h3 {
+      font-size: 15px;
+      margin-bottom: 7px;
+    }
+
+    .doc-group>p {
+      font-size: 12px;
+      color: var(--gray);
+      line-height: 1.7;
+    }
+
+    .doc-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(180px, .8fr);
+      align-items: center;
+      gap: 15px;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .doc-name {
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.6;
+    }
+
+    .doc-status {
+      display: block;
+      color: var(--gray);
+      font-size: 11px;
+      margin-top: 5px;
+    }
+
+    .file-input {
+      width: 100%;
+      min-width: 0;
+      font-size: 11px;
+    }
+
+    .file-input::file-selector-button {
+      border: 1px solid #000;
+      background: #fff;
+      padding: 9px;
+      margin-right: 8px;
+      cursor: pointer;
+    }
+
+    .upload-summary {
+      padding: 14px;
+      background: var(--soft);
+      font-size: 12px;
+      margin-top: 20px;
+      line-height: 1.8;
+      border: 1px solid var(--line);
+    }
+
+    .doc-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 7px;
+      border: 1px solid #ccc;
+      margin-top: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .doc-badge.uploaded {
+      background: #000;
+      color: #fff;
+      border-color: #000;
+    }
+
+    .doc-badge.uploading {
+      background: var(--soft);
+      color: #000;
+      border-color: #000;
+    }
+
+    .doc-badge.failed {
+      background: #fff;
+      color: var(--danger);
+      border-color: var(--danger);
+    }
+
+    .btn-mini {
+      padding: 3px 8px;
+      font-size: 10px;
+      font-weight: 800;
+      background: #000;
+      color: #fff;
+      border: 1px solid #000;
+      cursor: pointer;
+      margin-left: 6px;
+    }
+
+    .btn-mini:hover {
+      background: #fff;
+      color: #000;
+    }
+
+    .spinner-sm {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border: 2px solid #ccc;
+      border-top-color: #000;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .analysis-card {
+      border: 1px solid #000;
+      padding: 22px;
+      margin-top: 20px;
+    }
+
+    .analysis-card h3 {
+      margin: 0 0 10px;
+      font-size: 17px;
+    }
+
+    .analysis-card p {
+      color: var(--gray);
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .analysis-results {
+      margin-top: 18px;
+    }
+
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 15px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .status {
+      font-weight: 800;
+      text-align: right;
+    }
+
+    .status.good {
+      color: var(--success);
+    }
+
+    .status.warn {
+      color: var(--danger);
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .btn {
+      padding: 14px 20px;
+      min-height: 47px;
+      border: 2px solid #000;
+      background: #000;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .btn:hover {
+      background: #fff;
+      color: #000;
+    }
+
+    .btn.secondary {
+      background: #fff;
+      color: #000;
+    }
+
+    .btn.secondary:hover {
+      background: #eee;
+    }
+
+    .btn:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+    }
+
+    .error {
+      color: var(--danger);
+      font-size: 12px;
+      line-height: 1.6;
+      margin-top: 15px;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 22px 6%;
+      font-size: 11px;
+      color: var(--gray);
+      text-align: center;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    @media (max-width: 650px) {
+      .header {
+        padding: 17px 5%;
+      }
+
+      .header-note {
+        display: none;
+      }
+
+      .page {
+        margin-top: 25px;
+      }
+
+      .progress-step {
+        padding: 10px 2px;
+        font-size: 9px;
+      }
+
+      .progress-step .number {
+        width: 25px;
+        height: 25px;
+        line-height: 23px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .choice-content {
+        min-height: auto;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .field.full {
+        grid-column: auto;
+      }
+
+      .doc-item {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .actions .btn {
+        flex: 1;
+        padding: 12px 8px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="header">
+    <a class="brand" href="./launch.html">
+      <img src="./LOGO.jpeg" alt="CREDORA Logo">
+      <span>CREDORA</span>
+    </a>
+    <span class="header-note">LOAN APPLICATION WORKSPACE</span>
+  </header>
+
+  <main class="page">
+    <section class="intro">
+      <div class="eyebrow">SMART LOAN APPLICATION</div>
+      <h1>One application.<br>Clearer next steps.</h1>
+      <p>
+        Select your lender and loan type, provide your applicant details,
+        and organize the documents that may be requested for your application.
+      </p>
+    </section>
+
+    <nav class="progress" aria-label="Application progress">
+      <div class="progress-step active"><span class="number">1</span>Lender</div>
+      <div class="progress-step"><span class="number">2</span>Loan type</div>
+      <div class="progress-step"><span class="number">3</span>Applicant</div>
+      <div class="progress-step"><span class="number">4</span>Documents</div>
+      <div class="progress-step"><span class="number">5</span>Analysis</div>
+    </nav>
+
+    <form id="loanForm" class="panel">
+      <!-- STEP 1 -->
+      <section class="step active" data-step="0">
+        <h2 class="step-heading">Select lender type</h2>
+        <p class="step-description">
+          Choose the type of financial institution you want to approach.
+          This does not guarantee eligibility or loan approval.
+        </p>
+
+        <div class="cards">
+          <label class="choice">
+            <input type="radio" name="lenderType" value="Bank" required>
+            <span class="choice-content">
+              <span class="choice-title">Bank</span>
+              <span class="choice-desc">Public sector and private sector banks.</span>
+            </span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="lenderType" value="NBFC">
+            <span class="choice-content">
+              <span class="choice-title">NBFC</span>
+              <span class="choice-desc">Non-Banking Financial Company.</span>
+            </span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="lenderType" value="Microfinance Institution">
+            <span class="choice-content">
+              <span class="choice-title">Microfinance Institution</span>
+              <span class="choice-desc">Small loans for individuals and micro-businesses.</span>
+            </span>
+          </label>
+        </div>
+
+        <div class="notice">
+          <strong>Note:</strong> The available products and document requirements
+          vary by lender and applicant circumstances.
+        </div>
+      </section>
+
+      <!-- STEP 2 -->
+      <section class="step" data-step="1">
+        <h2 class="step-heading">Select loan type</h2>
+        <p class="step-description">
+          Choose the loan category that best describes your requirement.
+        </p>
+
+        <div class="cards">
+          <label class="choice">
+            <input type="radio" name="loanType" value="Home Loan" required>
+            <span class="choice-content"><span class="choice-title">Home Loan</span><span class="choice-desc">Buying or
+                constructing a house.</span></span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="loanType" value="Personal Loan">
+            <span class="choice-content"><span class="choice-title">Personal Loan</span><span
+                class="choice-desc">Personal expenses.</span></span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="loanType" value="Education Loan">
+            <span class="choice-content"><span class="choice-title">Education Loan</span><span
+                class="choice-desc">College fees and education.</span></span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="loanType" value="Vehicle Loan">
+            <span class="choice-content"><span class="choice-title">Vehicle Loan</span><span class="choice-desc">Car or
+                two-wheeler.</span></span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="loanType" value="Business Loan">
+            <span class="choice-content"><span class="choice-title">Business Loan</span><span
+                class="choice-desc">Starting or expanding a business.</span></span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="loanType" value="Agriculture Loan">
+            <span class="choice-content"><span class="choice-title">Agriculture Loan</span><span
+                class="choice-desc">Farming and agricultural needs.</span></span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="loanType" value="Gold Loan">
+            <span class="choice-content"><span class="choice-title">Gold Loan</span><span class="choice-desc">Loan
+                against pledged gold.</span></span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="loanType" value="Loan Against Property">
+            <span class="choice-content"><span class="choice-title">Loan Against Property</span><span
+                class="choice-desc">Loan secured by property.</span></span>
+          </label>
+        </div>
+      </section>
+
+      <!-- STEP 3 -->
+      <section class="step" data-step="2">
+        <h2 class="step-heading">Applicant details</h2>
+        <p class="step-description">
+          Provide accurate details. The lender will determine its own
+          eligibility criteria and verification requirements.
+        </p>
+
+        <div class="grid">
+          <div class="field">
+            <label for="fullName">FULL NAME</label>
+            <input id="fullName" name="fullName" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="email">EMAIL ADDRESS</label>
+            <input id="email" name="email" type="email" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label for="phone">PHONE NUMBER</label>
+            <input id="phone" name="phone" type="tel" autocomplete="tel" pattern="[0-9+\s()-]{8,16}" required>
+          </div>
+          <div class="field">
+            <label for="employment">EMPLOYMENT TYPE</label>
+            <select id="employment" name="employment" required>
+              <option value="">Select employment type</option>
+              <option>Salaried</option>
+              <option>Self-employed</option>
+              <option>Business owner</option>
+              <option>Agriculture</option>
+              <option>Student</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="income">MONTHLY INCOME (₹)</label>
+            <input id="income" name="income" type="number" min="0" step="1" required>
+          </div>
+          <div class="field">
+            <label for="loanAmount">LOAN AMOUNT REQUESTED (₹)</label>
+            <input id="loanAmount" name="loanAmount" type="number" min="1" step="1" required>
+          </div>
+          <div class="field">
+            <label for="emis">TOTAL EXISTING MONTHLY EMIs (₹)</label>
+            <input id="emis" name="emis" type="number" min="0" step="1" value="0" required>
+          </div>
+          <div class="field">
+            <label for="tenure">PREFERRED TENURE</label>
+            <select id="tenure" name="tenure" required>
+              <option value="">Select tenure</option>
+              <option>Up to 1 year</option>
+              <option>1–3 years</option>
+              <option>3–5 years</option>
+              <option>5–10 years</option>
+              <option>10–20 years</option>
+              <option>More than 20 years</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label for="purpose">LOAN PURPOSE / ADDITIONAL DETAILS</label>
+            <textarea id="purpose" name="purpose" placeholder="Briefly explain your loan requirement"></textarea>
+          </div>
+        </div>
+
+        <div class="notice">
+          Income and EMI details are used for preliminary information only.
+          This page does not calculate a verified credit score or guarantee eligibility.
+        </div>
+      </section>
+
+      <!-- STEP 4 -->
+      <section class="step" data-step="3">
+        <h2 class="step-heading">Upload documents</h2>
+        <p class="step-description">
+          The list below is a general checklist, not a universal lender requirement.
+          Select files you want to include for review.
+        </p>
+
+        <div class="notice" style="border-left: 3px solid #000; background: #f8f8f8;">
+          <strong>Secure document storage.</strong> Uploaded files are securely encrypted and stored in CREDORA's private storage bucket for Application ID <span id="appIdBadge" style="font-family:monospace; font-weight:700;">[Draft]</span>.
+        </div>
+
+        <div id="documentList"></div>
+
+        <div class="upload-summary" id="uploadSummary">
+          No documents selected.
+        </div>
+      </section>
+
+      <!-- STEP 5 -->
+      <section class="step" data-step="4">
+        <h2 class="step-heading">Document analysis</h2>
+        <p class="step-description">
+          Review the checklist and missing items before continuing.
+        </p>
+
+        <div class="analysis-card">
+          <h3>Autonomous AI Document Analysis</h3>
+          <p>
+            CREDORA AI parses uploaded document texts, extracts financial and identity metrics, cross-verifies details against your application declaration, and flags missing checklist items.
+          </p>
+          <button type="button" class="btn" id="analyzeBtn">RUN CHECKLIST REVIEW →</button>
+          <div id="analysisResults" class="analysis-results" aria-live="polite"></div>
+        </div>
+
+        <div class="notice">
+          A completed checklist is not loan approval. A lender may request
+          additional documents, originals, or independent verification.
+        </div>
+
+        <div class="field" style="margin-top:22px">
+          <label>
+            <input type="checkbox" id="consent" required>
+            I confirm that the information I provided is accurate to the best
+            of my knowledge and agree to the handling of this application
+            according to the applicable privacy notice.
+          </label>
+        </div>
+      </section>
+
+      <p class="error" id="formError" role="alert"></p>
+
+      <div class="actions">
+        <button type="button" class="btn secondary" id="previousBtn" hidden>← BACK</button>
+        <button type="button" class="btn" id="nextBtn">CONTINUE →</button>
+        <button type="submit" class="btn" id="submitBtn" hidden>FINISH DEMO →</button>
+      </div>
+    </form>
+  </main>
+
+  <footer>
+    © <span id="year"></span> CREDORA · Loan requirements vary by lender.
+  </footer>
+
+  <script>
+    const form = document.getElementById("loanForm");
+    const steps = [...document.querySelectorAll(".step")];
+    const progressSteps = [...document.querySelectorAll(".progress-step")];
+    const nextBtn = document.getElementById("nextBtn");
+    const previousBtn = document.getElementById("previousBtn");
+    const submitBtn = document.getElementById("submitBtn");
+    const formError = document.getElementById("formError");
+    const documentList = document.getElementById("documentList");
+    const uploadSummary = document.getElementById("uploadSummary");
+    const analysisResults = document.getElementById("analysisResults");
+
+    let currentStep = 0;
+    let reviewHasRun = false;
+    let activeApplicationId = sessionStorage.getItem("credora_application_id") || null;
+    let uploadedDocsMap = new Map();
+    let pendingUploadsCount = 0;
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    const commonDocuments = [
+      {
+        group: "A. Identity proof",
+        description: "Provide an accepted identity document as required by your lender.",
+        items: [
+          ["identity", "Aadhaar or another accepted identity document", "Commonly requested; accepted alternatives vary"],
+          ["pan", "PAN card, where required", "May be requested for financial verification"],
+          ["alternateId", "Passport, voter ID or driving licence", "Alternative identity proof, where accepted"]
+        ]
+      },
+      {
+        group: "B. Address proof",
+        description: "The lender determines which address documents it accepts.",
+        items: [
+          ["address", "Address proof", "Aadhaar, passport, voter ID, utility bill or accepted alternative"]
+        ]
+      },
+      {
+        group: "C. Income proof",
+        description: "Requirements depend on employment type and lender policy.",
+        items: [
+          ["salary", "Recent salary slips", "Typically the latest 3 months, if requested"],
+          ["bankStatements", "Bank statements", "Typically 3–6 months, if requested"],
+          ["tax", "Form 16 or income tax returns", "Where applicable"],
+          ["businessFinance", "Business financial statements", "For self-employed applicants, if requested"]
+        ]
+      },
+      {
+        group: "D. Employment or business proof",
+        description: "Upload the items applicable to your work situation.",
+        items: [
+          ["employmentProof", "Employee ID or employment certificate", "If applicable"],
+          ["businessProof", "Business registration or licence", "If applicable"],
+          ["businessActivity", "Proof of business activity", "For self-employed applicants, if requested"]
+        ]
+      },
+      {
+        group: "E. Other common documents",
+        description: "Additional items that a lender may request.",
+        items: [
+          ["photo", "Recent passport-size photograph", "If requested"],
+          ["application", "Loan application form", "Lender-provided form, if requested"],
+          ["existingLoans", "Existing loan details", "If applicable"],
+          ["guarantor", "Co-applicant or guarantor documents", "If required"]
+        ]
+      }
+    ];
+
+    const loanSpecificDocuments = {
+      "Home Loan": [
+        ["property", "Property documents or sale agreement"],
+        ["construction", "Approved building plan or construction estimate, if applicable"]
+      ],
+      "Personal Loan": [
+        ["personalBank", "Additional bank statements, if requested"],
+        ["personalEmployment", "Employment or income verification, if requested"]
+      ],
+      "Education Loan": [
+        ["admission", "Admission letter or proof of enrolment"],
+        ["educationCosts", "Fee structure or education cost estimate"]
+      ],
+      "Vehicle Loan": [
+        ["vehicleQuote", "Vehicle quotation or pro-forma invoice"],
+        ["vehicleDetails", "Vehicle details, if requested"]
+      ],
+      "Business Loan": [
+        ["businessPlan", "Business plan or purpose-of-loan statement, if requested"],
+        ["businessAccounts", "Business accounts or cash-flow records, if requested"]
+      ],
+      "Agriculture Loan": [
+        ["landRecords", "Land or cultivation records, if applicable"],
+        ["agriPurpose", "Agricultural activity or input-cost details, if requested"]
+      ],
+      "Gold Loan": [
+        ["goldDetails", "Gold pledge or valuation details, as instructed by the lender"]
+      ],
+      "Loan Against Property": [
+        ["propertyOwnership", "Property ownership documents"],
+        ["propertyValuation", "Property valuation or legal documents, if requested"]
+      ]
+    };
+
+    function selectedValue(name) {
+      return form.querySelector(`[name="${name}"]:checked`)?.value || "";
+    }
+
+    function escapeHTML(value) {
+      if (!value) return "";
+      return String(value).replace(/[&<>"']/g, char => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;",
+        '"': "&quot;", "'": "&#39;"
+      })[char]);
+    }
+
+    function buildDocumentList() {
+      const loanType = selectedValue("loanType");
+      let html = "";
+
+      commonDocuments.forEach(group => {
+        html += `<section class="doc-group">
+            <h3>${escapeHTML(group.group)}</h3>
+            <p>${escapeHTML(group.description)}</p>`;
+
+        group.items.forEach(([id, name, note]) => {
+          const uploaded = uploadedDocsMap.get(id);
+          const badgeHtml = uploaded
+            ? `<span class="doc-badge uploaded" id="badge-${id}">Uploaded ✓ (${(uploaded.size / 1024).toFixed(1)} KB)</span>`
+            : `<span class="doc-badge" id="badge-${id}">Not uploaded</span>`;
+
+          html += `<div class="doc-item">
+                <div>
+                    <div class="doc-name">${escapeHTML(name)}</div>
+                    <span class="doc-status">${escapeHTML(note)}</span>
+                    <div id="badge-wrap-${id}">${badgeHtml}</div>
+                </div>
+                <div>
+                    <input class="file-input" type="file" id="doc-${id}"
+                        data-doc-id="${id}" data-doc-name="${escapeHTML(name)}"
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        aria-label="Upload ${escapeHTML(name)}">
+                </div>
+            </div>`;
+        });
+
+        html += `</section>`;
+      });
+
+      const specific = loanSpecificDocuments[loanType] || [];
+      if (specific.length) {
+        html += `<section class="doc-group">
+            <h3>F. ${escapeHTML(loanType)}-specific documents</h3>
+            <p>Documents that may be requested for this loan category.</p>`;
+
+        specific.forEach(([id, name]) => {
+          const uploaded = uploadedDocsMap.get(id);
+          const badgeHtml = uploaded
+            ? `<span class="doc-badge uploaded" id="badge-${id}">Uploaded ✓ (${(uploaded.size / 1024).toFixed(1)} KB)</span>`
+            : `<span class="doc-badge" id="badge-${id}">Not uploaded</span>`;
+
+          html += `<div class="doc-item">
+                <div>
+                    <div class="doc-name">${escapeHTML(name)}</div>
+                    <span class="doc-status">May be requested; confirm with lender</span>
+                    <div id="badge-wrap-${id}">${badgeHtml}</div>
+                </div>
+                <div>
+                    <input class="file-input" type="file" id="doc-${id}"
+                        data-doc-id="${id}" data-doc-name="${escapeHTML(name)}"
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        aria-label="Upload ${escapeHTML(name)}">
+                </div>
+            </div>`;
+        });
+
+        html += `</section>`;
+      }
+
+      documentList.innerHTML = html;
+
+      documentList.querySelectorAll('input[type="file"]').forEach(input => {
+        input.addEventListener("change", async (e) => {
+          const file = e.target.files?.[0];
+          const docId = input.dataset.docId;
+          if (!file) return;
+
+          reviewHasRun = false;
+          await handleFileUpload(docId, file);
+        });
+      });
+
+      updateUploadSummary();
+    }
+
+    async function ensureApplicationDraft() {
+      if (activeApplicationId) return activeApplicationId;
+
+      const payload = {
+        id: activeApplicationId || undefined,
+        fullName: form.fullName.value.trim() || "Borrower Applicant",
+        email: form.email.value.trim() || "borrower@example.com",
+        phone: form.phone.value.trim() || "",
+        employment: form.employment.value || "Salaried",
+        income: parseFloat(form.income.value) || 0,
+        loanAmount: parseFloat(form.loanAmount.value) || 100000,
+        emis: parseFloat(form.emis.value) || 0,
+        tenure: form.tenure.value || "3-5 years",
+        purpose: form.purpose.value.trim() || "Loan requirement",
+        lenderType: selectedValue("lenderType") || "Bank",
+        loanType: selectedValue("loanType") || "Personal Loan",
+        application_status: "draft"
+      };
+
+      const res = await fetch('/api/applications', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data.success && data.applicationId) {
+        activeApplicationId = data.applicationId;
+        sessionStorage.setItem("credora_application_id", activeApplicationId);
+        const badge = document.getElementById("appIdBadge");
+        if (badge) badge.textContent = activeApplicationId;
+      }
+      return activeApplicationId;
+    }
+
+    async function handleFileUpload(docId, file) {
+      const badgeWrap = document.getElementById(`badge-wrap-${docId}`);
+      if (!badgeWrap) return;
+
+      // 1. Validation
+      if (file.size > 10 * 1024 * 1024) {
+        badgeWrap.innerHTML = `<span class="doc-badge failed">File exceeds 10MB limit</span>`;
+        return;
+      }
+
+      const ext = file.name.slice(file.name.lastIndexOf('.')).toLowerCase();
+      if (!['.pdf', '.jpg', '.jpeg', '.png'].includes(ext)) {
+        badgeWrap.innerHTML = `<span class="doc-badge failed">Only PDF, JPG, PNG allowed</span>`;
+        return;
+      }
+
+      // 2. Set uploading UI
+      badgeWrap.innerHTML = `<span class="doc-badge uploading"><span class="spinner-sm"></span> Uploading...</span>`;
+      pendingUploadsCount++;
+      nextBtn.disabled = true;
+
+      try {
+        const appId = await ensureApplicationDraft();
+        const fd = new FormData();
+        fd.append("documentType", docId);
+        fd.append("file", file, file.name);
+
+        const res = await fetch(`/api/applications/${encodeURIComponent(appId)}/documents`, {
+          method: 'POST',
+          body: fd
+        });
+
+        const data = await res.json();
+        if (res.ok && data.success && data.documents && data.documents.length > 0) {
+          const docRecord = data.documents[0];
+          uploadedDocsMap.set(docId, {
+            id: docRecord.id,
+            name: file.name,
+            size: file.size,
+            type: docId,
+            path: docRecord.storage_path
+          });
+          badgeWrap.innerHTML = `<span class="doc-badge uploaded">Uploaded ✓ (${(file.size / 1024).toFixed(1)} KB)</span>`;
+        } else {
+          badgeWrap.innerHTML = `<span class="doc-badge failed">Upload failed</span> <button type="button" class="btn-mini" onclick="window.retryDocUpload('${docId}')">Retry</button>`;
+        }
+      } catch (err) {
+        console.error("Upload error:", err);
+        badgeWrap.innerHTML = `<span class="doc-badge failed">Network error</span> <button type="button" class="btn-mini" onclick="window.retryDocUpload('${docId}')">Retry</button>`;
+      } finally {
+        pendingUploadsCount = Math.max(0, pendingUploadsCount - 1);
+        if (pendingUploadsCount === 0) {
+          nextBtn.disabled = false;
+        }
+        updateUploadSummary();
+      }
+    }
+
+    window.retryDocUpload = function(docId) {
+      const input = document.getElementById(`doc-${docId}`);
+      if (input && input.files && input.files[0]) {
+        handleFileUpload(docId, input.files[0]);
+      } else if (input) {
+        input.click();
+      }
+    };
+
+    function updateUploadSummary() {
+      const uploadedCount = uploadedDocsMap.size;
+      const totalSize = Array.from(uploadedDocsMap.values()).reduce((sum, d) => sum + (d.size || 0), 0);
+
+      const appIdDisplay = activeApplicationId ? ` (Application ID: ${activeApplicationId})` : '';
+      uploadSummary.innerHTML =
+        `<strong>${uploadedCount} document(s) uploaded</strong> securely to private storage vault${appIdDisplay}. ` +
+        `Total storage size: ${(totalSize / (1024 * 1024)).toFixed(2)} MB. ` +
+        `<br><span style="color:var(--gray); font-size:11px;">Documents are encrypted at rest and accessible only for underwriter review.</span>`;
+    }
+
+    function showStep(index) {
+      currentStep = index;
+
+      steps.forEach((step, i) => step.classList.toggle("active", i === index));
+
+      progressSteps.forEach((step, i) => {
+        step.classList.toggle("active", i === index);
+        step.classList.toggle("done", i < index);
+        step.querySelector(".number").textContent = i < index ? "✓" : String(i + 1);
+      });
+
+      previousBtn.hidden = index === 0;
+      nextBtn.hidden = index === steps.length - 1;
+      submitBtn.hidden = index !== steps.length - 1;
+      formError.textContent = "";
+
+      if (index === 3) {
+        const badge = document.getElementById("appIdBadge");
+        if (badge) badge.textContent = activeApplicationId || "[Draft]";
+        updateUploadSummary();
+      }
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function validateStep() {
+      const activeStep = steps[currentStep];
+      const requiredFields = [...activeStep.querySelectorAll("[required]")];
+
+      for (const field of requiredFields) {
+        if (field.type === "radio") {
+          const group = form.querySelectorAll(`[name="${field.name}"]`);
+          if (![...group].some(item => item.checked)) {
+            formError.textContent = "Please select an option before continuing.";
+            field.focus();
+            return false;
+          }
+          continue;
+        }
+
+        if (!field.checkValidity()) {
+          field.reportValidity();
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    form.querySelectorAll('input[name="loanType"]').forEach(input => {
+      input.addEventListener("change", () => {
+        buildDocumentList();
+        reviewHasRun = false;
+        analysisResults.innerHTML = "";
+      });
+    });
+
+    nextBtn.addEventListener("click", async () => {
+      if (!validateStep()) return;
+
+      // When finishing Step 3 (Applicant details), save the application to backend
+      if (currentStep === 2) {
+        nextBtn.disabled = true;
+        nextBtn.textContent = "SAVING APPLICATION...";
+        formError.textContent = "";
+
+        try {
+          const payload = {
+            id: activeApplicationId || undefined,
+            fullName: form.fullName.value.trim(),
+            email: form.email.value.trim(),
+            phone: form.phone.value.trim(),
+            employment: form.employment.value,
+            income: parseFloat(form.income.value) || 0,
+            loanAmount: parseFloat(form.loanAmount.value) || 0,
+            emis: parseFloat(form.emis.value) || 0,
+            tenure: form.tenure.value,
+            purpose: form.purpose.value.trim(),
+            lenderType: selectedValue("lenderType"),
+            loanType: selectedValue("loanType"),
+            application_status: "draft"
+          };
+
+          const res = await fetch('/api/applications', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          const data = await res.json();
+          if (res.ok && data.success) {
+            activeApplicationId = data.applicationId;
+            sessionStorage.setItem("credora_application_id", activeApplicationId);
+            const badge = document.getElementById("appIdBadge");
+            if (badge) badge.textContent = activeApplicationId;
+
+            buildDocumentList();
+            showStep(3);
+          } else {
+            formError.textContent = data.detail || "Error saving applicant details. Please try again.";
+          }
+        } catch (err) {
+          formError.textContent = "Network error connecting to backend: " + err.message;
+        } finally {
+          nextBtn.disabled = false;
+          nextBtn.textContent = "CONTINUE →";
+        }
+        return;
+      }
+
+      // When finishing Step 4 (Documents)
+      if (currentStep === 3) {
+        if (pendingUploadsCount > 0) {
+          formError.textContent = "Please wait for pending document uploads to complete.";
+          return;
+        }
+        showStep(4);
+        return;
+      }
+
+      showStep(Math.min(currentStep + 1, steps.length - 1));
+    });
+
+    previousBtn.addEventListener("click", () => {
+      showStep(Math.max(currentStep - 1, 0));
+    });
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // STEP 5: Real AI Document Analysis
+    // ─────────────────────────────────────────────────────────────────────────
+    document.getElementById("analyzeBtn").addEventListener("click", async () => {
+      if (!activeApplicationId) {
+        formError.textContent = "Application record not initialized. Please return to Step 3.";
+        return;
+      }
+
+      if (pendingUploadsCount > 0) {
+        formError.textContent = "Please wait for pending file uploads to complete.";
+        return;
+      }
+
+      const analyzeBtn = document.getElementById("analyzeBtn");
+      analyzeBtn.disabled = true;
+      analyzeBtn.textContent = "ANALYZING DOCUMENTS (AI)...";
+      formError.textContent = "";
+
+      analysisResults.innerHTML = `
+        <div style="padding: 22px; text-align: center; border: 1px solid var(--line); margin-top: 15px; background: var(--soft);">
+          <div class="spinner-sm" style="width:20px; height:20px; margin-bottom:10px;"></div>
+          <div style="font-weight:800; font-size:14px; margin-bottom:6px;">Running Google Gemini AI Analysis...</div>
+          <div style="color:var(--gray); font-size:12px; line-height:1.6;">
+            Extracting text from documents, cross-verifying applicant identity, evaluating income proof,
+            and checking debt-to-income & checklist rules against lender standards.
+          </div>
+        </div>
+      `;
+
+      try {
+        const res = await fetch(`/api/applications/${encodeURIComponent(activeApplicationId)}/analyze`, {
+          method: 'POST'
+        });
+
+        const data = await res.json();
+        if (res.ok && data.success && data.report) {
+          reviewHasRun = true;
+          renderAnalysisResults(data.report);
+          analyzeBtn.textContent = "RE-RUN ANALYSIS →";
+        } else {
+          analysisResults.innerHTML = `
+            <div style="border: 2px solid var(--danger); padding: 18px; margin-top: 15px; color: var(--danger); font-size: 12px; background:#fff;">
+              <strong>AI Analysis Error:</strong> ${escapeHTML(data.detail || "Unable to complete analysis.")}
+              <div style="margin-top: 12px;">
+                <button type="button" class="btn" style="padding:8px 14px; font-size:11px;" onclick="document.getElementById('analyzeBtn').click()">Retry Analysis ↺</button>
+              </div>
+            </div>
+          `;
+          analyzeBtn.textContent = "RUN CHECKLIST REVIEW →";
+        }
+      } catch (err) {
+        console.error("AI Analysis error:", err);
+        analysisResults.innerHTML = `
+          <div style="border: 2px solid var(--danger); padding: 18px; margin-top: 15px; color: var(--danger); font-size: 12px; background:#fff;">
+            <strong>Network Error:</strong> Failed to connect to analysis server. ${escapeHTML(err.message)}
+            <div style="margin-top: 12px;">
+              <button type="button" class="btn" style="padding:8px 14px; font-size:11px;" onclick="document.getElementById('analyzeBtn').click()">Retry Analysis ↺</button>
+            </div>
+          </div>
+        `;
+        analyzeBtn.textContent = "RUN CHECKLIST REVIEW →";
+      } finally {
+        analyzeBtn.disabled = false;
+      }
+    });
+
+    function renderAnalysisResults(report) {
+      const summary = report.executive_summary || "Document review completed.";
+      const status = (report.overall_status || "completed").toUpperCase();
+      const statusClass = status.includes("MANUAL") || status.includes("REVIEW") ? "warn" : "good";
+      const docResults = report.document_results || [];
+      const missing = report.missing_documents || [];
+      const inconsistencies = report.inconsistencies || [];
+
+      let docRowsHtml = "";
+      if (docResults.length === 0) {
+        docRowsHtml = `<div class="result-row"><span>Uploaded Documents</span><span class="status ${uploadedDocsMap.size > 0 ? 'good' : 'warn'}">${uploadedDocsMap.size} document(s) evaluated</span></div>`;
+      } else {
+        docResults.forEach(d => {
+          const fn = d.filename || d.file_name || "Document";
+          const st = d.extraction_status === 'failed' ? "warn" : "good";
+          const stLabel = d.extraction_status === 'failed' ? "Extraction failed" : "Verified ✓";
+          docRowsHtml += `<div class="result-row">
+            <span><strong>${escapeHTML(fn)}</strong> (${escapeHTML(d.detected_file_type || 'Doc')})</span>
+            <span class="status ${st}">${escapeHTML(stLabel)}</span>
+          </div>`;
+        });
+      }
+
+      let missingHtml = "";
+      if (missing.length > 0) {
+        missingHtml = `<div style="margin-top:14px; padding:12px; border:1px solid var(--line); background:#fff;">
+          <strong style="font-size:12px; color:var(--danger);">Items Flagged for Review / Missing:</strong>
+          <ul style="margin:8px 0 0; padding-left:18px; font-size:11px; line-height:1.7;">
+            ${missing.map(m => `<li>${escapeHTML(typeof m === 'string' ? m : (m.explanation || m.item || m.field_name))}</li>`).join('')}
+          </ul>
+        </div>`;
+      }
+
+      analysisResults.innerHTML = `
+        <div style="margin-top:18px;">
+          <div class="result-row">
+            <span>AI Review Status</span>
+            <span class="status ${statusClass}">${escapeHTML(status)}</span>
+          </div>
+          <div class="result-row">
+            <span>Executive Summary</span>
+            <span style="max-width:60%; text-align:right; font-size:11px; color:#333;">${escapeHTML(summary)}</span>
+          </div>
+          ${docRowsHtml}
+          ${missingHtml}
+          <div class="notice" style="margin-top:15px; font-size:11px;">
+            <strong>Analysis complete.</strong> Results have been saved into CREDORA's database.
+            Click <strong>FINISH DEMO →</strong> below to view the full verification report.
+          </div>
+        </div>
+      `;
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // FINISH APPLICATION: Update status and redirect to analysis_report.html
+    // ─────────────────────────────────────────────────────────────────────────
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
+
+      if (!validateStep()) return;
+
+      if (!reviewHasRun) {
+        formError.textContent = "Please run the AI document analysis review before finishing.";
+        document.getElementById("analyzeBtn").focus();
+        return;
+      }
+
+      if (!document.getElementById("consent").checked) {
+        formError.textContent = "Please confirm the declaration to continue.";
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "FINALIZING SUBMISSION...";
+      formError.textContent = "";
+
+      try {
+        if (activeApplicationId) {
+          await fetch(`/api/applications/${encodeURIComponent(activeApplicationId)}/status?status=submitted`, {
+            method: 'PATCH'
+          });
+        }
+
+        // Redirect to analysis_report.html with the real application ID
+        window.location.href = `analysis_report.html?applicationId=${encodeURIComponent(activeApplicationId)}`;
+      } catch (err) {
+        console.error("Finalize error:", err);
+        // Even if status patch has network glitch, proceed to report
+        window.location.href = `analysis_report.html?applicationId=${encodeURIComponent(activeApplicationId)}`;
+      }
+    });
+
+    buildDocumentList();
+    showStep(0);
+  </script>
+
+</body>
+
+</html>

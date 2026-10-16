@@ -127,45 +127,95 @@ export async function analyzeDocuments(details, files) {
   // 1. Attempt delegation to FastAPI AI Microservice on Port 8001 if available
   try {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 4000);
+    const timeout = setTimeout(() => controller.abort(), 60000); // 60s timeout for multi-doc AI extraction
     const healthRes = await fetch(`${config.AI_SERVICE_URL}/health`, { signal: controller.signal });
-    clearTimeout(timeout);
 
     if (healthRes.ok) {
       const formData = new FormData();
-      formData.append('loanType', loanType);
-      formData.append('lenderType', lenderType);
-      formData.append('fullName', applicantName);
-      formData.append('income', String(monthlyIncome));
-      formData.append('loanAmount', String(loanAmount));
-      formData.append('emis', String(existingDebt));
+      const appDetails = {
+        application_id: details.id || details.application_id || '',
+        applicant_name: applicantName,
+        full_name: applicantName,
+        email: details.email || details.applicant_email || '',
+        phone: details.phone || details.applicant_phone || '',
+        loan_type: loanType,
+        selected_loan_product: loanType,
+        lender_type: lenderType,
+        lender_category: lenderType,
+        monthly_income: monthlyIncome,
+        loan_amount: loanAmount,
+        requested_loan_amount: loanAmount,
+        existing_monthly_debt: existingDebt,
+        existing_monthly_obligations: existingDebt,
+        tenure: details.tenure || details.preferred_tenure || '3-5 years',
+        purpose: details.purpose || details.loan_purpose || ''
+      };
+
+      formData.append('application_details', JSON.stringify(appDetails));
+      formData.append('applicant_name', applicantName);
+      formData.append('application_id', appDetails.application_id);
+      formData.append('email', appDetails.email);
+      formData.append('phone', appDetails.phone);
+      formData.append('lender_category', lenderType);
+      formData.append('selected_loan_product', loanType);
+      formData.append('requested_loan_amount', String(loanAmount));
+      formData.append('monthly_income', String(monthlyIncome));
+      formData.append('existing_monthly_obligations', String(existingDebt));
 
       for (const file of files) {
         const blob = new Blob([file.buffer], { type: file.mimetype || 'application/octet-stream' });
-        formData.append('files', blob, file.originalname);
+        formData.append('files', blob, file.originalname || 'document.pdf');
       }
 
       const aiRes = await fetch(`${config.AI_SERVICE_URL}/analyze`, {
         method: 'POST',
-        body: formData
+        body: formData,
+        signal: controller.signal
       });
+      clearTimeout(timeout);
 
       if (aiRes.ok) {
         const aiData = await aiRes.json();
         return {
           success: true,
-          summary: aiData.summary || aiData.assessment_summary || '',
-          analysisSummary: aiData.summary || aiData.assessment_summary || '',
-          documents_analyzed: files.length,
-          failed_documents: aiData.failed_documents || [],
+          overall_status: aiData.analysis_status || 'completed',
+          executive_summary: aiData.application_summary?.overview || aiData.summary || 'Preliminary document analysis completed.',
+          summary: aiData.application_summary?.overview || aiData.summary || '',
+          extracted_information: {
+            applicant: applicantName,
+            email: appDetails.email,
+            phone: appDetails.phone,
+            loan_type: loanType,
+            lender_type: lenderType,
+            monthly_income: monthlyIncome,
+            requested_loan_amount: loanAmount,
+            existing_monthly_obligations: existingDebt,
+            extracted_fields: aiData.extracted_fields || [],
+            financial_review: aiData.financial_review || {},
+            financial_summary: aiData.financial_summary || {},
+            cross_document_checks: aiData.cross_document_checks || []
+          },
+          document_results: aiData.document_results || [],
+          missing_documents: aiData.missing_information || aiData.document_checklist_status?.missing_required_documents || [],
+          inconsistencies: aiData.application_summary?.inconsistencies_requiring_attention || aiData.report?.discrepancies || [],
+          risk_flags: aiData.risk_flags || [],
+          recommendations: aiData.application_summary?.recommended_action
+            ? [aiData.application_summary.recommended_action]
+            : (aiData.recommendations || ['Review submitted documents with credit underwriter']),
+          limitations: Array.isArray(aiData.analysis_limitations)
+            ? aiData.analysis_limitations.join('; ')
+            : (aiData.analysis_limitations || 'Preliminary automated review. Final terms subject to credit policy.'),
+          model_name: 'gemini-2.0-flash',
           financial_review: aiData.financial_review || {},
-          extracted_fields: aiData.extracted_fields || [],
-          risk_flags: aiData.risk_flags || []
+          application_summary: aiData.application_summary || {}
         };
+      } else {
+        const errTxt = await aiRes.text();
+        console.warn('[AI Microservice] /analyze non-200 response:', aiRes.status, errTxt);
       }
     }
   } catch (err) {
-    // FastAPI service not reachable or timed out; proceed to built-in deterministic engine
+    console.warn('[AI Microservice] Exception, falling back to deterministic engine:', err.message);
   }
 
   // 2. Built-in Deterministic Document Extraction & Analysis

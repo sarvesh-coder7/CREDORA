@@ -879,40 +879,49 @@ def _call_gemini_with_retries(
     base_backoff: float = 0.5,
 ) -> str:
     """
-    Call Gemini generate_content with bounded retries for transient errors.
-    Never retries permanently failing errors (400, 401, 404).
+    Call Gemini generate_content with bounded retries for transient errors and fallback models.
+    Never retries permanently failing errors (400, 401).
     """
+    candidate_models = [model]
+    for fallback in ['gemini-3.1-flash-lite', 'gemini-flash-latest', 'gemini-flash-lite-latest']:
+        if fallback not in candidate_models:
+            candidate_models.append(fallback)
+
     last_exc = None
-    for attempt in range(max_retries + 1):
-        try:
-            response = client.models.generate_content(
-                model=model,
-                contents=prompt,
-                config={"response_mime_type": "application/json"},
-            )
-            response_text = getattr(response, "text", None)
-            if not response_text:
-                raise DocumentAnalysisError("Gemini returned an empty response.")
-            return response_text
-        except DocumentAnalysisError:
-            raise
-        except Exception as exc:
-            last_exc = exc
-            if attempt < max_retries and _is_transient_error(exc):
-                sleep_time = base_backoff * (2 ** attempt)
-                logger.warning(
-                    "Gemini transient error on attempt %s/%s (%s). Retrying in %ss...",
-                    attempt + 1,
-                    max_retries + 1,
-                    exc,
-                    sleep_time,
+    for current_model in candidate_models:
+        for attempt in range(max_retries + 1):
+            try:
+                response = client.models.generate_content(
+                    model=current_model,
+                    contents=prompt,
+                    config={"response_mime_type": "application/json"},
                 )
-                time.sleep(sleep_time)
-                continue
-            break
+                response_text = getattr(response, "text", None)
+                if not response_text:
+                    raise DocumentAnalysisError("Gemini returned an empty response.")
+                return response_text
+            except DocumentAnalysisError:
+                raise
+            except Exception as exc:
+                last_exc = exc
+                if attempt < max_retries and _is_transient_error(exc):
+                    sleep_time = base_backoff * (2 ** attempt)
+                    logger.warning(
+                        "Gemini transient error on attempt %s/%s with %s (%s). Retrying in %ss...",
+                        attempt + 1,
+                        max_retries + 1,
+                        current_model,
+                        exc,
+                        sleep_time,
+                    )
+                    time.sleep(sleep_time)
+                    continue
+                # If transient or model-not-found error exhausted on this model, proceed to next candidate model
+                logger.warning("Attempt with model %s failed (%s); trying fallback...", current_model, exc)
+                break
 
     raise DocumentAnalysisError(
-        f"Gemini analysis failed. Check API configuration, model availability, "
+        f"Gemini analysis failed across candidate models. Check API configuration, model availability, "
         f"quota, network access, and try again. Error: {last_exc}"
     ) from last_exc
 
