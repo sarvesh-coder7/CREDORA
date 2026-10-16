@@ -10,6 +10,8 @@
 
     <link rel="icon" href="./ICON.png">
     <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./profile.css">
+    <script type="module" src="./supabaseClient.js"></script>
     <script src="./script.js" defer></script>
 </head>
 
@@ -26,7 +28,7 @@
             <!-- AUTH / PROFILE AREA -->
             <div class="nav-auth" id="navAuth">
                 <a href="login.html" class="nav-login" id="loginLink">
-                    LOGOUT <span></span>
+                    LOGIN <span>↗</span>
                 </a>
 
                 <div class="profile-container" id="profileContainer" hidden>
@@ -339,13 +341,358 @@
         <div class="profile-dialog-content">
             <h2>Password settings</h2>
             <p>
-                Password changes are unavailable in this frontend demo.
-                Connect a secure authentication backend to enable them.
+                Password changes require secure authentication credentials.
+                To change your password, request a reset link from the login page.
             </p>
             <button type="button" class="profile-btn profile-btn-dark" id="closeDialog">Close</button>
         </div>
     </dialog>
 
+    <script>
+        document.getElementById("currentYear").textContent = new Date().getFullYear();
+
+        function getStoredUser() {
+            try {
+                return JSON.parse(localStorage.getItem("credoraUser") || "{}");
+            } catch {
+                return {};
+            }
+        }
+
+        function saveStoredUser(updated) {
+            try {
+                localStorage.setItem("credoraUser", JSON.stringify(updated));
+                window.dispatchEvent(new CustomEvent("credora:auth-change", { detail: updated }));
+            } catch (e) {
+                console.warn("Storage save error:", e);
+            }
+        }
+
+        function updateAvatarDisplay(name, image) {
+            const initial = (name || "User").trim().charAt(0).toUpperCase() || "U";
+            const sidebarAvatar = document.getElementById("avatarPreview");
+            const largeAvatar = document.getElementById("largeAvatar");
+
+            if (image) {
+                if (sidebarAvatar) {
+                    sidebarAvatar.style.backgroundImage = `url("${image}")`;
+                    sidebarAvatar.textContent = "";
+                }
+                if (largeAvatar) {
+                    largeAvatar.style.backgroundImage = `url("${image}")`;
+                    largeAvatar.textContent = "";
+                }
+            } else {
+                if (sidebarAvatar) {
+                    sidebarAvatar.style.backgroundImage = "";
+                    sidebarAvatar.textContent = initial;
+                }
+                if (largeAvatar) {
+                    largeAvatar.style.backgroundImage = "";
+                    largeAvatar.textContent = initial;
+                }
+            }
+        }
+
+        function populateFields(user) {
+            const name = user.name || user.fullName || "";
+            const email = user.email || "";
+            const phone = user.phone || user.mobile || user.mobile_number || "";
+            const city = user.city || "";
+            const address = user.address || "";
+            const dob = user.dob || "";
+            const displayName = user.displayName || (name ? name.split(" ")[0] : "");
+            const employmentType = user.employmentType || "";
+            const company = user.company || "";
+            const monthlyIncome = user.monthlyIncome || "";
+            const workExperience = user.workExperience || "";
+
+            document.getElementById("sidebarName").textContent = name || "CREDORA User";
+            document.getElementById("sidebarEmail").textContent = email || "user@example.com";
+
+            const fullNameInput = document.getElementById("fullName");
+            if (fullNameInput) fullNameInput.value = name;
+            const displayNameInput = document.getElementById("displayName");
+            if (displayNameInput) displayNameInput.value = displayName;
+            const emailInput = document.getElementById("email");
+            if (emailInput) emailInput.value = email;
+            const phoneInput = document.getElementById("phone");
+            if (phoneInput) phoneInput.value = phone;
+            const dobInput = document.getElementById("dob");
+            if (dobInput) dobInput.value = dob;
+            const cityInput = document.getElementById("city");
+            if (cityInput) cityInput.value = city;
+            const addressInput = document.getElementById("address");
+            if (addressInput) addressInput.value = address;
+
+            const empTypeInput = document.getElementById("employmentType");
+            if (empTypeInput && employmentType) empTypeInput.value = employmentType;
+            const companyInput = document.getElementById("company");
+            if (companyInput) companyInput.value = company;
+            const incomeInput = document.getElementById("monthlyIncome");
+            if (incomeInput) incomeInput.value = monthlyIncome;
+            const expInput = document.getElementById("workExperience");
+            if (expInput && workExperience) expInput.value = workExperience;
+
+            if (user.preferences) {
+                const emailNotif = document.getElementById("emailNotifications");
+                if (emailNotif && typeof user.preferences.emailNotifications === "boolean") {
+                    emailNotif.checked = user.preferences.emailNotifications;
+                }
+                const appRem = document.getElementById("applicationReminders");
+                if (appRem && typeof user.preferences.applicationReminders === "boolean") {
+                    appRem.checked = user.preferences.applicationReminders;
+                }
+            }
+
+            updateAvatarDisplay(name, user.image);
+        }
+
+        function showStatus(message, isError = false) {
+            const statusEl = document.getElementById("statusMessage");
+            if (!statusEl) return;
+            statusEl.textContent = message;
+            statusEl.className = "profile-message active " + (isError ? "error" : "success");
+            setTimeout(() => {
+                statusEl.className = "profile-message";
+            }, 3500);
+        }
+
+        function setFormEditing(sectionId, isEditing) {
+            const section = document.getElementById(sectionId);
+            if (!section) return;
+            const inputs = section.querySelectorAll("input, select, textarea");
+            inputs.forEach(input => {
+                if (input.id !== "email") {
+                    input.disabled = !isEditing;
+                }
+            });
+            const actions = section.querySelector(".profile-form-actions");
+            if (actions) actions.hidden = !isEditing;
+            const editBtn = section.querySelector(".edit-button");
+            if (editBtn) editBtn.hidden = isEditing;
+            if (isEditing) {
+                const first = section.querySelector("input:not(:disabled), select:not(:disabled)");
+                if (first) first.focus();
+            }
+        }
+
+        // Initialize state
+        let currentUser = getStoredUser();
+        populateFields(currentUser);
+
+        // Sidebar Navigation
+        const sideLinks = document.querySelectorAll(".profile-side-link");
+        sideLinks.forEach(link => {
+            link.addEventListener("click", () => {
+                sideLinks.forEach(l => l.classList.remove("active"));
+                link.classList.add("active");
+                const targetId = link.getAttribute("data-target");
+                const targetEl = document.getElementById(targetId);
+                if (targetEl) {
+                    targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+                }
+            });
+        });
+
+        // Edit buttons
+        document.querySelectorAll(".edit-button").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const sectionId = btn.getAttribute("data-section");
+                setFormEditing(sectionId, true);
+            });
+        });
+
+        // Cancel buttons
+        document.querySelectorAll(".cancel-button").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const sectionId = btn.getAttribute("data-section");
+                populateFields(currentUser);
+                setFormEditing(sectionId, false);
+            });
+        });
+
+        // Personal form save
+        const personalForm = document.getElementById("personalForm");
+        if (personalForm) {
+            personalForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                currentUser.name = document.getElementById("fullName").value.trim();
+                currentUser.fullName = currentUser.name;
+                currentUser.displayName = document.getElementById("displayName").value.trim();
+                currentUser.phone = document.getElementById("phone").value.trim();
+                currentUser.dob = document.getElementById("dob").value;
+                currentUser.city = document.getElementById("city").value.trim();
+                currentUser.address = document.getElementById("address").value.trim();
+
+                saveStoredUser(currentUser);
+                populateFields(currentUser);
+                setFormEditing("personalSection", false);
+                showStatus("Personal information updated successfully.");
+
+                // Sync with Supabase if active
+                if (window.CredoraAuth && window.CredoraAuth.supabase && currentUser.id) {
+                    try {
+                        await window.CredoraAuth.supabase.from("borrower_profiles").update({
+                            full_name: currentUser.name,
+                            mobile_number: currentUser.phone,
+                            city: currentUser.city
+                        }).eq("id", currentUser.id);
+                    } catch (err) {
+                        console.warn("Supabase profile sync:", err);
+                    }
+                }
+            });
+        }
+
+        // Employment form save
+        const employmentForm = document.getElementById("employmentForm");
+        if (employmentForm) {
+            employmentForm.addEventListener("submit", (e) => {
+                e.preventDefault();
+                currentUser.employmentType = document.getElementById("employmentType").value;
+                currentUser.company = document.getElementById("company").value.trim();
+                currentUser.monthlyIncome = document.getElementById("monthlyIncome").value;
+                currentUser.workExperience = document.getElementById("workExperience").value;
+
+                saveStoredUser(currentUser);
+                populateFields(currentUser);
+                setFormEditing("employmentSection", false);
+                showStatus("Employment & income information saved.");
+            });
+        }
+
+        // Save preferences
+        const savePreferencesBtn = document.getElementById("savePreferences");
+        if (savePreferencesBtn) {
+            savePreferencesBtn.addEventListener("click", () => {
+                currentUser.preferences = {
+                    emailNotifications: document.getElementById("emailNotifications").checked,
+                    applicationReminders: document.getElementById("applicationReminders").checked
+                };
+                saveStoredUser(currentUser);
+                showStatus("Preferences saved.");
+            });
+        }
+
+        // Photo Upload
+        const photoInput = document.getElementById("profilePhoto");
+        if (photoInput) {
+            photoInput.addEventListener("change", () => {
+                const file = photoInput.files?.[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    currentUser.image = ev.target.result;
+                    saveStoredUser(currentUser);
+                    updateAvatarDisplay(currentUser.name, currentUser.image);
+                    showStatus("Profile photo updated.");
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Back button
+        const backBtn = document.getElementById("backButton");
+        if (backBtn) {
+            backBtn.addEventListener("click", () => {
+                window.location.href = "index.html";
+            });
+        }
+
+        // Password Dialog
+        const passwordDialog = document.getElementById("passwordDialog");
+        const passwordBtn = document.getElementById("passwordButton");
+        const closeDialogBtn = document.getElementById("closeDialog");
+
+        if (passwordBtn && passwordDialog) {
+            passwordBtn.addEventListener("click", () => passwordDialog.showModal());
+        }
+        if (closeDialogBtn && passwordDialog) {
+            closeDialogBtn.addEventListener("click", () => passwordDialog.close());
+        }
+
+        // Export data
+        const exportBtn = document.getElementById("exportButton");
+        if (exportBtn) {
+            exportBtn.addEventListener("click", () => {
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentUser, null, 2));
+                const dlAnchor = document.createElement("a");
+                dlAnchor.setAttribute("href", dataStr);
+                dlAnchor.setAttribute("download", `credora-profile-${currentUser.email || "user"}.json`);
+                dlAnchor.click();
+                showStatus("Profile data exported.");
+            });
+        }
+
+        // Clear local profile data
+        const clearBtn = document.getElementById("clearButton");
+        if (clearBtn) {
+            clearBtn.addEventListener("click", () => {
+                if (confirm("Are you sure you want to clear your local profile data from this browser?")) {
+                    localStorage.removeItem("credoraUser");
+                    showStatus("Profile cleared from browser.");
+                    setTimeout(() => {
+                        window.location.href = "login.html";
+                    }, 800);
+                }
+            });
+        }
+
+        // Sign out button
+        const signOutBtn = document.getElementById("signOutButton");
+        if (signOutBtn) {
+            signOutBtn.addEventListener("click", async () => {
+                if (window.CredoraAuth && typeof window.CredoraAuth.logout === "function") {
+                    await window.CredoraAuth.logout();
+                } else {
+                    localStorage.removeItem("credoraUser");
+                }
+                window.location.href = "login.html";
+            });
+        }
+
+        // Supabase async session sync on load
+        window.addEventListener("load", async () => {
+            try {
+                if (window.CredoraAuth && typeof window.CredoraAuth.checkSession === "function") {
+                    const sessionInfo = await window.CredoraAuth.checkSession();
+                    if (sessionInfo && sessionInfo.user) {
+                        const p = sessionInfo.profile || {};
+                        let changed = false;
+
+                        if (!currentUser.id) {
+                            currentUser.id = sessionInfo.user.id;
+                            changed = true;
+                        }
+                        if (!currentUser.email && sessionInfo.user.email) {
+                            currentUser.email = sessionInfo.user.email;
+                            changed = true;
+                        }
+                        if (!currentUser.name && p.full_name) {
+                            currentUser.name = p.full_name;
+                            changed = true;
+                        }
+                        if (!currentUser.phone && p.mobile_number) {
+                            currentUser.phone = p.mobile_number;
+                            changed = true;
+                        }
+                        if (!currentUser.city && p.city) {
+                            currentUser.city = p.city;
+                            changed = true;
+                        }
+
+                        if (changed) {
+                            saveStoredUser(currentUser);
+                            populateFields(currentUser);
+                        }
+                    }
+                }
+            } catch (err) {
+                console.log("Session sync info:", err);
+            }
+        });
+    </script>
 </body>
 
 </html>

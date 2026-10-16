@@ -1,4 +1,3 @@
-
 /* ==========================================
    CREDORA GLOBAL DESIGN SYSTEM
    Black / White Brutalist UI
@@ -105,49 +104,49 @@ textarea:focus-visible {
 ===================================== */
 
 .site-header {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    background: #fff;
-    border: none;
-    box-shadow: none;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: #fff;
+  border: none;
+  box-shadow: none;
 }
 
 /* Main Navbar */
 .navbar {
-    width: 100%;
-    min-height: 80px;
-    margin: 0;
-    padding: 14px 5%;
-    box-sizing: border-box;
+  width: 100%;
+  min-height: 80px;
+  margin: 0;
+  padding: 14px 5%;
+  box-sizing: border-box;
 
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
 
-    background: #fff;
-    border: none;
-    border-bottom: 2px solid #000;
+  background: #fff;
+  border: none;
+  border-bottom: 2px solid #000;
 }
 
 /* Logo and Website Name */
 .navbar .brand,
 .navbar .logo,
 .navbar .navbar-brand {
-    display: inline-flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
 
-    margin: 0 auto 0 0;
-    padding: 0;
-    flex-shrink: 0;
+  margin: 0 auto 0 0;
+  padding: 0;
+  flex-shrink: 0;
 
-    color: #000;
-    text-decoration: none;
-    border: none;
+  color: #000;
+  text-decoration: none;
+  border: none;
 }
 
 /* Logo Image */
@@ -155,83 +154,83 @@ textarea:focus-visible {
 .navbar .logo img,
 .navbar .navbar-brand img,
 .navbar .logo-img {
-    display: block;
-    width: 42px;
-    height: 42px;
-    object-fit: contain;
+  display: block;
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
 }
 
 /* Website Name */
 .navbar .brand-name,
 .navbar .logo-text,
 .navbar .brand span {
-    color: #000;
-    font-size: 24px;
-    font-weight: 900;
-    letter-spacing: 2px;
-    white-space: nowrap;
+  color: #000;
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  white-space: nowrap;
 }
 
 /* Navigation Container */
 .navbar .nav-links,
 .navbar .nav-menu {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 24px;
 
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 /* Navigation Links */
 .navbar .nav-links a,
 .navbar .nav-menu a {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-    padding: 12px 0;
-    margin: 0;
+  padding: 12px 0;
+  margin: 0;
 
-    color: #000;
-    background: transparent;
-    font-size: 14px;
-    font-weight: 700;
-    text-decoration: none;
+  color: #000;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
 
-    border: none !important;
-    box-sizing: border-box;
+  border: none !important;
+  box-sizing: border-box;
 }
 
 /* Animated Underline */
 .navbar .nav-links a:not(.login-btn)::after,
 .navbar .nav-menu a:not(.login-btn)::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: 4px;
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 4px;
 
-    width: 100%;
-    height: 2px;
-    background: #000;
+  width: 100%;
+  height: 2px;
+  background: #000;
 
-    transform: scaleX(0);
-    transform-origin: left center;
-    transition: transform 0.3s ease;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.3s ease;
 }
 
 /* Hover: Line Moves Left to Right */
 .navbar .nav-links a:not(.login-btn):hover::after,
 .navbar .nav-menu a:not(.login-btn):hover::after {
-    transform: scaleX(1);
+  transform: scaleX(1);
 }
 
 /* Active Page Underline */
 .navbar .nav-links a.active:not(.login-btn)::after,
 .navbar .nav-menu a.active:not(.login-btn)::after {
-    transform: scaleX(1);
+  transform: scaleX(1);
 }
 
 /* Login Button - Complete Four-Sided Border */
@@ -239,28 +238,28 @@ textarea:focus-visible {
 .navbar .nav-menu a.login-btn,
 .navbar a.login-btn,
 .navbar a[href*="login"] {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-    padding: 11px 22px;
-    margin: 0;
+  padding: 11px 22px;
+  margin: 0;
 
-    color: #000;
-    background: #fff;
-    font-size: 14px;
-    font-weight: 800;
-    text-decoration: none;
+  color: #000;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 800;
+  text-decoration: none;
 
-    border: 2px solid #000 !important;
-    box-sizing: border-box;
-    transition: background 0.2s ease, color 0.2s ease;
+  border: 2px solid #000 !important;
+  box-sizing: border-box;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 /* Disable Underline on Login Button */
 .navbar a.login-btn::after,
 .navbar a[href*="login"]::after {
-    display: none !important;
+  display: none !important;
 }
 
 /* Login Hover */
@@ -268,62 +267,62 @@ textarea:focus-visible {
 .navbar .nav-menu a.login-btn:hover,
 .navbar a.login-btn:hover,
 .navbar a[href*="login"]:hover {
-    color: #fff;
-    background: #000;
+  color: #fff;
+  background: #000;
 }
 
 /* Remove Default List Styling */
 .navbar ul {
-    list-style: none;
+  list-style: none;
 }
 
 /* Prevent Nested Navbar Borders */
 .site-header .navbar {
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-bottom: 2px solid #000;
-    box-shadow: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 2px solid #000;
+  box-shadow: none;
 }
 
 /* Responsive Navbar */
 @media (max-width: 650px) {
-    .navbar {
-        flex-wrap: wrap;
-        padding: 14px 4%;
-        gap: 14px;
-    }
+  .navbar {
+    flex-wrap: wrap;
+    padding: 14px 4%;
+    gap: 14px;
+  }
 
-    .navbar .brand,
-    .navbar .logo,
-    .navbar .navbar-brand {
-        margin-right: auto;
-    }
+  .navbar .brand,
+  .navbar .logo,
+  .navbar .navbar-brand {
+    margin-right: auto;
+  }
 
-    .navbar .nav-links,
-    .navbar .nav-menu {
-        width: 100%;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        gap: 16px;
-    }
+  .navbar .nav-links,
+  .navbar .nav-menu {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 16px;
+  }
 
-    .navbar .nav-links a,
-    .navbar .nav-menu a {
-        font-size: 13px;
-    }
+  .navbar .nav-links a,
+  .navbar .nav-menu a {
+    font-size: 13px;
+  }
 
-    .navbar .brand-name,
-    .navbar .logo-text,
-    .navbar .brand span {
-        font-size: 20px;
-    }
+  .navbar .brand-name,
+  .navbar .logo-text,
+  .navbar .brand span {
+    font-size: 20px;
+  }
 }
 
 
 /* If navbar is used independently, show its bottom line */
-body > .navbar,
-main > .navbar {
+body>.navbar,
+main>.navbar {
   border-bottom: 2px solid var(--black);
 }
 
@@ -372,7 +371,7 @@ nav {
 }
 
 .nav-links a,
-.site-nav > a,
+.site-nav>a,
 nav a {
   display: inline-flex;
   flex: 0 0 auto;
@@ -391,8 +390,8 @@ nav a {
 
 .nav-links a:hover,
 .nav-links a.active,
-.site-nav > a:hover,
-.site-nav > a.active,
+.site-nav>a:hover,
+.site-nav>a.active,
 nav a:hover,
 nav a.active {
   color: var(--gray-500);
@@ -1134,7 +1133,7 @@ footer {
   margin: 20px auto 30px;
 }
 
-.lender-search > label {
+.lender-search>label {
   display: block;
   margin-bottom: 12px;
   font-size: 11px;
@@ -1367,7 +1366,7 @@ footer {
   border: none;
 }
 
-.form-grid > label {
+.form-grid>label {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -1509,7 +1508,7 @@ footer {
   }
 
   .nav-links a,
-  .site-nav > a,
+  .site-nav>a,
   nav a {
     justify-content: flex-start;
     min-height: 48px;
@@ -1520,7 +1519,7 @@ footer {
   }
 
   .nav-links a.active,
-  .site-nav > a.active,
+  .site-nav>a.active,
   nav a.active {
     border: none;
   }
@@ -1659,6 +1658,7 @@ footer {
 }
 
 @media (max-width: 380px) {
+
   .brand,
   .logo {
     font-size: 19px;
@@ -1691,8 +1691,8 @@ footer {
 }
 
 /* A standalone navbar gets one bottom line */
-body > .navbar,
-main > .navbar {
+body>.navbar,
+main>.navbar {
   border-bottom: 2px solid var(--black) !important;
 }
 
@@ -1717,18 +1717,18 @@ footer {
 }
 
 /* Fix navbar bottom line on login page */
-body > .site-header,
-body > .navbar,
-body > header,
+body>.site-header,
+body>.navbar,
+body>header,
 .site-header,
 .navbar {
-    border-bottom: 2px solid #000 !important;
-    box-shadow: none !important;
+  border-bottom: 2px solid #000 !important;
+  box-shadow: none !important;
 }
 
 /* Prevent a duplicate line if navbar is inside header */
 .site-header .navbar {
-    border-bottom: none !important;
+  border-bottom: none !important;
 }
 
 /* Remove extra navigation-link underlines */
@@ -1738,102 +1738,152 @@ body > header,
 .navbar nav a,
 .navbar .nav-links a,
 .navbar .site-nav a {
-    border-bottom: none !important;
+  border-bottom: none !important;
 }
 
 /* Remove the line below LOCAL DATA */
 .dash-topline {
-    border-bottom: none !important;
+  border-bottom: none !important;
 }
+
 /* CREDORA Legal Page Header */
 .legal-header {
-    width: 100%;
-    min-height: 82px;
-    padding: 16px 6%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+  width: 100%;
+  min-height: 82px;
+  padding: 16px 6%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
 
-    background: #ffffff;
-    color: #000000;
+  background: #ffffff;
+  color: #000000;
 
-    border: none;
-    border-bottom: 2px solid #000000;
-    box-shadow: none;
+  border: none;
+  border-bottom: 2px solid #000000;
+  box-shadow: none;
 }
 
 /* Logo and Brand Name */
 .legal-brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
 
-    color: #000000;
-    text-decoration: none;
-    font-size: 24px;
-    font-weight: 900;
-    letter-spacing: 3px;
+  color: #000000;
+  text-decoration: none;
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: 3px;
 }
 
 .legal-brand img {
-    width: 44px;
-    height: 44px;
-    object-fit: contain;
-    display: block;
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  display: block;
 }
 
 /* Back Button */
 .back-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
 
-    padding: 10px 18px;
-    background: #ffffff;
-    color: #000000;
+  padding: 10px 18px;
+  background: #ffffff;
+  color: #000000;
 
-    border: 2px solid #000000;
-    border-radius: 0;
-    box-shadow: none;
+  border: 2px solid #000000;
+  border-radius: 0;
+  box-shadow: none;
 
-    font-size: 14px;
-    font-weight: 800;
-    cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .back-arrow {
-    font-size: 22px;
-    line-height: 1;
+  font-size: 22px;
+  line-height: 1;
 }
 
 .back-button:hover {
-    background: #000000;
-    color: #ffffff;
+  background: #000000;
+  color: #ffffff;
 }
 
 /* Mobile Responsive */
 @media (max-width: 600px) {
-    .legal-header {
-        min-height: 70px;
-        padding: 14px 5%;
-    }
+  .legal-header {
+    min-height: 70px;
+    padding: 14px 5%;
+  }
 
-    .legal-brand {
-        gap: 8px;
-        font-size: 19px;
-        letter-spacing: 2px;
-    }
+  .legal-brand {
+    gap: 8px;
+    font-size: 19px;
+    letter-spacing: 2px;
+  }
 
-    .legal-brand img {
-        width: 36px;
-        height: 36px;
-    }
+  .legal-brand img {
+    width: 36px;
+    height: 36px;
+  }
 
-    .back-button {
-        padding: 8px 12px;
-        font-size: 13px;
-    }
+  .back-button {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+}
+
+/* Lender page — application button above footer */
+.lender-application-action {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  max-width: 1200px;
+  margin: 32px auto 40px;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+.lender-application-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 15px 24px;
+  background: #000;
+  color: #fff;
+  border: 1px solid #000;
+  text-decoration: none;
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.lender-application-btn:hover {
+  background: #fff;
+  color: #000;
+}
+
+.lender-application-btn:focus-visible {
+  outline: 3px solid #777;
+  outline-offset: 4px;
+}
+
+@media (max-width: 600px) {
+  .lender-application-action {
+    padding: 0 16px;
+    margin: 24px auto 32px;
+  }
+
+  .lender-application-btn {
+    width: 100%;
+  }
 }

@@ -329,10 +329,10 @@
                         formMessage.style.color = "#080";
                         form.reset();
                     } else {
-                        formMessage.textContent = "Registration successful! Redirecting to your dashboard...";
+                        formMessage.textContent = "Registration successful! Redirecting to your profile...";
                         formMessage.style.color = "#080";
                         setTimeout(() => {
-                            window.location.href = "index.html";
+                            window.location.href = "profile.html";
                         }, 1200);
                     }
                 } catch (err) {
@@ -353,7 +353,7 @@
                     formMessage.textContent = `Welcome back, ${res.profile?.full_name || 'User'}! Redirecting...`;
                     formMessage.style.color = "#080";
                     setTimeout(() => {
-                        window.location.href = "index.html";
+                        window.location.href = "profile.html";
                     }, 600);
                 } catch (err) {
                     formMessage.textContent = err.message || "Login failed. Please check credentials.";

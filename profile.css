@@ -1,0 +1,572 @@
+/* ==========================================
+   CREDORA PROFILE PAGE STYLES
+   High-Contrast Neo-Brutalist Aesthetic
+========================================== */
+
+body.profile-page {
+  background-color: #ffffff;
+  color: #000000;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main.profile-container,
+.profile-page-main {
+  width: 100%;
+  max-width: 1200px;
+  margin: 36px auto 70px;
+  padding: 0 6%;
+  flex: 1;
+}
+
+/* Page Heading */
+.profile-page-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+  padding-bottom: 24px;
+  margin-bottom: 36px;
+  border-bottom: 2px solid #000000;
+}
+
+.profile-eyebrow {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  color: #000000;
+}
+
+.profile-subtitle {
+  font-size: 15px;
+  color: #666666;
+  max-width: 650px;
+  line-height: 1.5;
+}
+
+/* Profile Layout */
+.profile-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 36px;
+  align-items: start;
+}
+
+/* Sidebar */
+.profile-sidebar {
+  border: 2px solid #000000;
+  background: #ffffff;
+  padding: 28px 22px;
+  position: sticky;
+  top: 96px;
+  box-shadow: 4px 4px 0px #000000;
+}
+
+.profile-user-summary {
+  text-align: center;
+  padding-bottom: 20px;
+}
+
+.profile-avatar {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: #000000;
+  color: #ffffff;
+  font-size: 26px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  border: 2px solid #000000;
+  background-size: cover;
+  background-position: center;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+}
+
+.profile-avatar.profile-avatar-large {
+  width: 90px;
+  height: 90px;
+  font-size: 32px;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+#sidebarName {
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+  color: #000000;
+}
+
+#sidebarEmail {
+  font-size: 13px;
+  color: #666666;
+  word-break: break-all;
+  margin-bottom: 14px;
+}
+
+.profile-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border: 1px solid #000000;
+  background: #ffffff;
+}
+
+.profile-status span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+}
+
+.profile-sidebar-divider {
+  height: 2px;
+  background: #000000;
+  margin: 20px 0;
+}
+
+/* Navigation Links in Sidebar */
+.profile-side-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 13px 15px;
+  margin-bottom: 8px;
+  background: transparent;
+  color: #000000;
+  border: 1px solid transparent;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+}
+
+.profile-side-link span {
+  font-family: 'DM Mono', monospace, monospace;
+  font-size: 11px;
+  color: #888888;
+}
+
+.profile-side-link:hover {
+  background: #f4f4f4;
+  border-color: #000000;
+}
+
+.profile-side-link.active {
+  background: #000000;
+  color: #ffffff;
+  border-color: #000000;
+}
+
+.profile-side-link.active span {
+  color: #aaaaaa;
+}
+
+/* Content Area */
+.profile-content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.profile-card {
+  border: 2px solid #000000;
+  background: #ffffff;
+  padding: 32px 30px;
+  box-shadow: 4px 4px 0px #000000;
+}
+
+.profile-section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding-bottom: 20px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.profile-section-heading h2 {
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  margin: 4px 0;
+}
+
+.profile-section-heading p {
+  font-size: 13px;
+  color: #666666;
+}
+
+/* Photo row */
+.profile-photo-row {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding-bottom: 24px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.profile-photo-row strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 3px;
+}
+
+.profile-photo-row p {
+  font-size: 13px;
+  color: #666666;
+  margin-bottom: 10px;
+}
+
+/* Form Grids */
+.profile-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.profile-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-field-full {
+  grid-column: 1 / -1;
+}
+
+.profile-field label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  color: #222222;
+}
+
+.profile-field input,
+.profile-field select,
+.profile-field textarea {
+  width: 100%;
+  padding: 12px 14px;
+  font-family: inherit;
+  font-size: 14px;
+  color: #000000;
+  background: #ffffff;
+  border: 1px solid #000000;
+  outline: none;
+  border-radius: 0;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+.profile-field input:focus,
+.profile-field select:focus,
+.profile-field textarea:focus {
+  border: 2px solid #000000;
+  padding: 11px 13px;
+}
+
+.profile-field input:disabled,
+.profile-field select:disabled,
+.profile-field textarea:disabled {
+  background: #f7f7f7;
+  color: #555555;
+  border-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.profile-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e5e5;
+}
+
+/* Buttons */
+.profile-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 22px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 0;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.profile-btn-dark {
+  background: #000000;
+  color: #ffffff;
+  border: 2px solid #000000;
+}
+
+.profile-btn-dark:hover {
+  background: #333333;
+  border-color: #333333;
+}
+
+.profile-btn-outline {
+  background: #ffffff;
+  color: #000000;
+  border: 2px solid #000000;
+}
+
+.profile-btn-outline:hover {
+  background: #000000;
+  color: #ffffff;
+}
+
+.profile-btn-danger {
+  background: #ffffff;
+  color: #b91c1c;
+  border: 2px solid #b91c1c;
+}
+
+.profile-btn-danger:hover {
+  background: #b91c1c;
+  color: #ffffff;
+}
+
+.profile-text-btn {
+  background: transparent;
+  border: 0;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #000000;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 4px 6px;
+}
+
+.profile-text-btn:hover {
+  opacity: 0.7;
+}
+
+/* Preference & Security Rows */
+.profile-preference-row,
+.profile-security-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.profile-preference-row:last-of-type,
+.profile-security-row:last-of-type {
+  border-bottom: none;
+  margin-bottom: 20px;
+}
+
+.profile-preference-row strong,
+.profile-security-row strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 3px;
+}
+
+.profile-preference-row p,
+.profile-security-row p {
+  font-size: 13px;
+  color: #666666;
+}
+
+/* Switch */
+.profile-switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.profile-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.profile-switch-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #cccccc;
+  border: 2px solid #000000;
+  transition: 0.2s;
+}
+
+.profile-switch-slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #000000;
+  transition: 0.2s;
+}
+
+.profile-switch input:checked + .profile-switch-slider {
+  background-color: #000000;
+}
+
+.profile-switch input:checked + .profile-switch-slider:before {
+  transform: translateX(22px);
+  background-color: #ffffff;
+}
+
+/* Status Message */
+.profile-message {
+  font-size: 13.5px;
+  font-weight: 700;
+  min-height: 20px;
+  padding: 10px 16px;
+  border: 1px solid transparent;
+  display: none;
+}
+
+.profile-message.active {
+  display: block;
+}
+
+.profile-message.success {
+  color: #065f46;
+  background: #ecfdf5;
+  border-color: #059669;
+}
+
+.profile-message.error {
+  color: #991b1b;
+  background: #fef2f2;
+  border-color: #dc2626;
+}
+
+/* Footer in content */
+.profile-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 24px;
+  border-top: 1px solid #e5e5e5;
+  font-size: 13px;
+  color: #777777;
+}
+
+.profile-footer a {
+  color: #000000;
+  text-decoration: none;
+  font-weight: 700;
+  margin-left: 14px;
+}
+
+.profile-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Modal Dialog */
+.profile-dialog {
+  border: 2px solid #000000;
+  padding: 0;
+  background: #ffffff;
+  box-shadow: 8px 8px 0px #000000;
+  width: min(460px, 92%);
+  margin: auto;
+}
+
+.profile-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.profile-dialog-content {
+  padding: 32px 28px;
+}
+
+.profile-dialog-content h2 {
+  font-size: 22px;
+  font-weight: 900;
+  margin-bottom: 12px;
+}
+
+.profile-dialog-content p {
+  font-size: 14px;
+  color: #555555;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .profile-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-sidebar {
+    position: static;
+  }
+
+  .profile-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .profile-page-heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .profile-card {
+    padding: 24px 18px;
+  }
+
+  .profile-photo-row {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .profile-section-heading {
+    flex-direction: column;
+  }
+
+  .profile-preference-row,
+  .profile-security-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}

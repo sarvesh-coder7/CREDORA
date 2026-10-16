@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,8 +13,7 @@
 
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&family=Roboto:wght@400;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
-    rel="stylesheet"
-  >
+    rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
   <script type="module" src="supabaseClient.js"></script>
@@ -31,14 +31,8 @@
         <span>CREDORA</span>
       </a>
 
-      <button
-        class="menu-toggle"
-        id="menuToggle"
-        type="button"
-        aria-label="Toggle navigation"
-        aria-controls="navLinks"
-        aria-expanded="false"
-      >☰</button>
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="Toggle navigation" aria-controls="navLinks"
+        aria-expanded="false">☰</button>
 
       <div class="nav-links" id="navLinks">
         <a href="index.html">Home</a>
@@ -57,14 +51,8 @@
 
         <div class="profile-container" id="profileContainer" hidden>
 
-          <button
-            class="profile-button"
-            id="profileButton"
-            type="button"
-            aria-label="Open profile menu"
-            aria-controls="profileDropdown"
-            aria-expanded="false"
-          >
+          <button class="profile-button" id="profileButton" type="button" aria-label="Open profile menu"
+            aria-controls="profileDropdown" aria-expanded="false">
             <img id="profileImage" src="profile.png" alt="">
           </button>
 
@@ -97,74 +85,67 @@
     <section class="section">
       <div class="container">
 
-<!-- SEARCH -->
-<div class="lender-search">
-  <label for="lenderSearch" class="eyebrow">
-    SEARCH DIRECTORY
-  </label>
+        <!-- SEARCH -->
+        <div class="lender-search">
+          <label for="lenderSearch" class="eyebrow">
+            SEARCH DIRECTORY
+          </label>
 
-  <div class="lender-search-box">
-    <svg
-      class="search-icon"
-      xmlns="http://www.w3.org/2000/svg"
-      width="21"
-      height="21"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      aria-hidden="true"
-    >
-      <circle cx="11" cy="11" r="7"></circle>
-      <path d="m20 20-4-4"></path>
-    </svg>
+          <div class="lender-search-box">
+            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              aria-hidden="true">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="m20 20-4-4"></path>
+            </svg>
 
-    <input
-      type="search"
-      id="lenderSearch"
-      placeholder="Search lenders by name..."
-      autocomplete="off"
-      aria-label="Search lenders by name"
-    >
+            <input type="search" id="lenderSearch" placeholder="Search lenders by name..." autocomplete="off"
+              aria-label="Search lenders by name">
 
-    <button type="button" id="lenderSearchButton" hidden>
-      SEARCH ↗
-    </button>
-  </div>
-</div>
+            <button type="button" id="lenderSearchButton" hidden>
+              SEARCH ↗
+            </button>
+          </div>
+        </div>
 
-<p id="lenderStatus" role="status" aria-live="polite" hidden></p>
+        <p id="lenderStatus" role="status" aria-live="polite" hidden></p>
 
-<div class="grid grid-3" id="lenderList" aria-live="polite"></div>
+        <div class="grid grid-3" id="lenderList" aria-live="polite"></div>
 
-<div id="lenderEmpty" class="card">
-  <p class="eyebrow">DIRECTORY STATUS</p>
-  <h3 id="lenderEmptyTitle">NO LENDERS AVAILABLE</h3>
-  <p id="lenderEmptyMessage">
-    No verified lenders are currently available in the directory.
-  </p>
-</div>
+        <div id="lenderEmpty" class="card">
+          <p class="eyebrow">DIRECTORY STATUS</p>
+          <h3 id="lenderEmptyTitle">NO LENDERS AVAILABLE</h3>
+          <p id="lenderEmptyMessage">
+            No verified lenders are currently available in the directory.
+          </p>
+        </div>
 
-  <!-- FOOTER: MATCHES index.html -->
-  <footer class="site-footer">
-    <div class="footer-inner">
+        <!-- APPLICATION BUTTON -->
+        <div class="lender-application-action">
+          <a href="loan_application.html" class="lender-application-btn">
+            APPLICATION <span aria-hidden="true">↗</span>
+          </a>
+        </div>
 
-      <p class="footer-copy">
-        © <span data-year></span> CREDORA. All rights reserved.
-      </p>
+        <!-- FOOTER: MATCHES index.html -->
+        <footer class="site-footer">
+          <div class="footer-inner">
 
-      <div class="footer-links">
-        <a href="index.html">Home</a>
-        <a href="applications.html">Applications</a>
-        <a href="lenders.html">Lenders</a>
-        <a href="reports.html">Reports</a>
-        <a href="about.html">Contact</a>
-      </div>
+            <p class="footer-copy">
+              © <span data-year></span> CREDORA. All rights reserved.
+            </p>
 
-    </div>
-  </footer>
+            <div class="footer-links">
+              <a href="index.html">Home</a>
+              <a href="applications.html">Applications</a>
+              <a href="lenders.html">Lenders</a>
+              <a href="reports.html">Reports</a>
+              <a href="about.html">Contact</a>
+            </div>
+
+          </div>
+        </footer>
 
 </body>
+
 </html>
