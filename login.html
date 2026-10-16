@@ -1,384 +1,385 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#ffffff">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ffffff">
 
-  <title>CREDORA — Welcome</title>
-  <link rel="icon" type="image/png" href="./ICON.png">
+    <title>CREDORA — Welcome</title>
+    <link rel="icon" type="image/png" href="./ICON.png">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    :root {
-      --black: #000000;
-      --white: #ffffff;
-      --gray: #777777;
-      --light-gray: #e9e9e9;
-    }
+        :root {
+            --black: #000000;
+            --white: #ffffff;
+            --gray: #777777;
+            --light-gray: #e9e9e9;
+        }
 
-    html {
-      min-height: 100%;
-    }
+        html {
+            min-height: 100%;
+        }
 
-    body {
-      min-height: 100vh;
-      font-family: 'Inter', sans-serif;
-      background: var(--white);
-      color: var(--black);
-      display: flex;
-      flex-direction: column;
-    }
+        body {
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            display: flex;
+            flex-direction: column;
+        }
 
-    /* HEADER */
+        /* HEADER */
 
-    .header {
-      width: 100%;
-      padding: 25px 7%;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
+        .header {
+            width: 100%;
+            padding: 25px 7%;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
 
-    .logo {
-      width: 48px;
-      height: 48px;
-      object-fit: contain;
-    }
+        .logo {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+        }
 
-    .brand-name {
-      font-size: 25px;
-      font-weight: 900;
-      letter-spacing: -1.5px;
-    }
+        .brand-name {
+            font-size: 25px;
+            font-weight: 900;
+            letter-spacing: -1.5px;
+        }
 
-    /* MAIN */
+        /* MAIN */
 
-    .main {
-      flex: 1;
-      width: 100%;
-      max-width: 1150px;
-      margin: auto;
-      padding: 45px 7% 70px;
-      display: grid;
-      grid-template-columns: 1fr 0.8fr;
-      align-items: center;
-      gap: 70px;
-    }
+        .main {
+            flex: 1;
+            width: 100%;
+            max-width: 1150px;
+            margin: auto;
+            padding: 45px 7% 70px;
+            display: grid;
+            grid-template-columns: 1fr 0.8fr;
+            align-items: center;
+            gap: 70px;
+        }
 
-    .intro {
-      max-width: 590px;
-    }
+        .intro {
+            max-width: 590px;
+        }
 
-    .eyebrow {
-      display: inline-block;
-      border: 1px solid var(--black);
-      padding: 9px 13px;
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 28px;
-    }
+        .eyebrow {
+            display: inline-block;
+            border: 1px solid var(--black);
+            padding: 9px 13px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 28px;
+        }
 
-    .intro h1 {
-      font-size: clamp(42px, 5.5vw, 76px);
-      line-height: 0.98;
-      font-weight: 900;
-      letter-spacing: -4px;
-      margin-bottom: 25px;
-    }
+        .intro h1 {
+            font-size: clamp(42px, 5.5vw, 76px);
+            line-height: 0.98;
+            font-weight: 900;
+            letter-spacing: -4px;
+            margin-bottom: 25px;
+        }
 
-    .intro h1 span {
-      display: block;
-      color: var(--white);
-      -webkit-text-stroke: 1.5px var(--black);
-    }
+        .intro h1 span {
+            display: block;
+            color: var(--white);
+            -webkit-text-stroke: 1.5px var(--black);
+        }
 
-    .intro p {
-      max-width: 460px;
-      color: var(--gray);
-      font-size: 15px;
-      line-height: 1.9;
-    }
+        .intro p {
+            max-width: 460px;
+            color: var(--gray);
+            font-size: 15px;
+            line-height: 1.9;
+        }
 
-    .intro-line {
-      width: 65px;
-      height: 5px;
-      background: var(--black);
-      margin-top: 32px;
-    }
+        .intro-line {
+            width: 65px;
+            height: 5px;
+            background: var(--black);
+            margin-top: 32px;
+        }
 
-    /* LOGIN OPTIONS */
+        /* LOGIN OPTIONS */
 
-    .login-panel {
-      width: 100%;
-      max-width: 410px;
-      justify-self: end;
-    }
+        .login-panel {
+            width: 100%;
+            max-width: 410px;
+            justify-self: end;
+        }
 
-    .panel-heading {
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 18px;
-    }
+        .panel-heading {
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
 
-    .login-card {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-      width: 100%;
-      padding: 24px 22px;
-      margin-bottom: 14px;
-      border: 2px solid var(--black);
-      color: var(--black);
-      text-decoration: none;
-      background: var(--white);
-      transition: background 0.2s ease, color 0.2s ease,
-        transform 0.2s ease;
-    }
+        .login-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            width: 100%;
+            padding: 24px 22px;
+            margin-bottom: 14px;
+            border: 2px solid var(--black);
+            color: var(--black);
+            text-decoration: none;
+            background: var(--white);
+            transition: background 0.2s ease, color 0.2s ease,
+                        transform 0.2s ease;
+        }
 
-    .login-card:hover,
-    .login-card:focus-visible {
-      background: var(--black);
-      color: var(--white);
-      transform: translateY(-3px);
-      outline: none;
-    }
+        .login-card:hover,
+        .login-card:focus-visible {
+            background: var(--black);
+            color: var(--white);
+            transform: translateY(-3px);
+            outline: none;
+        }
 
-    .card-content {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
+        .card-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
 
-    .card-icon {
-      width: 43px;
-      height: 43px;
-      border: 1px solid currentColor;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
+        .card-icon {
+            width: 43px;
+            height: 43px;
+            border: 1px solid currentColor;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
 
-    .card-icon svg {
-      width: 23px;
-      height: 23px;
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 1.7;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
+        .card-icon svg {
+            width: 23px;
+            height: 23px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.7;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
 
-    .card-title {
-      display: block;
-      font-size: 16px;
-      font-weight: 800;
-      margin-bottom: 6px;
-    }
+        .card-title {
+            display: block;
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
 
-    .card-description {
-      display: block;
-      font-size: 11px;
-      opacity: 0.65;
-      line-height: 1.5;
-    }
+        .card-description {
+            display: block;
+            font-size: 11px;
+            opacity: 0.65;
+            line-height: 1.5;
+        }
 
-    .card-arrow {
-      font-size: 25px;
-      transition: transform 0.2s ease;
-    }
+        .card-arrow {
+            font-size: 25px;
+            transition: transform 0.2s ease;
+        }
 
-    .login-card:hover .card-arrow {
-      transform: translateX(5px);
-    }
+        .login-card:hover .card-arrow {
+            transform: translateX(5px);
+        }
 
-    .security-note {
-      color: var(--gray);
-      font-size: 11px;
-      line-height: 1.8;
-      margin-top: 22px;
-    }
+        .security-note {
+            color: var(--gray);
+            font-size: 11px;
+            line-height: 1.8;
+            margin-top: 22px;
+        }
 
-    .security-note strong {
-      color: var(--black);
-    }
+        .security-note strong {
+            color: var(--black);
+        }
 
-    /* FOOTER */
+        /* FOOTER */
 
-    .footer {
-      border-top: 1px solid var(--light-gray);
-      padding: 20px 7%;
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      color: var(--gray);
-      font-size: 10px;
-      letter-spacing: 0.5px;
-    }
+        .footer {
+            border-top: 1px solid var(--light-gray);
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            color: var(--gray);
+            font-size: 10px;
+            letter-spacing: 0.5px;
+        }
 
-    .footer strong {
-      color: var(--black);
-    }
+        .footer strong {
+            color: var(--black);
+        }
 
-    /* MOBILE */
+        /* MOBILE */
 
-    @media (max-width: 760px) {
-      .header {
-        padding: 22px 6%;
-      }
+        @media (max-width: 760px) {
+            .header {
+                padding: 22px 6%;
+            }
 
-      .main {
-        grid-template-columns: 1fr;
-        gap: 42px;
-        padding: 40px 6% 55px;
-      }
+            .main {
+                grid-template-columns: 1fr;
+                gap: 42px;
+                padding: 40px 6% 55px;
+            }
 
-      .intro h1 {
-        font-size: clamp(43px, 11vw, 66px);
-        letter-spacing: -2.5px;
-      }
+            .intro h1 {
+                font-size: clamp(43px, 11vw, 66px);
+                letter-spacing: -2.5px;
+            }
 
-      .intro p {
-        font-size: 14px;
-      }
+            .intro p {
+                font-size: 14px;
+            }
 
-      .login-panel {
-        max-width: 100%;
-        justify-self: stretch;
-      }
+            .login-panel {
+                max-width: 100%;
+                justify-self: stretch;
+            }
 
-      .login-card {
-        padding: 20px 16px;
-      }
+            .login-card {
+                padding: 20px 16px;
+            }
 
-      .footer {
-        padding: 18px 6%;
-        flex-wrap: wrap;
-      }
-    }
+            .footer {
+                padding: 18px 6%;
+                flex-wrap: wrap;
+            }
+        }
 
-    @media (prefers-reduced-motion: reduce) {
-
-      *,
-      *::before,
-      *::after {
-        transition: none !important;
-      }
-    }
-  </style>
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                transition: none !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-  <!-- BRAND -->
-  <header class="header">
-    <img src="./LOGO.jpeg" alt="CREDORA Logo" class="logo">
-    <span class="brand-name">CREDORA</span>
-  </header>
+    <!-- BRAND -->
+    <header class="header">
+        <img src="./LOGO.jpeg" alt="CREDORA Logo" class="logo">
+        <span class="brand-name">CREDORA</span>
+    </header>
 
-  <!-- INTRODUCTION AND LOGIN -->
-  <main class="main">
+    <!-- INTRODUCTION AND LOGIN -->
+    <main class="main">
 
-    <section class="intro">
-      <span class="eyebrow">A smarter financial connection</span>
+        <section class="intro">
+            <span class="eyebrow">A smarter financial connection</span>
 
-      <h1>
-        Finance meets
-        <span>opportunity.</span>
-      </h1>
+            <h1>
+                Finance meets
+                <span>opportunity.</span>
+            </h1>
 
-      <p>
-        Welcome to CREDORA — a platform designed to bring users
-        and lenders closer together. Begin your journey by choosing
-        the login that fits your role.
-      </p>
+            <p>
+                Welcome to CREDORA — a platform designed to bring users
+                and lenders closer together. Begin your journey by choosing
+                the login that fits your role.
+            </p>
 
-      <div class="intro-line"></div>
-    </section>
+            <div class="intro-line"></div>
+        </section>
 
-    <section class="login-panel" aria-label="Choose your login">
-      <h2 class="panel-heading">Choose your access</h2>
+        <section class="login-panel" aria-label="Choose your login">
+            <h2 class="panel-heading">Choose your access</h2>
 
-      <!-- USER LOGIN -->
-      <a href="./user_login.html" class="login-card" aria-label="Continue to User Login">
+            <!-- USER LOGIN -->
+            <a href="./user_login.html"
+               class="login-card"
+               aria-label="Continue to User Login">
 
-        <span class="card-content">
-          <span class="card-icon">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <circle cx="12" cy="8" r="4"></circle>
-              <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"></path>
-            </svg>
-          </span>
+                <span class="card-content">
+                    <span class="card-icon">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="12" cy="8" r="4"></circle>
+                            <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"></path>
+                        </svg>
+                    </span>
 
-          <span>
-            <span class="card-title">User Login</span>
-            <span class="card-description">
-              Access your account and explore lending options.
-            </span>
-          </span>
-        </span>
+                    <span>
+                        <span class="card-title">User Login</span>
+                        <span class="card-description">
+                            Access your account and explore lending options.
+                        </span>
+                    </span>
+                </span>
 
-        <span class="card-arrow" aria-hidden="true">→</span>
-      </a>
+                <span class="card-arrow" aria-hidden="true">→</span>
+            </a>
 
-      <!-- LENDER LOGIN -->
-      <a href="./lender_login.html" class="login-card" aria-label="Continue to Lender Login">
+            <!-- LENDER LOGIN -->
+            <a href="./lender_login.html"
+               class="login-card"
+               aria-label="Continue to Lender Login">
 
-        <span class="card-content">
-          <span class="card-icon">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M3 10h18L12 3 3 10Z"></path>
-              <path d="M5 10v9M9 10v9M15 10v9M19 10v9M3 21h18M2 19h20"></path>
-            </svg>
-          </span>
+                <span class="card-content">
+                    <span class="card-icon">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M3 10h18L12 3 3 10Z"></path>
+                            <path d="M5 10v9M9 10v9M15 10v9M19 10v9M3 21h18M2 19h20"></path>
+                        </svg>
+                    </span>
 
-          <span>
-            <span class="card-title">Lender Login</span>
-            <span class="card-description">
-              Access your lender account and manage your activity.
-            </span>
-          </span>
-        </span>
+                    <span>
+                        <span class="card-title">Lender Login</span>
+                        <span class="card-description">
+                            Access your lender account and manage your activity.
+                        </span>
+                    </span>
+                </span>
 
-        <span class="card-arrow" aria-hidden="true">→</span>
-      </a>
+                <span class="card-arrow" aria-hidden="true">→</span>
+            </a>
 
-      <p class="security-note">
-        <strong>Secure access.</strong> Continue through the existing
-        CREDORA login page to authenticate your account.
-      </p>
-    </section>
+            <p class="security-note">
+                <strong>Secure access.</strong> Continue through the existing
+                CREDORA login page to authenticate your account.
+            </p>
+        </section>
 
-  </main>
+    </main>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <span>© <span id="year"></span> <strong>CREDORA</strong></span>
-    <span>Connecting users and lenders.</span>
-  </footer>
+    <!-- FOOTER -->
+    <footer class="footer">
+        <span>© <span id="year"></span> <strong>CREDORA</strong></span>
+        <span>Connecting users and lenders.</span>
+    </footer>
 
-  <script>
-    document.getElementById("year").textContent =
-      new Date().getFullYear();
-  </script>
+    <script>
+        document.getElementById("year").textContent =
+            new Date().getFullYear();
+    </script>
 
 </body>
-
 </html>

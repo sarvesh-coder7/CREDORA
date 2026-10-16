@@ -1,0 +1,31 @@
+{
+  "name": "CREDORA",
+  "version": "1.0.0",
+  "project": "SIH2k26",
+  "description": "Bridging Borrowers and Lenders Through Intelligent Document Analysis - Autonomous AI Underwriting & Loan Processing Engine",
+  "services": {
+    "frontend": {
+      "framework": "HTML5 / Vanilla CSS / JavaScript",
+      "bundler": "Vite",
+      "port": 5173
+    },
+    "backend": {
+      "framework": "Node.js / Express",
+      "port": 8000,
+      "main": "server.js"
+    },
+    "ai_server": {
+      "framework": "Python / FastAPI",
+      "port": 8001,
+      "main": "ai-server/app.py"
+    },
+    "database": {
+      "provider": "Supabase PostgreSQL",
+      "features": [
+        "Row Level Security (RLS)",
+        "Document Storage Buckets",
+        "Deterministic Cross-Document Verification"
+      ]
+    }
+  }
+}
